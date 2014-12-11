@@ -1,0 +1,44 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{a27d368d-adb6-4cd9-a425-de6f0cbe4bda}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="NTLauncher 3.0\Src\NTLauncher.dproj" />
+    <Projects Include="ServerAuthSystem\Src\ServerAuthSystem.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="NTLauncher">
+    <MSBuild Projects="NTLauncher 3.0\Src\NTLauncher.dproj" Targets="" />
+  </Target>
+  <Target Name="NTLauncher:Clean">
+    <MSBuild Projects="NTLauncher 3.0\Src\NTLauncher.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="NTLauncher:Make">
+    <MSBuild Projects="NTLauncher 3.0\Src\NTLauncher.dproj" Targets="Make" />
+  </Target>
+  <Target Name="ServerAuthSystem">
+    <MSBuild Projects="ServerAuthSystem\Src\ServerAuthSystem.dproj" Targets="" />
+  </Target>
+  <Target Name="ServerAuthSystem:Clean">
+    <MSBuild Projects="ServerAuthSystem\Src\ServerAuthSystem.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="ServerAuthSystem:Make">
+    <MSBuild Projects="ServerAuthSystem\Src\ServerAuthSystem.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="NTLauncher;ServerAuthSystem" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="NTLauncher:Clean;ServerAuthSystem:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="NTLauncher:Make;ServerAuthSystem:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>
