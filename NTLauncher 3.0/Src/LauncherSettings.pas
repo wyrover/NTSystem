@@ -11,17 +11,17 @@ interface
 
 
 const
-  LauncherVersion: Byte = 0; // Версия лаунчера, должна совпадать с версией в обвязке
+  LauncherVersion: Byte = 0; // Р’РµСЂСЃРёСЏ Р»Р°СѓРЅС‡РµСЂР°, РґРѕР»Р¶РЅР° СЃРѕРІРїР°РґР°С‚СЊ СЃ РІРµСЂСЃРёРµР№ РІ РѕР±РІСЏР·РєРµ
 
-  GlobalSalt: string = 'Соль';
+  GlobalSalt: string = 'РЎРѕР»СЊ';
 
 {$IFDEF BEACON}
-// Интервал между проверками контрольных сумм во время игры:
-  BeaconDelay: Cardinal = 10000; // В миллисекундах!
+// РРЅС‚РµСЂРІР°Р» РјРµР¶РґСѓ РїСЂРѕРІРµСЂРєР°РјРё РєРѕРЅС‚СЂРѕР»СЊРЅС‹С… СЃСѓРјРј РІРѕ РІСЂРµРјСЏ РёРіСЂС‹:
+  BeaconDelay: Cardinal = 10000; // Р’ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…!
 {$ENDIF}
 
 {$IFDEF EURISTIC_DEFENCE}
-// Интервал между поиском параллельно запущенных клиентов:
+// РРЅС‚РµСЂРІР°Р» РјРµР¶РґСѓ РїРѕРёСЃРєРѕРј РїР°СЂР°Р»Р»РµР»СЊРЅРѕ Р·Р°РїСѓС‰РµРЅРЅС‹С… РєР»РёРµРЅС‚РѕРІ:
   EuristicDelay: Cardinal = 15000;
 {$ENDIF}
 
@@ -29,15 +29,15 @@ const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 var
-// IP и порт серверной обвязки и Bukkit-сервера:
-  PrimaryIP: string = '127.0.0.1'; // Основной IP
-  SecondaryIP: string = '127.0.0.1'; // Запасной IP - используется, если не удалось
-                                     // присоединиться к основному
+// IP Рё РїРѕСЂС‚ СЃРµСЂРІРµСЂРЅРѕР№ РѕР±РІСЏР·РєРё Рё Bukkit-СЃРµСЂРІРµСЂР°:
+  PrimaryIP: string = '127.0.0.1'; // РћСЃРЅРѕРІРЅРѕР№ IP
+  SecondaryIP: string = '127.0.0.1'; // Р—Р°РїР°СЃРЅРѕР№ IP - РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ, РµСЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ
+                                     // РїСЂРёСЃРѕРµРґРёРЅРёС‚СЊСЃСЏ Рє РѕСЃРЅРѕРІРЅРѕРјСѓ
 
-  ServerPort: Word = 65533;   // Порт обвязки
-  GamePort: string = '25565'; // Порт сервера
+  ServerPort: Word = 65533;   // РџРѕСЂС‚ РѕР±РІСЏР·РєРё
+  GamePort: string = '25565'; // РџРѕСЂС‚ СЃРµСЂРІРµСЂР°
 
-// IP и порт распределителя (если используется):
+// IP Рё РїРѕСЂС‚ СЂР°СЃРїСЂРµРґРµР»РёС‚РµР»СЏ (РµСЃР»Рё РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ):
   {$IFDEF MULTISERVER}
   DistributorPrimaryIP: PAnsiChar = '127.0.0.1';
   DistributorSecondaryIP: PAnsiChar = '127.0.0.1';
@@ -46,35 +46,35 @@ var
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Адреса скриптов загрузки скинов и плащей на сайте:
+// РђРґСЂРµСЃР° СЃРєСЂРёРїС‚РѕРІ Р·Р°РіСЂСѓР·РєРё СЃРєРёРЅРѕРІ Рё РїР»Р°С‰РµР№ РЅР° СЃР°Р№С‚Рµ:
   SkinUploadAddress: string = 'http://froggystyle.ru/Minecraft/upload_skin.php';
   CloakUploadAddress: string = 'http://froggystyle.ru/Minecraft/upload_cloak.php';
 
-// Адреса папок со скинами и плащами на сайте:
+// РђРґСЂРµСЃР° РїР°РїРѕРє СЃРѕ СЃРєРёРЅР°РјРё Рё РїР»Р°С‰Р°РјРё РЅР° СЃР°Р№С‚Рµ:
   SkinDownloadAddress: string = 'http://froggystyle.ru/Minecraft/MinecraftSkins';
   CloakDownloadAddress: string = 'http://froggystyle.ru/Minecraft/MinecraftCloaks';
 
-// Адреса архивов с игрой на сайте:
+// РђРґСЂРµСЃР° Р°СЂС…РёРІРѕРІ СЃ РёРіСЂРѕР№ РЅР° СЃР°Р№С‚Рµ:
   ClientAddress: string = 'http://froggystyle.ru/Minecraft/Main.zip';
   AssetsAddress: string = 'http://froggystyle.ru/Minecraft/Assets.zip';
 
-// Адрес лаунчера для автообновления:
+// РђРґСЂРµСЃ Р»Р°СѓРЅС‡РµСЂР° РґР»СЏ Р°РІС‚РѕРѕР±РЅРѕРІР»РµРЅРёСЏ:
   {$IFDEF AUTOUPDATE}
   LauncherAddress: string = 'http://froggystyle.ru/Minecraft/NTLauncher.exe';
   {$ENDIF}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Это не трогаем:
+// Р­С‚Рѕ РЅРµ С‚СЂРѕРіР°РµРј:
   ClientTempArchiveName: string = '_$RCVR.bin';
   AssetsTempArchiveName: string = '_$ASTS.bin';
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Процесс виртуальной машины (java.exe - с консолью, javaw.exe - без консоли):
+// РџСЂРѕС†РµСЃСЃ РІРёСЂС‚СѓР°Р»СЊРЅРѕР№ РјР°С€РёРЅС‹ (java.exe - СЃ РєРѕРЅСЃРѕР»СЊСЋ, javaw.exe - Р±РµР· РєРѕРЅСЃРѕР»Рё):
   JavaApp: string = 'java.exe';
 
-// А это параметры виртуальной машины, их изменять можно:
+// Рђ СЌС‚Рѕ РїР°СЂР°РјРµС‚СЂС‹ РІРёСЂС‚СѓР°Р»СЊРЅРѕР№ РјР°С€РёРЅС‹, РёС… РёР·РјРµРЅСЏС‚СЊ РјРѕР¶РЅРѕ:
   JVMParams: string = '';
 {
   JVMParams: string = '-server ' +
@@ -115,67 +115,67 @@ var
                       '-XX:+UseCompressedOops ';
 }
 
-// Путь относительно MainFolder, где будет лежать java(w).exe если
-// выставлен флаг использования собственной джавы, скачиваемой в архиве
-// вместе с клиентом (Main.zip):
+// РџСѓС‚СЊ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ MainFolder, РіРґРµ Р±СѓРґРµС‚ Р»РµР¶Р°С‚СЊ java(w).exe РµСЃР»Рё
+// РІС‹СЃС‚Р°РІР»РµРЅ С„Р»Р°Рі РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ СЃРѕР±СЃС‚РІРµРЅРЅРѕР№ РґР¶Р°РІС‹, СЃРєР°С‡РёРІР°РµРјРѕР№ РІ Р°СЂС…РёРІРµ
+// РІРјРµСЃС‚Рµ СЃ РєР»РёРµРЅС‚РѕРј (Main.zip):
   {$IFDEF CUSTOM_JAVA}
-  JavaDir: string = 'java\bin'; // Путь к java(w).exe в %APPDATA%\MainFolder\
+  JavaDir: string = 'java\bin'; // РџСѓС‚СЊ Рє java(w).exe РІ %APPDATA%\MainFolder\
   {$ENDIF}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  MainFolder: string = '\.NTLauncher'; // Папка в %APPDATA%: %APPDATA\MainFolder
-  RegistryPath: string = 'NTLauncher'; // Название пункта в реестре в ветке HKEY_CURRENT_USER\\Software\\
+  MainFolder: string = '\.NTLauncher'; // РџР°РїРєР° РІ %APPDATA%: %APPDATA\MainFolder
+  RegistryPath: string = 'NTLauncher'; // РќР°Р·РІР°РЅРёРµ РїСѓРЅРєС‚Р° РІ СЂРµРµСЃС‚СЂРµ РІ РІРµС‚РєРµ HKEY_CURRENT_USER\\Software\\
 
-// Путь к папке с Natives относительно папки MainFolder (%APPDATA%\MainFolder\NativesPath):
+// РџСѓС‚СЊ Рє РїР°РїРєРµ СЃ Natives РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РїР°РїРєРё MainFolder (%APPDATA%\MainFolder\NativesPath):
   NativesPath: string = 'versions\LL4GOF\natives';
 
-// Путь к папке с клиентом относительно MainFolder (%APPDATA%\MainFolder\MineJarPath):
+// РџСѓС‚СЊ Рє РїР°РїРєРµ СЃ РєР»РёРµРЅС‚РѕРј РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ MainFolder (%APPDATA%\MainFolder\MineJarPath):
   MineJarFolder: string = 'versions\LL4GOF';
 
-// Путь к папке с библиотеками относительно MainFolder (%APPDATA%\MainFolder\LibrariesFolder):
-  LibrariesFolder: string = 'libraries'; // Для старых версий (1.5.2 и старше) должен быть пустой строкой!
+// РџСѓС‚СЊ Рє РїР°РїРєРµ СЃ Р±РёР±Р»РёРѕС‚РµРєР°РјРё РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ MainFolder (%APPDATA%\MainFolder\LibrariesFolder):
+  LibrariesFolder: string = 'libraries'; // Р”Р»СЏ СЃС‚Р°СЂС‹С… РІРµСЂСЃРёР№ (1.5.2 Рё СЃС‚Р°СЂС€Рµ) РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРѕР№!
 
-// Путь к папке с ресурсами (Assets) относительно MainFolder (%APPDATA%\MainFolder\MineJarPath):
+// РџСѓС‚СЊ Рє РїР°РїРєРµ СЃ СЂРµСЃСѓСЂСЃР°РјРё (Assets) РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ MainFolder (%APPDATA%\MainFolder\MineJarPath):
   AssetsFolder: string = 'assets';
 
-  GameVersion: string = '1.7.10'; // Версия игры для запуска
-  AssetIndex: string = '1.7.10';  // Индекс ресурсов игры
+  GameVersion: string = '1.7.10'; // Р’РµСЂСЃРёСЏ РёРіСЂС‹ РґР»СЏ Р·Р°РїСѓСЃРєР°
+  AssetIndex: string = '1.7.10';  // РРЅРґРµРєСЃ СЂРµСЃСѓСЂСЃРѕРІ РёРіСЂС‹
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Главный класс:
+// Р“Р»Р°РІРЅС‹Р№ РєР»Р°СЃСЃ:
 
-  // Чистый Minecraft до 1.5.2 включительно:
+  // Р§РёСЃС‚С‹Р№ Minecraft РґРѕ 1.5.2 РІРєР»СЋС‡РёС‚РµР»СЊРЅРѕ:
   //MainClass: string = 'net.minecraft.client.Minecraft';
 
-  // Чистый Minecraft, начиная с 1.6:
+  // Р§РёСЃС‚С‹Р№ Minecraft, РЅР°С‡РёРЅР°СЏ СЃ 1.6:
   //MainClass: string = 'net.minecraft.client.main.Main';
 
   // Forge, Optifine:
   MainClass: string = 'net.minecraft.launchwrapper.Launch';
 
 
-// Дополнительные классы для поддержки Forge, LiteLoader, Optifine, GLSL Shaders и т.д.:
-// TweakClass'ы можно комбинировать
+// Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РєР»Р°СЃСЃС‹ РґР»СЏ РїРѕРґРґРµСЂР¶РєРё Forge, LiteLoader, Optifine, GLSL Shaders Рё С‚.Рґ.:
+// TweakClass'С‹ РјРѕР¶РЅРѕ РєРѕРјР±РёРЅРёСЂРѕРІР°С‚СЊ
 
 
-  // Чистый Minecraft:
+  // Р§РёСЃС‚С‹Р№ Minecraft:
   //TweakClass: string = '';
 
   // Forge:
   //TweakClass: string = '--tweakClass cpw.mods.fml.common.launcher.FMLTweaker';
 
-  // OptiFine без Forge:
+  // OptiFine Р±РµР· Forge:
   //TweakClass: string = '--tweakClass optifine.OptiFineTweaker';
 
-  // OptiFine + GLSL Shaders без Forge:
+  // OptiFine + GLSL Shaders Р±РµР· Forge:
   //TweakClass: string = '--tweakClass optifine.OptiFineTweaker --tweakClass shadersmodcore.loading.SMCTweaker';
 
   // LiteLoader:
   //TweakClass: string = '--tweakClass com.mumfrey.liteloader.launch.LiteLoaderTweaker';
 
-  // LiteLoader с Forge:
+  // LiteLoader СЃ Forge:
   TweakClass: string = '--tweakClass com.mumfrey.liteloader.launch.LiteLoaderTweaker --tweakClass cpw.mods.fml.common.launcher.FMLTweaker';
 
 implementation

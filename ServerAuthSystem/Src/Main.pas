@@ -169,7 +169,7 @@ implementation
 
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
-// Поток чтения консоли:
+// РџРѕС‚РѕРє С‡С‚РµРЅРёСЏ РєРѕРЅСЃРѕР»Рё:
 type
   TConsoleThread = class(TThread)
     protected
@@ -179,7 +179,7 @@ type
     procedure ServerTerminated;
   end;
 
-// Поток контроля игроков:
+// РџРѕС‚РѕРє РєРѕРЅС‚СЂРѕР»СЏ РёРіСЂРѕРєРѕРІ:
 type
   TPlayersControlThread = class(TThread)
     protected
@@ -187,7 +187,7 @@ type
     procedure UpdatePlayersList;
   end;
 
-// Поток мониторинга:
+// РџРѕС‚РѕРє РјРѕРЅРёС‚РѕСЂРёРЅРіР°:
 type
   TMonitoringThread = class(TThread)
     protected
@@ -225,7 +225,7 @@ function EmptyWorkingSet(hProcess: THandle): BOOL; stdcall; external 'psapi.dll'
 const
   RegistryPath: string = 'ServerAuthSystem';
   SettingsFile: string = 'config.ini';
-  SettingsSection: string = 'Настройки обвязки';
+  SettingsSection: string = 'РќР°СЃС‚СЂРѕР№РєРё РѕР±РІСЏР·РєРё';
 
 var
   ServerStatus: Boolean = False;
@@ -237,7 +237,7 @@ var
 procedure TMainForm.ExceptionHandler(Sender: TObject; E: Exception);
 begin
   if E is ESocketError then Exit;
-  MessageBox(Handle, PAnsiChar(E.Message), 'Ошибка!', MB_ICONERROR);;
+  MessageBox(Handle, PAnsiChar(E.Message), 'РћС€РёР±РєР°!', MB_ICONERROR);;
 end;
 
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
@@ -258,8 +258,8 @@ begin
     FreeOnTerminate := True;
   end;
 
-  PlayersList.Cells[0, 0] := 'Игроки';
-  PlayersList.Cells[1, 0] := 'Таймер';
+  PlayersList.Cells[0, 0] := 'РРіСЂРѕРєРё';
+  PlayersList.Cells[1, 0] := 'РўР°Р№РјРµСЂ';
 
   InitializeCriticalSection(CriticalSection);
   InitializeCriticalSection(PlayersCriticalSection);
@@ -276,7 +276,7 @@ begin
     DistributorPortEdit.Text := ReadStringFromRegistry(RegistryPath, 'DistributorPort', '65533');
     PluginIPEdit.Text        := ReadStringFromRegistry(RegistryPath, 'PluginIP', '127.0.0.1');
     PluginPortEdit.Text      := ReadStringFromRegistry(RegistryPath, 'PluginPort', '35533');
-    GlobalSaltEdit.Text      := ReadStringFromRegistry(RegistryPath, 'GlobalSalt', 'Соль');
+    GlobalSaltEdit.Text      := ReadStringFromRegistry(RegistryPath, 'GlobalSalt', 'РЎРѕР»СЊ');
     JVMParamsEdit.Text       := ReadStringFromRegistry(RegistryPath, 'JVMParams', JVMParamsEdit.Text);
 
     dbHostEdit.Text       := ReadStringFromRegistry(RegistryPath, 'dbHost', dbHostEdit.Text);
@@ -321,7 +321,7 @@ begin
     DistributorPortEdit.Text := ReadString(SettingsSection, 'DistributorPort', '65533');
     PluginIPEdit.Text        := ReadString(SettingsSection, 'PluginIP', '127.0.0.1');
     PluginPortEdit.Text      := ReadString(SettingsSection, 'PluginPort', '35533');
-    GlobalSaltEdit.Text      := ReadString(SettingsSection, 'GlobalSalt', 'Соль');
+    GlobalSaltEdit.Text      := ReadString(SettingsSection, 'GlobalSalt', 'РЎРѕР»СЊ');
     JVMParamsEdit.Text       := ReadString(SettingsSection, 'JVMParams', JVMParamsEdit.Text);
 
     dbHostEdit.Text       := ReadString(SettingsSection, 'dbHost', dbHostEdit.Text);
@@ -383,7 +383,7 @@ end;
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 //
 //
-//                           Функции сервера
+//                           Р¤СѓРЅРєС†РёРё СЃРµСЂРІРµСЂР°
 //
 //
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
@@ -398,14 +398,14 @@ begin
     begin
       ServerConsole.Clear;
 
-      // Получаем статус сокета:
+      // РџРѕР»СѓС‡Р°РµРј СЃС‚Р°С‚СѓСЃ СЃРѕРєРµС‚Р°:
       IsSocketAlreadyOpened := ServerSocket.Active;
 
-      // Если сокет запущен - выключаем для предотвращения наследования сокета:
+      // Р•СЃР»Рё СЃРѕРєРµС‚ Р·Р°РїСѓС‰РµРЅ - РІС‹РєР»СЋС‡Р°РµРј РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РЅР°СЃР»РµРґРѕРІР°РЅРёСЏ СЃРѕРєРµС‚Р°:
       if IsSocketAlreadyOpened then ServerSocket.Close;
 
       EnterCriticalSection(CriticalSection);
-      // Создаём новую консоль:
+      // РЎРѕР·РґР°С‘Рј РЅРѕРІСѓСЋ РєРѕРЅСЃРѕР»СЊ:
       if not CreatePipes(
                           nil,
                           PAnsiChar(
@@ -425,24 +425,24 @@ begin
       begin
         LeaveCriticalSection(CriticalSection);
 
-        // Если сокет был запущен - запускаем снова:
+        // Р•СЃР»Рё СЃРѕРєРµС‚ Р±С‹Р» Р·Р°РїСѓС‰РµРЅ - Р·Р°РїСѓСЃРєР°РµРј СЃРЅРѕРІР°:
         if IsSocketAlreadyOpened then ServerSocket.Open;
 
-        MessageBox(Handle, 'Не получилось запустить сервер!', 'Ошибка!', MB_ICONERROR);
+        MessageBox(Handle, 'РќРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ Р·Р°РїСѓСЃС‚РёС‚СЊ СЃРµСЂРІРµСЂ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
         Exit;
       end;
 
       ServerStatus := True;
       LeaveCriticalSection(CriticalSection);
 
-      // Если сокет был запущен - запускаем снова:
+      // Р•СЃР»Рё СЃРѕРєРµС‚ Р±С‹Р» Р·Р°РїСѓС‰РµРЅ - Р·Р°РїСѓСЃРєР°РµРј СЃРЅРѕРІР°:
       if IsSocketAlreadyOpened then ServerSocket.Open;
 
-      StartServerButton.Caption := 'Остановить сервер';
-      ServerStatusLabel.Caption := 'Включен';
+      StartServerButton.Caption := 'РћСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРµСЂРІРµСЂ';
+      ServerStatusLabel.Caption := 'Р’РєР»СЋС‡РµРЅ';
       ServerStatusLabel.Font.Color := clGreen;
 
-      // Запускаем поток чтения консоли:
+      // Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє С‡С‚РµРЅРёСЏ РєРѕРЅСЃРѕР»Рё:
       with TConsoleThread.Create(False) do
       begin
         FreeOnTerminate := True;
@@ -460,8 +460,8 @@ begin
       ServerStatus := False;
       LeaveCriticalSection(CriticalSection);
 
-      StartServerButton.Caption := 'Запустить сервер';
-      ServerStatusLabel.Caption := 'Выключен';
+      StartServerButton.Caption := 'Р—Р°РїСѓСЃС‚РёС‚СЊ СЃРµСЂРІРµСЂ';
+      ServerStatusLabel.Caption := 'Р’С‹РєР»СЋС‡РµРЅ';
       ServerStatusLabel.Font.Color := clMaroon;
     end;
   end;
@@ -487,12 +487,12 @@ begin
     StringLen := Length(ConsoleText);
     if StringLen = 0 then Continue;
 
-    // Удаляем перевод каретки в конце:
+    // РЈРґР°Р»СЏРµРј РїРµСЂРµРІРѕРґ РєР°СЂРµС‚РєРё РІ РєРѕРЅС†Рµ:
     Delete(ConsoleText, StringLen - 1, 2);
     if (Pos(#8, ConsoleText) = 0) and (Pos(#20, ConsoleText) = 0) then Synchronize(UpdateForm);
   end;
 
-  // Клиент завершился, обрабатываем это событие:
+  // РљР»РёРµРЅС‚ Р·Р°РІРµСЂС€РёР»СЃСЏ, РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј СЌС‚Рѕ СЃРѕР±С‹С‚РёРµ:
   Synchronize(ServerTerminated);
 end;
 
@@ -509,7 +509,7 @@ procedure TConsoleThread.ServerTerminated;
 begin
   if ServerStatus then
   begin
-    // Если сервер непредвиденно завершился, закрываем хэндлы:
+    // Р•СЃР»Рё СЃРµСЂРІРµСЂ РЅРµРїСЂРµРґРІРёРґРµРЅРЅРѕ Р·Р°РІРµСЂС€РёР»СЃСЏ, Р·Р°РєСЂС‹РІР°РµРј С…СЌРЅРґР»С‹:
     with PipesInfo do
     begin
       EnterCriticalSection(CriticalSection);
@@ -529,10 +529,10 @@ begin
       False:
       with MainForm do
       begin
-        MessageBox(Handle, 'Непредвиденное завершение сервера!', 'Ошибка!', MB_ICONERROR);
+        MessageBox(Handle, 'РќРµРїСЂРµРґРІРёРґРµРЅРЅРѕРµ Р·Р°РІРµСЂС€РµРЅРёРµ СЃРµСЂРІРµСЂР°!', 'РћС€РёР±РєР°!', MB_ICONERROR);
 
-        StartServerButton.Caption := 'Запустить сервер';
-        ServerStatusLabel.Caption := 'Выключен';
+        StartServerButton.Caption := 'Р—Р°РїСѓСЃС‚РёС‚СЊ СЃРµСЂРІРµСЂ';
+        ServerStatusLabel.Caption := 'Р’С‹РєР»СЋС‡РµРЅ';
         ServerStatusLabel.Font.Color := clMaroon;
       end;
     end;
@@ -542,7 +542,7 @@ end;
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 //
 //
-//                           Функции сокета
+//                           Р¤СѓРЅРєС†РёРё СЃРѕРєРµС‚Р°
 //
 //
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
@@ -559,7 +559,7 @@ begin
     begin
       SocketConsole.Clear;
 
-      // Проверяем соединение с MySQL-сервером:
+      // РџСЂРѕРІРµСЂСЏРµРј СЃРѕРµРґРёРЅРµРЅРёРµ СЃ MySQL-СЃРµСЂРІРµСЂРѕРј:
       if UseMySQL.Checked then
       begin
         if not IsMySQLInit then InitMySQL;
@@ -572,39 +572,39 @@ begin
 
         if not CheckConnection(SQLParams, Error) then
         begin
-          MessageBox(Handle, PAnsiChar('Не удалось подключиться к MySQL-базе!' + #13#10 + 'Ошибка: ' + Error), 'Ошибка!', MB_ICONERROR);
+          MessageBox(Handle, PAnsiChar('РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє MySQL-Р±Р°Р·Рµ!' + #13#10 + 'РћС€РёР±РєР°: ' + Error), 'РћС€РёР±РєР°!', MB_ICONERROR);
           DeinitMySQL;
           Exit;
         end;
       end;
 
-      // Открываем сокет:
+      // РћС‚РєСЂС‹РІР°РµРј СЃРѕРєРµС‚:
       ServerSocket.Port := StrToInt(SocketPortEdit.Text);
       try
         ServerSocket.Open;
       except
         on E: Exception do
         begin
-          MessageBox(Handle, PAnsiChar('Ошибка при запуске сокета:' + #13#10 + E.Message), 'Ошибка!', MB_ICONERROR);
+          MessageBox(Handle, PAnsiChar('РћС€РёР±РєР° РїСЂРё Р·Р°РїСѓСЃРєРµ СЃРѕРєРµС‚Р°:' + #13#10 + E.Message), 'РћС€РёР±РєР°!', MB_ICONERROR);
           Exit;
         end;
       end;
 
-      // Запускаем поток контроля игроков:
+      // Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє РєРѕРЅС‚СЂРѕР»СЏ РёРіСЂРѕРєРѕРІ:
       PlayersControlThread := TPLayersControlThread.Create(False);
       PlayersControlThread.Priority := tpLower;
       PlayersControlThread.FreeOnTerminate := True;
 
-      StartSocketButton.Caption := 'Остановить обвязку';
-      SocketStatusLabel.Caption := 'Включен';
+      StartSocketButton.Caption := 'РћСЃС‚Р°РЅРѕРІРёС‚СЊ РѕР±РІСЏР·РєСѓ';
+      SocketStatusLabel.Caption := 'Р’РєР»СЋС‡РµРЅ';
       SocketStatusLabel.Font.Color := clGreen;
     end;
 
     True:
     begin
       ServerSocket.Close;
-      StartSocketButton.Caption := 'Запустить обвязку';
-      SocketStatusLabel.Caption := 'Выключен';
+      StartSocketButton.Caption := 'Р—Р°РїСѓСЃС‚РёС‚СЊ РѕР±РІСЏР·РєСѓ';
+      SocketStatusLabel.Caption := 'Р’С‹РєР»СЋС‡РµРЅ';
       SocketStatusLabel.Font.Color := clMaroon;
     end;
   end;
@@ -617,13 +617,13 @@ end;
 procedure TMainForm.ServerSocketClientError(Sender: TObject;
   Socket: TCustomWinSocket; ErrorEvent: TErrorEvent; var ErrorCode: Integer);
 const
-  General    : string = 'Общая ошибка';
-  Send       : string = 'Ошибка при отправке данных';
-  Receive    : string = 'Ошибка при получении данных';
-  Connect    : string = 'Ошибка при подключении';
-  Disconnect : string = 'Ошибка при отключении';
-  Accept     : string = 'Ошибка при принятии запроса от клиента';
-  Lookup     : string = 'Ошибка при обзоре сети';
+  General    : string = 'РћР±С‰Р°СЏ РѕС€РёР±РєР°';
+  Send       : string = 'РћС€РёР±РєР° РїСЂРё РѕС‚РїСЂР°РІРєРµ РґР°РЅРЅС‹С…';
+  Receive    : string = 'РћС€РёР±РєР° РїСЂРё РїРѕР»СѓС‡РµРЅРёРё РґР°РЅРЅС‹С…';
+  Connect    : string = 'РћС€РёР±РєР° РїСЂРё РїРѕРґРєР»СЋС‡РµРЅРёРё';
+  Disconnect : string = 'РћС€РёР±РєР° РїСЂРё РѕС‚РєР»СЋС‡РµРЅРёРё';
+  Accept     : string = 'РћС€РёР±РєР° РїСЂРё РїСЂРёРЅСЏС‚РёРё Р·Р°РїСЂРѕСЃР° РѕС‚ РєР»РёРµРЅС‚Р°';
+  Lookup     : string = 'РћС€РёР±РєР° РїСЂРё РѕР±Р·РѕСЂРµ СЃРµС‚Рё';
 var
   ErrorString: string;
 begin
@@ -636,12 +636,12 @@ begin
     eeAccept     : ErrorString := Accept;
     eeLookup     : ErrorString := Lookup;
   else
-    ErrorString := 'Неизвестная ошибка сети';
+    ErrorString := 'РќРµРёР·РІРµСЃС‚РЅР°СЏ РѕС€РёР±РєР° СЃРµС‚Рё';
   end;
 
-  // Пишем отчёт:
+  // РџРёС€РµРј РѕС‚С‡С‘С‚:
   SocketConsole.Lines.Add(
-                          '[' + TimeToStr(Now) + '] Ошибка в сокете клиента ' + Socket.RemoteAddress + ':' + #13#10#13#10 +
+                          '[' + TimeToStr(Now) + '] РћС€РёР±РєР° РІ СЃРѕРєРµС‚Рµ РєР»РёРµРЅС‚Р° ' + Socket.RemoteAddress + ':' + #13#10#13#10 +
                           '   ErrorEvent : ' + ErrorString + #13#10 +
                           '   ErrorCode  : ' + IntToStr(ErrorCode) + #13#10#13#10 +
                           '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
@@ -700,7 +700,7 @@ begin
 
   Data := Socket.ReceiveText;
 
-  // Получаем данные:
+  // РџРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ:
   Action     := GetXMLParameter(Data, 'type');
   Login      := GetXMLParameter(Data, 'login');
   Password   := GetXMLParameter(Data, 'password');
@@ -709,7 +709,7 @@ begin
   HWID       := GetXMLParameter(Data, 'hwid');
   IsWatchDog := Pos('<wd>', Data) <> 0;
 
-  // Проверяем глобальную соль:
+  // РџСЂРѕРІРµСЂСЏРµРј РіР»РѕР±Р°Р»СЊРЅСѓСЋ СЃРѕР»СЊ:
   if Pos(GlobalSaltEdit.Text, Data) = 0 then
   begin
     if not IsWatchDog then
@@ -724,12 +724,12 @@ begin
         end;
       end;
 
-      // Пишем отчёт:
+      // РџРёС€РµРј РѕС‚С‡С‘С‚:
       SocketConsole.Lines.Add(
-                              '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                              '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                               '   Type      : ' + UpperCase(Action) + #13#10 +
                               '   Login     : ' + Login + #13#10#13#10 +
-                              'Ответили клиенту:' + #13#10 +
+                              'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                               '   # BAD GLOBAL SALT' + #13#10#13#10 +
                               '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
       );
@@ -738,13 +738,13 @@ begin
     begin
       if SaltWatchDog.Checked then
       begin
-        // Пишем отчёт:
+        // РџРёС€РµРј РѕС‚С‡С‘С‚:
         SocketConsole.Lines.Add(
-                                '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                                '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                                 ' # WATCHDOG:' + #13#10 +
                                 '   Type      : ' + UpperCase(Action) + #13#10 +
                                 '   Login     : ' + Login + #13#10#13#10 +
-                                'Ответили клиенту:' + #13#10 +
+                                'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                                 '   # BAD GLOBAL SALT' + #13#10#13#10 +
                                 '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
         );
@@ -753,38 +753,38 @@ begin
 
     Socket.Close;
 
-    // Завершаем счётчик производительности:
+    // Р—Р°РІРµСЂС€Р°РµРј СЃС‡С‘С‚С‡РёРє РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё:
     QueryPerformanceCounter(T2);
-    MainForm.Caption := 'Система управления сервером [Выполнено за: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
+    MainForm.Caption := 'РЎРёСЃС‚РµРјР° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРµСЂРІРµСЂРѕРј [Р’С‹РїРѕР»РЅРµРЅРѕ Р·Р°: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
     Exit;
   end;
 
 
-  // Проверяем на неверный запрос:
+  // РџСЂРѕРІРµСЂСЏРµРј РЅР° РЅРµРІРµСЂРЅС‹Р№ Р·Р°РїСЂРѕСЃ:
   if CheckSymbols(Login) or CheckSymbols(Mail) or (Length(Login) = 0) then
   begin
     Socket.SendText(RESPONSE_INCORRECT_DATA + LauncherVersion);
 
-    // Пишем отчёт:
+    // РџРёС€РµРј РѕС‚С‡С‘С‚:
     SocketConsole.Lines.Add(
-                            '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                            '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                             '   Type      : ' + UpperCase(Action) + #13#10 +
                             '   Login     : ' + Login + #13#10#13#10 +
-                            'Ответили клиенту:' + #13#10 +
+                            'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                             '   # INCORRECT DATA' + #13#10#13#10 +
                             '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
     );
 
     Socket.Close;
 
-    // Завершаем счётчик производительности:
+    // Р—Р°РІРµСЂС€Р°РµРј СЃС‡С‘С‚С‡РёРє РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё:
     QueryPerformanceCounter(T2);
-    MainForm.Caption := 'Система управления сервером [Выполнено за: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
+    MainForm.Caption := 'РЎРёСЃС‚РµРјР° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРµСЂРІРµСЂРѕРј [Р’С‹РїРѕР»РЅРµРЅРѕ Р·Р°: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
     Exit;
   end;
 
 
-// Все данные проверены, выполняем запрос:
+// Р’СЃРµ РґР°РЅРЅС‹Рµ РїСЂРѕРІРµСЂРµРЅС‹, РІС‹РїРѕР»РЅСЏРµРј Р·Р°РїСЂРѕСЃ:
 
   if UseMySQL.Checked then
   begin
@@ -806,12 +806,12 @@ begin
   if Action = 'auth' then
   begin
 
-    // Готовим строку с версией лаунчера:
+    // Р“РѕС‚РѕРІРёРј СЃС‚СЂРѕРєСѓ СЃ РІРµСЂСЃРёРµР№ Р»Р°СѓРЅС‡РµСЂР°:
     LauncherVersion := '<version>' + LauncherVersionEdit.Text + '</version>';
 
     UserInBase := False;
 
-    // Проверяем пользователя на наличие в базе:
+    // РџСЂРѕРІРµСЂСЏРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅР° РЅР°Р»РёС‡РёРµ РІ Р±Р°Р·Рµ:
     if AllGranted.Checked then
       UserInBase := True;
 
@@ -838,29 +838,29 @@ begin
                                     'response'
                                     ) = 'success';
 
-      // Если не удалось подключиться к распределителю:
+      // Р•СЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє СЂР°СЃРїСЂРµРґРµР»РёС‚РµР»СЋ:
       if not ConnectionStatus then
       begin
         Response := RESPONSE_DISTRIBUTOR_FAIL;
         Socket.SendText(Response);
 
-        // Пишем отчёт:
+        // РџРёС€РµРј РѕС‚С‡С‘С‚:
         SocketConsole.Lines.Add(
-                                '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                                '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                                 '   Type      : AUTH -> DISTRIBUTOR' + #13#10 +
                                 '   Login     : ' + Login + #13#10 +
                                 '   Password  : ' + Password + #13#10#13#10 +
-                                'Ответили клиенту:' + #13#10 +
+                                'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                                 '   # DISTRIBUTOR CONNECTION FAIL' + #13#10#13#10 +
                                 '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
         );
 
-        // Отключаем клиента:
+        // РћС‚РєР»СЋС‡Р°РµРј РєР»РёРµРЅС‚Р°:
         Socket.Close;
 
-        // Завершаем счётчик производительности:
+        // Р—Р°РІРµСЂС€Р°РµРј СЃС‡С‘С‚С‡РёРє РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё:
         QueryPerformanceCounter(T2);
-        MainForm.Caption := 'Система управления сервером [Выполнено за: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
+        MainForm.Caption := 'РЎРёСЃС‚РµРјР° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРµСЂРІРµСЂРѕРј [Р’С‹РїРѕР»РЅРµРЅРѕ Р·Р°: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
         Exit;
       end;
 
@@ -890,13 +890,13 @@ begin
 
     Socket.SendText(Response);
 
-    // Пишем отчёт:
+    // РџРёС€РµРј РѕС‚С‡С‘С‚:
     SocketConsole.Lines.Add(
-                            '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                            '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                             '   Type      : AUTH' + #13#10 +
                             '   Login     : ' + Login + #13#10 +
                             '   Password  : ' + Password + #13#10#13#10 +
-                            'Ответили клиенту:' + #13#10 +
+                            'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                             '   # ' + UpperCase(GetXMLParameter(Response, 'response')) + #13#10#13#10 +
                             '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
     );
@@ -906,7 +906,7 @@ begin
 
   if Action = 'reg' then
   begin
-    // Если используем распределитель - перенаправляем запрос ему и возвращаем ответ:
+    // Р•СЃР»Рё РёСЃРїРѕР»СЊР·СѓРµРј СЂР°СЃРїСЂРµРґРµР»РёС‚РµР»СЊ - РїРµСЂРµРЅР°РїСЂР°РІР»СЏРµРј Р·Р°РїСЂРѕСЃ РµРјСѓ Рё РІРѕР·РІСЂР°С‰Р°РµРј РѕС‚РІРµС‚:
     if UseDistributor.Checked then
     begin
       Socket.SendText(
@@ -919,31 +919,31 @@ begin
                       )
                      );
 
-      // Если не удалось подключиться к распределителю:
+      // Р•СЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє СЂР°СЃРїСЂРµРґРµР»РёС‚РµР»СЋ:
       if not ConnectionStatus then
       begin
         Response := RESPONSE_DISTRIBUTOR_FAIL;
         Socket.SendText(Response);
 
-        // Пишем отчёт:
+        // РџРёС€РµРј РѕС‚С‡С‘С‚:
         SocketConsole.Lines.Add(
-                                '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                                '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                                 '   Type      : REG -> DISTRIBUTOR' + #13#10 +
                                 '   Login     : ' + Login + #13#10 +
                                 '   Password  : ' + Password + #13#10 +
                                 '   Mail      : ' + Mail + #13#10 +
                                 '   HWID      : ' + HWID + #13#10#13#10 +
-                                'Ответили клиенту:' + #13#10 +
+                                'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                                 '   # DISTRIBUTOR CONNECTION FAIL' + #13#10#13#10 +
                                 '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
         );
 
-        // Отключаем клиента:
+        // РћС‚РєР»СЋС‡Р°РµРј РєР»РёРµРЅС‚Р°:
         Socket.Close;
 
-        // Завершаем счётчик производительности:
+        // Р—Р°РІРµСЂС€Р°РµРј СЃС‡С‘С‚С‡РёРє РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё:
         QueryPerformanceCounter(T2);
-        MainForm.Caption := 'Система управления сервером [Выполнено за: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
+        MainForm.Caption := 'РЎРёСЃС‚РµРјР° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРµСЂРІРµСЂРѕРј [Р’С‹РїРѕР»РЅРµРЅРѕ Р·Р°: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
         Exit;
       end;
 
@@ -1009,20 +1009,20 @@ begin
 
     Socket.SendText(Response);
 
-    // Пишем отчёт:
+    // РџРёС€РµРј РѕС‚С‡С‘С‚:
     SocketConsole.Lines.Add(
-                            '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                            '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                             '   Type      : REG' + #13#10 +
                             '   Login     : ' + Login + #13#10 +
                             '   Password  : ' + Password + #13#10 +
                             '   Mail      : ' + Mail + #13#10 +
                             '   HWID      : ' + HWID + #13#10#13#10 +
-                            'Ответили клиенту:' + #13#10 +
+                            'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                             '   # ' + UpperCase(GetXMLParameter(Response, 'response')) + #13#10#13#10 +
                             '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
     );
 
-    // Заполняем список игроков в StringGrid'e:
+    // Р—Р°РїРѕР»РЅСЏРµРј СЃРїРёСЃРѕРє РёРіСЂРѕРєРѕРІ РІ StringGrid'e:
     FillStringGrid;
   end;
 
@@ -1031,7 +1031,7 @@ begin
   begin
     UserInBase := False;
 
-    // Проверяем пользователя на наличие в базе:
+    // РџСЂРѕРІРµСЂСЏРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅР° РЅР°Р»РёС‡РёРµ РІ Р±Р°Р·Рµ:
     if AllGranted.Checked then
       UserInBase := True;
 
@@ -1058,29 +1058,29 @@ begin
                                     'response'
                                     ) = 'success';
 
-      // Если не удалось подключиться к распределителю:
+      // Р•СЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє СЂР°СЃРїСЂРµРґРµР»РёС‚РµР»СЋ:
       if not ConnectionStatus then
       begin
         Response := RESPONSE_DISTRIBUTOR_FAIL;
         Socket.SendText(Response);
 
-        // Пишем отчёт:
+        // РџРёС€РµРј РѕС‚С‡С‘С‚:
         SocketConsole.Lines.Add(
-                                '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                                '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                                 '   Type      : GAMEAUTH -> DISTRIBUTOR' + #13#10 +
                                 '   Login     : ' + Login + #13#10 +
                                 '   Password  : ' + Password + #13#10#13#10 +
-                                'Ответили клиенту:' + #13#10 +
+                                'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                                 '   # DISTRIBUTOR CONNECTION FAIL' + #13#10#13#10 +
                                 '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
         );
 
-        // Отключаем клиента:
+        // РћС‚РєР»СЋС‡Р°РµРј РєР»РёРµРЅС‚Р°:
         Socket.Close;
 
-        // Завершаем счётчик производительности:
+        // Р—Р°РІРµСЂС€Р°РµРј СЃС‡С‘С‚С‡РёРє РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё:
         QueryPerformanceCounter(T2);
-        MainForm.Caption := 'Система управления сервером [Выполнено за: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
+        MainForm.Caption := 'РЎРёСЃС‚РµРјР° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРµСЂРІРµСЂРѕРј [Р’С‹РїРѕР»РЅРµРЅРѕ Р·Р°: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
         Exit;
       end;
     end;
@@ -1140,15 +1140,15 @@ begin
 
     Socket.SendText(Response);
 
-    // Пишем отчёт:
+    // РџРёС€РµРј РѕС‚С‡С‘С‚:
     SocketConsole.Lines.Add(
-                            '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                            '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                             '   Type      : GAMEAUTH' + #13#10 +
                             '   Login     : ' + Login + #13#10 +
                             '   Password  : ' + Password + #13#10 +
                             '   Checksum  : ' + Checksum + #13#10 +
                             '   HWID      : ' + HWID + #13#10#13#10 +
-                            'Ответили клиенту:' + #13#10 +
+                            'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                             '   # ' + UpperCase(GetXMLParameter(Response, 'response')) + #13#10#13#10 +
                             '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
     );
@@ -1168,7 +1168,7 @@ begin
           RemovePlayer(Login);
           Response := RESPONSE_BAD_CHECKSUM;
 
-          // Посылаем плагину команду на удаление игрока с сервера:
+          // РџРѕСЃС‹Р»Р°РµРј РїР»Р°РіРёРЅСѓ РєРѕРјР°РЅРґСѓ РЅР° СѓРґР°Р»РµРЅРёРµ РёРіСЂРѕРєР° СЃ СЃРµСЂРІРµСЂР°:
           PluginCommand := GlobalSaltEdit.Text + '<type>kick</type><login>' + Login + '</login>';
           SendData(PluginIPEdit.Text, StrToInt(PluginPortEdit.Text), PluginCommand, 200);
         end;
@@ -1180,7 +1180,7 @@ begin
           RemovePlayer(Login);
           Response := RESPONSE_BAD_CHECKSUM;
 
-          // Посылаем плагину команду на удаление игрока с сервера:
+          // РџРѕСЃС‹Р»Р°РµРј РїР»Р°РіРёРЅСѓ РєРѕРјР°РЅРґСѓ РЅР° СѓРґР°Р»РµРЅРёРµ РёРіСЂРѕРєР° СЃ СЃРµСЂРІРµСЂР°:
           PluginCommand := GlobalSaltEdit.Text + '<type>kick</type><login>' + Login + '</login>';
           SendData(PluginIPEdit.Text, StrToInt(PluginPortEdit.Text), PluginCommand, 200);
         end;
@@ -1190,13 +1190,13 @@ begin
     Socket.SendText(Response);
 
     if ShowBeaconMessages.Checked then
-      // Пишем отчёт:
+      // РџРёС€РµРј РѕС‚С‡С‘С‚:
       SocketConsole.Lines.Add(
-                              '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                              '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                               '   Type      : BEACON' + #13#10 +
                               '   Login     : ' + Login + #13#10 +
                               '   Checksum  : ' + Checksum + #13#10#13#10 +
-                              'Ответили клиенту:' + #13#10 +
+                              'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                               '   # ' + UpperCase(GetXMLParameter(Response, 'response')) + #13#10#13#10 +
                               '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
       );
@@ -1207,15 +1207,15 @@ begin
   begin
     RemovePlayer(Login);
 
-    // Посылаем плагину команду на удаление игрока с сервера:
+    // РџРѕСЃС‹Р»Р°РµРј РїР»Р°РіРёРЅСѓ РєРѕРјР°РЅРґСѓ РЅР° СѓРґР°Р»РµРЅРёРµ РёРіСЂРѕРєР° СЃ СЃРµСЂРІРµСЂР°:
     PluginCommand := GlobalSaltEdit.Text + '<type>kick</type><login>' + Login + '</login>';
     SendData(PluginIPEdit.Text, StrToInt(PluginPortEdit.Text), PluginCommand, 200);
 
     if ShowDeauthMessages.Checked then
-      // Пишем отчёт:
+      // РџРёС€РµРј РѕС‚С‡С‘С‚:
       if IsWatchDog then
         SocketConsole.Lines.Add(
-                                '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                                '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                                 ' # WATCHDOG:' + #13#10 +
                                 '   Type      : DEAUTH' + #13#10 +
                                 '   Login     : ' + Login + #13#10#13#10 +
@@ -1223,7 +1223,7 @@ begin
         )
       else
         SocketConsole.Lines.Add(
-                                '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                                '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                                 '   Type      : DEAUTH' + #13#10 +
                                 '   Login     : ' + Login + #13#10#13#10 +
                                 '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
@@ -1246,12 +1246,12 @@ begin
     Socket.SendText(Response);
 
     if ShowPluginMessages.Checked then
-      // Пишем отчёт:
+      // РџРёС€РµРј РѕС‚С‡С‘С‚:
       SocketConsole.Lines.Add(
-                              '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                              '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                               '   Type      : [NTPLAGUE] LOGIN EVENT' + #13#10 +
                               '   Login     : ' + Login + #13#10#13#10 +
-                              'Ответили клиенту:' + #13#10 +
+                              'РћС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ:' + #13#10 +
                               '   # ' + UpperCase(Response) + #13#10#13#10 +
                               '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
       );
@@ -1267,9 +1267,9 @@ begin
     if DeletePlayersOnEnter.Checked then RemovePlayer(Login);
 
     if ShowPluginMessages.Checked then
-      // Пишем отчёт:
+      // РџРёС€РµРј РѕС‚С‡С‘С‚:
       SocketConsole.Lines.Add(
-                              '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                              '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                               '   Type      : [NTPLAGUE] JOIN EVENT' + #13#10 +
                               '   Login     : ' + Login + #13#10#13#10 +
                               '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
@@ -1283,9 +1283,9 @@ begin
     if DeletePlayersOnEnter.Checked then RemovePlayer(Login);
 
     if ShowPluginMessages.Checked then
-      // Пишем отчёт:
+      // РџРёС€РµРј РѕС‚С‡С‘С‚:
       SocketConsole.Lines.Add(
-                              '[' + TimeToStr(Now) + '] Клиент ' + Socket.RemoteAddress + ' прислал данные:' + #13#10#13#10 +
+                              '[' + TimeToStr(Now) + '] РљР»РёРµРЅС‚ ' + Socket.RemoteAddress + ' РїСЂРёСЃР»Р°Р» РґР°РЅРЅС‹Рµ:' + #13#10#13#10 +
                               '   Type      : [NTPLAGUE] QUIT EVENT' + #13#10 +
                               '   Login     : ' + Login + #13#10#13#10 +
                               '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -' + #13#10
@@ -1296,12 +1296,12 @@ begin
   end;
 
 
-  // Отключаем клиента:
+  // РћС‚РєР»СЋС‡Р°РµРј РєР»РёРµРЅС‚Р°:
   Socket.Close;
 
-  // Завершаем счётчик производительности:
+  // Р—Р°РІРµСЂС€Р°РµРј СЃС‡С‘С‚С‡РёРє РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё:
   QueryPerformanceCounter(T2);
-  MainForm.Caption := 'Система управления сервером [Выполнено за: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
+  MainForm.Caption := 'РЎРёСЃС‚РµРјР° СѓРїСЂР°РІР»РµРЅРёСЏ СЃРµСЂРІРµСЂРѕРј [Р’С‹РїРѕР»РЅРµРЅРѕ Р·Р°: ' + FormatFloat('0.0000', (T2 - T1) / Frequency) + ']';
 end;
 
 
@@ -1399,7 +1399,7 @@ begin
     else
     begin
       PlayersList.RowCount := 2;
-      PlayersList.Cells[0, 1] := 'Игроков нет';
+      PlayersList.Cells[0, 1] := 'РРіСЂРѕРєРѕРІ РЅРµС‚';
       PlayersList.Cells[1, 1] := '0';
     end;
   end;
@@ -1412,7 +1412,7 @@ end;
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 //
 //
-//                     Второстепенный функционал
+//                     Р’С‚РѕСЂРѕСЃС‚РµРїРµРЅРЅС‹Р№ С„СѓРЅРєС†РёРѕРЅР°Р»
 //
 //
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
@@ -1465,7 +1465,7 @@ begin
   if LocalBase.Checked then SaveStringToRegistry(RegistryPath, 'AuthMode', 'base');
   if UseDistributor.Checked then SaveStringToRegistry(RegistryPath, 'AuthMode', 'use distributor');
 
-  MessageBox(Handle, 'Настройки сохранены в реестр!', 'Успешно!', MB_ICONASTERISK);
+  MessageBox(Handle, 'РќР°СЃС‚СЂРѕР№РєРё СЃРѕС…СЂР°РЅРµРЅС‹ РІ СЂРµРµСЃС‚СЂ!', 'РЈСЃРїРµС€РЅРѕ!', MB_ICONASTERISK);
 end;
 
 
@@ -1520,7 +1520,7 @@ begin
     if UseDistributor.Checked then WriteString(SettingsSection, 'AuthMode', 'use distributor');
   end;
 
-  MessageBox(Handle, 'Настройки сохранены в файл config.ini', 'Успешно!', MB_ICONASTERISK);
+  MessageBox(Handle, 'РќР°СЃС‚СЂРѕР№РєРё СЃРѕС…СЂР°РЅРµРЅС‹ РІ С„Р°Р№Р» config.ini', 'РЈСЃРїРµС€РЅРѕ!', MB_ICONASTERISK);
 end;
 
 
@@ -1631,7 +1631,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Рисуем заливку цветом:
+// Р РёСЃСѓРµРј Р·Р°Р»РёРІРєСѓ С†РІРµС‚РѕРј:
 procedure TMainForm.PlayersGridDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var
@@ -1640,10 +1640,10 @@ begin
   Login := TrimLeft(PlayersGrid.Cells[ACol, ARow]);
 
   if ARow = PlayersGrid.Row then
-    // Любая выделенная ячейка:
+    // Р›СЋР±Р°СЏ РІС‹РґРµР»РµРЅРЅР°СЏ СЏС‡РµР№РєР°:
     PlayersGrid.Canvas.Brush.Color := RGB(121, 191, 255)
   else
-    // Все остальные ячейки:
+    // Р’СЃРµ РѕСЃС‚Р°Р»СЊРЅС‹Рµ СЏС‡РµР№РєРё:
     if IsPlayerOnline(Login) then
       PlayersGrid.Canvas.Brush.Color := RGB(100, 255, 112)
     else
@@ -1658,7 +1658,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Выделяем ячейки правой кнопкой мыши:
+// Р’С‹РґРµР»СЏРµРј СЏС‡РµР№РєРё РїСЂР°РІРѕР№ РєРЅРѕРїРєРѕР№ РјС‹С€Рё:
 procedure TMainForm.PlayersGridMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
@@ -1683,7 +1683,7 @@ var
   I: LongWord;
   Decrement: LongWord;
 begin
-  FillBasePlayers; // Получаем список игроков в базе
+  FillBasePlayers; // РџРѕР»СѓС‡Р°РµРј СЃРїРёСЃРѕРє РёРіСЂРѕРєРѕРІ РІ Р±Р°Р·Рµ
 
   BaseCount := Length(BasePlayers);
   OnlineCount := Length(OnlinePlayers);
@@ -1691,7 +1691,7 @@ begin
   if (BaseCount = 0) and (OnlineCount = 0) then
   begin
     PlayersGrid.RowCount := 1;
-    PlayersGrid.Cells[0, 0] := '  Игроков нет';
+    PlayersGrid.Cells[0, 0] := '  РРіСЂРѕРєРѕРІ РЅРµС‚';
     PlayersGrid.Font.Name := 'Tahoma';
     Exit;
   end
@@ -1720,7 +1720,7 @@ begin
         PlayersGrid.Cells[0, I + OnlineCount - Decrement] := '  ' + BasePlayers[I];
       end
       else
-        Inc(Decrement); // Понял, да?
+        Inc(Decrement); // РџРѕРЅСЏР», РґР°?
     end;
 
     if Decrement > 0 then
@@ -1753,7 +1753,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>kick</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' выкинут с сервера!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' РІС‹РєРёРЅСѓС‚ СЃ СЃРµСЂРІРµСЂР°!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1772,7 +1772,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>ban</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' забанен!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' Р·Р°Р±Р°РЅРµРЅ!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1791,7 +1791,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>unban</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' успешно разбанен!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' СѓСЃРїРµС€РЅРѕ СЂР°Р·Р±Р°РЅРµРЅ!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1810,7 +1810,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>ban ip</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' забанен по IP!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' Р·Р°Р±Р°РЅРµРЅ РїРѕ IP!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1829,7 +1829,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>unban ip</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' успешно разбанен по IP!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' СѓСЃРїРµС€РЅРѕ СЂР°Р·Р±Р°РЅРµРЅ РїРѕ IP!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1842,7 +1842,7 @@ var
 begin
   Login := TrimLeft(PlayersGrid.Cells[0, PlayersGrid.Row]);
   BanPlayerHWIDs(Login);
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' успешно забанен по железу!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' СѓСЃРїРµС€РЅРѕ Р·Р°Р±Р°РЅРµРЅ РїРѕ Р¶РµР»РµР·Сѓ!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1861,7 +1861,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>add to whitelist</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' добавлен в белый лист!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' РґРѕР±Р°РІР»РµРЅ РІ Р±РµР»С‹Р№ Р»РёСЃС‚!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1880,7 +1880,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>remove from whitelist</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' удалён из белого листа!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' СѓРґР°Р»С‘РЅ РёР· Р±РµР»РѕРіРѕ Р»РёСЃС‚Р°!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1893,7 +1893,7 @@ var
 begin
   Login := TrimLeft(PlayersGrid.Cells[0, PlayersGrid.Row]);
   AddPlayer(Login, StrToInt(TimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' добавлен в очередь на авторизацию!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' РґРѕР±Р°РІР»РµРЅ РІ РѕС‡РµСЂРµРґСЊ РЅР° Р°РІС‚РѕСЂРёР·Р°С†РёСЋ!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1906,7 +1906,7 @@ var
 begin
   Login := TrimLeft(PlayersGrid.Cells[0, PlayersGrid.Row]);
   AddPlayer(Login, -1);
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' добавлен в бессрочную очередь на авторизацию!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' РґРѕР±Р°РІР»РµРЅ РІ Р±РµСЃСЃСЂРѕС‡РЅСѓСЋ РѕС‡РµСЂРµРґСЊ РЅР° Р°РІС‚РѕСЂРёР·Р°С†РёСЋ!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1919,7 +1919,7 @@ var
 begin
   Login := TrimLeft(PlayersGrid.Cells[0, PlayersGrid.Row]);
   RemovePlayer(Login);
-  //MessageBox(Handle, PAnsiChar('Игрок ' + Login + ' удалён из очереди на авторизацию!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРє ' + Login + ' СѓРґР°Р»С‘РЅ РёР· РѕС‡РµСЂРµРґРё РЅР° Р°РІС‚РѕСЂРёР·Р°С†РёСЋ!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1938,7 +1938,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>op</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('Игроку ' + Login + ' даны полномочия оператора!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РРіСЂРѕРєСѓ ' + Login + ' РґР°РЅС‹ РїРѕР»РЅРѕРјРѕС‡РёСЏ РѕРїРµСЂР°С‚РѕСЂР°!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1957,7 +1957,7 @@ begin
   Port := StrToInt(PluginPortEdit.Text);
   GlobalSalt := GlobalSaltEdit.Text;
   SendData(IP, Port, GlobalSalt + '<type>deop</type><login>' + Login + '</login>', StrToInt(PluginTimeoutEdit.Text));
-  //MessageBox(Handle, PAnsiChar('С игрока ' + Login + ' сняты полномочия оператора!'), 'Успешно', MB_ICONASTERISK);
+  //MessageBox(Handle, PAnsiChar('РЎ РёРіСЂРѕРєР° ' + Login + ' СЃРЅСЏС‚С‹ РїРѕР»РЅРѕРјРѕС‡РёСЏ РѕРїРµСЂР°С‚РѕСЂР°!'), 'РЈСЃРїРµС€РЅРѕ', MB_ICONASTERISK);
 end;
 
 
@@ -1981,7 +1981,7 @@ var
 
 begin
   inherited;
-  InitProcessors; // Инициализируем процессоры
+  InitProcessors; // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РїСЂРѕС†РµСЃСЃРѕСЂС‹
   ProcessorsCount := GetProcessorsCount;
 
   Accumulator := 0;
@@ -2013,7 +2013,7 @@ begin
 
     Memory.dwLength := SizeOf(Memory);
     GlobalMemoryStatusEx(Memory);
-    RAM := IntToStr(Memory.ullAvailPhys div 1048576) + ' Мб';
+    RAM := IntToStr(Memory.ullAvailPhys div 1048576) + ' РњР±';
 
     GetProcessInfo(GetCurrentProcessID, ProcessInfo);
     ThreadsCount := IntToStr(ProcessInfo.ThreadsCount);
@@ -2051,7 +2051,7 @@ begin
 
     Inc(Accumulator);
 
-    // Чистим память:
+    // Р§РёСЃС‚РёРј РїР°РјСЏС‚СЊ:
     if Accumulator = 120 then
     begin
       Accumulator := 0;

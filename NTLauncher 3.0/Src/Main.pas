@@ -5,9 +5,9 @@ interface
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 {
-  LauncherSettings.pas - настройка лаунчера
-  Definitions.inc - флаги условной компиляции
-  LocalServersList.inc - локальный список серверов
+  LauncherSettings.pas - РЅР°СЃС‚СЂРѕР№РєР° Р»Р°СѓРЅС‡РµСЂР°
+  Definitions.inc - С„Р»Р°РіРё СѓСЃР»РѕРІРЅРѕР№ РєРѕРјРїРёР»СЏС†РёРё
+  LocalServersList.inc - Р»РѕРєР°Р»СЊРЅС‹Р№ СЃРїРёСЃРѕРє СЃРµСЂРІРµСЂРѕРІ
 }
 
 {$I Definitions.inc}
@@ -90,7 +90,7 @@ type
     procedure UploadCloakButtonClick(Sender: TObject);
     procedure OpenLauncherFolderClick(Sender: TObject);
     procedure OpenClientFolderClick(Sender: TObject);
-    // function CallProc(FunctionID: LongWord): Boolean; // Для шаблонизатора!
+    // function CallProc(FunctionID: LongWord): Boolean; // Р”Р»СЏ С€Р°Р±Р»РѕРЅРёР·Р°С‚РѕСЂР°!
     procedure RegLabelMouseEnter(Sender: TObject);
     procedure RegLabelMouseLeave(Sender: TObject);
     procedure RegLabelMouseDown(Sender: TObject; Button: TMouseButton;
@@ -115,7 +115,7 @@ implementation
 
 {$R *.dfm}
 
-// Массив событий для потоков загрузки клиентов:
+// РњР°СЃСЃРёРІ СЃРѕР±С‹С‚РёР№ РґР»СЏ РїРѕС‚РѕРєРѕРІ Р·Р°РіСЂСѓР·РєРё РєР»РёРµРЅС‚РѕРІ:
 var
   ArrayEvents: array [0..1] of THandle = (INVALID_HANDLE_VALUE, INVALID_HANDLE_VALUE);
 
@@ -125,7 +125,7 @@ const
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Тип загружаемого архива:
+// РўРёРї Р·Р°РіСЂСѓР¶Р°РµРјРѕРіРѕ Р°СЂС…РёРІР°:
 const
   ARCHIVE_MAIN   = 0;
   ARCHIVE_ASSETS = 1;
@@ -169,7 +169,7 @@ type
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Тип загружаемой картинки:
+// РўРёРї Р·Р°РіСЂСѓР¶Р°РµРјРѕР№ РєР°СЂС‚РёРЅРєРё:
 const
   IMAGE_SKIN  = 0;
   IMAGE_CLOAK = 1;
@@ -186,7 +186,7 @@ type
   end;
 
 
-// Константы типа соединения с сокетом:
+// РљРѕРЅСЃС‚Р°РЅС‚С‹ С‚РёРїР° СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ СЃРѕРєРµС‚РѕРј:
 const
   TYPE_AUTH     = 0;
   TYPE_REG      = 1;
@@ -231,15 +231,15 @@ type
 
 
 var
-  Mainpath: string; // Рабочая папка
-  Minepath: string; // Папка с клиентом
+  Mainpath: string; // Р Р°Р±РѕС‡Р°СЏ РїР°РїРєР°
+  Minepath: string; // РџР°РїРєР° СЃ РєР»РёРµРЅС‚РѕРј
 
-  // Переменные для хранения временного пути до скина и плаща для загрузки их на сайт:
+  // РџРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РІСЂРµРјРµРЅРЅРѕРіРѕ РїСѓС‚Рё РґРѕ СЃРєРёРЅР° Рё РїР»Р°С‰Р° РґР»СЏ Р·Р°РіСЂСѓР·РєРё РёС… РЅР° СЃР°Р№С‚:
   TempSkinPath: string;
   TempCloakPath: string;
 
   {$IFDEF MONITORING}
-  // Поток мониторинга:
+  // РџРѕС‚РѕРє РјРѕРЅРёС‚РѕСЂРёРЅРіР°:
   MonitoringThread: TMonitoringThread;
   {$ENDIF}
 
@@ -271,14 +271,14 @@ var
 begin
   //DoDoubleBuffering(MainForm);
 
-  // Удаляем временные файлы:
+  // РЈРґР°Р»СЏРµРј РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹:
   DeleteFile(Injector32Name);
   DeleteFile(Injector64Name);
   DeleteFile(HookLib32Name);
   DeleteFile(HookLib64Name);
 
   {$IFDEF AUTOUPDATE}
-  // Удаляем старый лаунчер:
+  // РЈРґР°Р»СЏРµРј СЃС‚Р°СЂС‹Р№ Р»Р°СѓРЅС‡РµСЂ:
   DeleteDirectory('*.old');
   {$ENDIF}
 
@@ -292,7 +292,7 @@ begin
     StartPerimeter(PerimeterSettings);
   {$ENDIF}
 
-  // Читаем настройки из реестра:
+  // Р§РёС‚Р°РµРј РЅР°СЃС‚СЂРѕР№РєРё РёР· СЂРµРµСЃС‚СЂР°:
   LoginEdit.Text := ReadStringFromRegistry(RegistryPath, 'Login', 'Player');
   PasswordEdit.Text := ReadStringFromRegistry(RegistryPath, 'Password', 'Player');
   RAMEdit.Text := ReadStringFromRegistry(RegistryPath, 'RAM', '1024');
@@ -318,18 +318,18 @@ begin
     {$ENDIF}
   {$ENDIF}
 
-  // Создаём флажки-события для потоков загрузки:
+  // РЎРѕР·РґР°С‘Рј С„Р»Р°Р¶РєРё-СЃРѕР±С‹С‚РёСЏ РґР»СЏ РїРѕС‚РѕРєРѕРІ Р·Р°РіСЂСѓР·РєРё:
   ArrayEvents[EVENT_MAIN] := CreateEvent(nil, TRUE, FALSE, nil);
   ArrayEvents[EVENT_ASSETS] := CreateEvent(nil, TRUE, FALSE, nil);
   SetEvent(ArrayEvents[EVENT_MAIN]);
   SetEvent(ArrayEvents[EVENT_ASSETS]);
 
-  // Создаём основной путь и путь к клиенту:
+  // РЎРѕР·РґР°С‘Рј РѕСЃРЅРѕРІРЅРѕР№ РїСѓС‚СЊ Рё РїСѓС‚СЊ Рє РєР»РёРµРЅС‚Сѓ:
   Mainpath := GetSpecialFolderPath(26) + MainFolder;
   Minepath := Mainpath;
 
   {$IFDEF MONITORING}
-  // Создаём поток мониторинга:
+  // РЎРѕР·РґР°С‘Рј РїРѕС‚РѕРє РјРѕРЅРёС‚РѕСЂРёРЅРіР°:
   MonitoringThread := TMonitoringThread.Create(True);
   MonitoringThread.FreeOnTerminate := True;
   MonitoringThread.Priority := tpLower;
@@ -341,7 +341,7 @@ begin
   MonitoringLabel.Visible := True;
   {$ENDIF}
 
-  // Если нет Assets'ов (например, клиент старых версий):
+  // Р•СЃР»Рё РЅРµС‚ Assets'РѕРІ (РЅР°РїСЂРёРјРµСЂ, РєР»РёРµРЅС‚ СЃС‚Р°СЂС‹С… РІРµСЂСЃРёР№):
   if Length(AssetsAddress) = 0 then
   begin
     AssetsLabel.Visible              := False;
@@ -352,7 +352,7 @@ begin
     AssetsRemainingTimeLabel.Visible := False;
   end;
 
-  // Если стоит автологин, то логинимся:
+  // Р•СЃР»Рё СЃС‚РѕРёС‚ Р°РІС‚РѕР»РѕРіРёРЅ, С‚Рѕ Р»РѕРіРёРЅРёРјСЃСЏ:
   TypeOfConnection := TYPE_AUTH;
   if AutoLoginCheckbox.Checked then
   begin
@@ -366,47 +366,47 @@ end;
 
 procedure TMainForm.AuthButtonClick(Sender: TObject);
 begin
-// Проверяем данные:
-  // Логин:
+// РџСЂРѕРІРµСЂСЏРµРј РґР°РЅРЅС‹Рµ:
+  // Р›РѕРіРёРЅ:
   if Length(LoginEdit.Text) = 0 then
   begin
-    MessageBox(Handle, 'Введите логин!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
     Exit;
   end;
 
   if CheckSymbols(LoginEdit.Text) then
   begin
-    MessageBox(Handle, 'В логине есть запрещённые символы!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'Р’ Р»РѕРіРёРЅРµ РµСЃС‚СЊ Р·Р°РїСЂРµС‰С‘РЅРЅС‹Рµ СЃРёРјРІРѕР»С‹!', 'РћС€РёР±РєР°!', MB_ICONERROR);
     Exit;
   end;
 
-  // Пароль:
+  // РџР°СЂРѕР»СЊ:
   if Length(PasswordEdit.Text) = 0 then
   begin
-    MessageBox(Handle, 'Введите пароль!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
     Exit;
   end;
 
-  // Недопустимые символы в пароле не проверяем, т.к. он хэшируется.
+  // РќРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹ РІ РїР°СЂРѕР»Рµ РЅРµ РїСЂРѕРІРµСЂСЏРµРј, С‚.Рє. РѕРЅ С…СЌС€РёСЂСѓРµС‚СЃСЏ.
 
-  // Почта:
+  // РџРѕС‡С‚Р°:
   if TypeOfConnection = TYPE_REG then
   begin
     if Length(MailEdit.Text) = 0 then
     begin
-      MessageBox(Handle, 'Введите логин!', 'Ошибка!', MB_ICONERROR);
+      MessageBox(Handle, 'Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
       Exit;
     end;
 
     if CheckSymbols(MailEdit.Text) then
     begin
-      MessageBox(Handle, 'В логине есть запрещённые символы!', 'Ошибка!', MB_ICONERROR);
+      MessageBox(Handle, 'Р’ Р»РѕРіРёРЅРµ РµСЃС‚СЊ Р·Р°РїСЂРµС‰С‘РЅРЅС‹Рµ СЃРёРјРІРѕР»С‹!', 'РћС€РёР±РєР°!', MB_ICONERROR);
       Exit;
     end;
 
     if Pos('@', MailEdit.Text) = 0 then
     begin
-      MessageBox(Handle, 'Введён некорректный адрес электронной почты!', 'Ошибка!', MB_ICONERROR);
+      MessageBox(Handle, 'Р’РІРµРґС‘РЅ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ Р°РґСЂРµСЃ СЌР»РµРєС‚СЂРѕРЅРЅРѕР№ РїРѕС‡С‚С‹!', 'РћС€РёР±РєР°!', MB_ICONERROR);
       Exit;
     end;
   end;
@@ -424,10 +424,10 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Подключение к обвязке:
+// РџРѕРґРєР»СЋС‡РµРЅРёРµ Рє РѕР±РІСЏР·РєРµ:
 procedure TMainForm.SetupConnect;
 begin
-  // Настраиваем сокет на первичное подключение:
+  // РќР°СЃС‚СЂР°РёРІР°РµРј СЃРѕРєРµС‚ РЅР° РїРµСЂРІРёС‡РЅРѕРµ РїРѕРґРєР»СЋС‡РµРЅРёРµ:
   ClientSocket.Host := PrimaryIP;
   ClientSocket.Port := ServerPort;
 
@@ -436,7 +436,7 @@ begin
   except
     ClientSocket.Close;
 
-    // Не удалось подключиться по основному IP, пробуем запасной:
+    // РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ РїРѕ РѕСЃРЅРѕРІРЅРѕРјСѓ IP, РїСЂРѕР±СѓРµРј Р·Р°РїР°СЃРЅРѕР№:
     try
       ClientSocket.Host := SecondaryIP;
       ClientSocket.Open;
@@ -446,15 +446,15 @@ begin
         MessageBox(
                     Handle,
                     PAnsiChar(
-                               'Не удалось подключиться!' +#13#10#13#10 +
-                               'Тип соединения: ' + IntToStr(TypeOfConnection) + #13#10#13#10 +
-                               'Адрес: ' + ClientSocket.Host + ' : ' + IntToStr(ClientSocket.Port) + #13#10 +
+                               'РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ!' +#13#10#13#10 +
+                               'РўРёРї СЃРѕРµРґРёРЅРµРЅРёСЏ: ' + IntToStr(TypeOfConnection) + #13#10#13#10 +
+                               'РђРґСЂРµСЃ: ' + ClientSocket.Host + ' : ' + IntToStr(ClientSocket.Port) + #13#10 +
                                '  PrimaryIP: ' + PrimaryIP + #13#10 +
                                '  SecondaryIP: ' + SecondaryIP + #13#10 +
                                '  ServerPort: ' + IntToStr(ServerPort) + #13#10 +
                                '  GamePort: ' + GamePort
                               ),
-                    'Ошибка!',
+                    'РћС€РёР±РєР°!',
                     MB_ICONERROR
                    );
     end;
@@ -465,7 +465,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Маячок:
+// РњР°СЏС‡РѕРє:
 procedure BeaconThreadProc;
 begin
   TypeOfConnection := TYPE_BEACON;
@@ -475,7 +475,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Деавторизация:
+// Р”РµР°РІС‚РѕСЂРёР·Р°С†РёСЏ:
 procedure DeauthThreadProc;
 begin
   TypeOfConnection := TYPE_DEAUTH;
@@ -514,10 +514,10 @@ var
   ConsoleThread: TReadConsoleThread;
   {$ENDIF}
 begin
-  // Создаём поток для обработки ответа от сервера:
+  // РЎРѕР·РґР°С‘Рј РїРѕС‚РѕРє РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РѕС‚РІРµС‚Р° РѕС‚ СЃРµСЂРІРµСЂР°:
   WinSocketStream := TWinSocketStream.Create(ClientSocket.Socket, 3000);
 
-  // Отправляем сообщение:
+  // РћС‚РїСЂР°РІР»СЏРµРј СЃРѕРѕР±С‰РµРЅРёРµ:
   case TypeOfConnection of
     TYPE_AUTH:
       ClientSocket.Socket.SendText(
@@ -576,24 +576,24 @@ begin
 //  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 
 
-  // Ждём ответ:
+  // Р–РґС‘Рј РѕС‚РІРµС‚:
   if WinSocketStream.WaitForData(WinSocketStream.TimeOut) then
   begin
     WinSocketStream.Read(Buffer, 65535);
     Received := Buffer;
 
-    // Проверяем версию лаунчера:
+    // РџСЂРѕРІРµСЂСЏРµРј РІРµСЂСЃРёСЋ Р»Р°СѓРЅС‡РµСЂР°:
     if TypeOfConnection = TYPE_AUTH then
     begin
       if StrToInt(GetXMLParameter(Received, 'version')) <> LauncherVersion then
       begin
         {$IFDEF AUTOUPDATE}
-        if MessageBox(Handle, 'Неверная версия лаунчера!' + #13#10 + 'Хотите обновить прямо сейчас?', 'Есть новая версия!', MB_ICONQUESTION + MB_YESNO) = IDYES then
+        if MessageBox(Handle, 'РќРµРІРµСЂРЅР°СЏ РІРµСЂСЃРёСЏ Р»Р°СѓРЅС‡РµСЂР°!' + #13#10 + 'РҐРѕС‚РёС‚Рµ РѕР±РЅРѕРІРёС‚СЊ РїСЂСЏРјРѕ СЃРµР№С‡Р°СЃ?', 'Р•СЃС‚СЊ РЅРѕРІР°СЏ РІРµСЂСЃРёСЏ!', MB_ICONQUESTION + MB_YESNO) = IDYES then
         begin
           HTTPSend := THTTPSend.Create;
           if not HTTPSend.HTTPMethod('GET', LauncherAddress) then
           begin
-            MessageBox(Handle, 'Ошибка при загрузке новой версии!' + #13#10 + 'Перезапустите лаунчер и попробуйте снова!', 'Ошибка!', MB_ICONERROR);
+            MessageBox(Handle, 'РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ РЅРѕРІРѕР№ РІРµСЂСЃРёРё!' + #13#10 + 'РџРµСЂРµР·Р°РїСѓСЃС‚РёС‚Рµ Р»Р°СѓРЅС‡РµСЂ Рё РїРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°!', 'РћС€РёР±РєР°!', MB_ICONERROR);
             ExitProcess(0);
           end;
           LauncherName := ExtractFileName(Application.ExeName);
@@ -605,11 +605,11 @@ begin
         end
         else
         begin
-          MessageBox(Handle, 'Для игры обновите лаунчер!', 'Ошибка!', MB_ICONERROR);
+          MessageBox(Handle, 'Р”Р»СЏ РёРіСЂС‹ РѕР±РЅРѕРІРёС‚Рµ Р»Р°СѓРЅС‡РµСЂ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
           ExitProcess(0);
         end;
         {$ELSE}
-        MessageBox(Handle, 'Неверная версия лаунчера!' + #13#10 + 'Скачайте новую версию!', 'Ошибка!', MB_ICONERROR);
+        MessageBox(Handle, 'РќРµРІРµСЂРЅР°СЏ РІРµСЂСЃРёСЏ Р»Р°СѓРЅС‡РµСЂР°!' + #13#10 + 'РЎРєР°С‡Р°Р№С‚Рµ РЅРѕРІСѓСЋ РІРµСЂСЃРёСЋ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
         FreeAndNil(WinSocketStream);
         ClientSocket.Close;
         ExitProcess(0);
@@ -617,37 +617,37 @@ begin
       end;
     end;
 
-    // С версией всё нормально, идём дальше:
+    // РЎ РІРµСЂСЃРёРµР№ РІСЃС‘ РЅРѕСЂРјР°Р»СЊРЅРѕ, РёРґС‘Рј РґР°Р»СЊС€Рµ:
     Response := GetXMLParameter(Received, 'response');
 
     
     if Response = 'salt fault' then
-      MessageBox(Handle, 'Неверная глобальная соль!', 'Ошибка!', MB_ICONERROR);
+      MessageBox(Handle, 'РќРµРІРµСЂРЅР°СЏ РіР»РѕР±Р°Р»СЊРЅР°СЏ СЃРѕР»СЊ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
 
 
     if Response = 'incorrect data' then
-      MessageBox(Handle, 'Запрещённые символы!', 'Ошибка!', MB_ICONERROR);
+      MessageBox(Handle, 'Р—Р°РїСЂРµС‰С‘РЅРЅС‹Рµ СЃРёРјРІРѕР»С‹!', 'РћС€РёР±РєР°!', MB_ICONERROR);
 
 
     if Response = 'bad login' then
-      MessageBox(Handle, 'Неверный логин или пароль!', 'Ошибка!', MB_ICONERROR);
+      MessageBox(Handle, 'РќРµРІРµСЂРЅС‹Р№ Р»РѕРіРёРЅ РёР»Рё РїР°СЂРѕР»СЊ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
 
 
     if Response = 'already exists' then
-      MessageBox(Handle, 'Пользователь уже есть в базе!', 'Ошибка!', MB_ICONERROR);
+      MessageBox(Handle, 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓР¶Рµ РµСЃС‚СЊ РІ Р±Р°Р·Рµ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
 
 
     if Response = 'distributor connection fail' then
-      MessageBox(Handle, 'Не удалось подключиться к распределителю через обвязку!', 'Ошибка!', MB_ICONERROR);
+      MessageBox(Handle, 'РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє СЂР°СЃРїСЂРµРґРµР»РёС‚РµР»СЋ С‡РµСЂРµР· РѕР±РІСЏР·РєСѓ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
 
 
     if Response = 'banned' then
-      MessageBox(Handle, 'Вас забанили, идите нахуй!', 'тЫЫ = СЛИЛСЯ!', MB_ICONERROR);
+      MessageBox(Handle, 'Р’Р°СЃ Р·Р°Р±Р°РЅРёР»Рё, РёРґРёС‚Рµ РЅР°С…СѓР№!', 'С‚Р«Р« = РЎР›РР›РЎРЇ!', MB_ICONERROR);
 
 
     if Response = 'bad checksum' then
     begin
-      // Очищаем папку с игрой:
+      // РћС‡РёС‰Р°РµРј РїР°РїРєСѓ СЃ РёРіСЂРѕР№:
       FlushGameFolder(Minepath, MineJarFolder, LibrariesFolder);
 
       if Length(AssetsAddress) > 0 then
@@ -661,14 +661,14 @@ begin
     if Response = 'success' then case TypeOfConnection of
       TYPE_AUTH:
       begin
-        // Меняем панель на панель ЛК:
+        // РњРµРЅСЏРµРј РїР°РЅРµР»СЊ РЅР° РїР°РЅРµР»СЊ Р›Рљ:
         MainPageControl.TabIndex := 1;
 
-        // Чистим изображения скина и плаща:
+        // Р§РёСЃС‚РёРј РёР·РѕР±СЂР°Р¶РµРЅРёСЏ СЃРєРёРЅР° Рё РїР»Р°С‰Р°:
         ClearImage(SkinImage);
         ClearImage(CloakImage);
 
-        // Загружаем скин и плащ:
+        // Р—Р°РіСЂСѓР¶Р°РµРј СЃРєРёРЅ Рё РїР»Р°С‰:
         DownloadSkin := TDownloadImageThread.Create(True);
         DownloadSkin.ImageType := IMAGE_SKIN;
         DownloadSkin.URL := SkinDownloadAddress + '/' + LoginEdit.Text + '.png';
@@ -683,7 +683,7 @@ begin
         DownloadCloak.Priority := tpNormal;
         DownloadCloak.Resume;
 
-        // Если включена мультисерверность, обрабатываем список серверов:
+        // Р•СЃР»Рё РІРєР»СЋС‡РµРЅР° РјСѓР»СЊС‚РёСЃРµСЂРІРµСЂРЅРѕСЃС‚СЊ, РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј СЃРїРёСЃРѕРє СЃРµСЂРІРµСЂРѕРІ:
         {$IFDEF MULTISERVER}
           {$IFNDEF LOCAL_SERVERS_LIST}
             GetServerList(Received);
@@ -692,14 +692,14 @@ begin
         {$ENDIF}
 
         {$IFDEF MONITORING}
-        // Запускаем мониторинг:
+        // Р—Р°РїСѓСЃРєР°РµРј РјРѕРЅРёС‚РѕСЂРёРЅРі:
         MonitoringThread.Resume;
         {$ENDIF}
 
-        // Получаем количество свободной оперативки:
-        FreeRAMLabel.Caption := IntToStr(GetFreeMemory) + ' Мб';
+        // РџРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРІРѕР±РѕРґРЅРѕР№ РѕРїРµСЂР°С‚РёРІРєРё:
+        FreeRAMLabel.Caption := IntToStr(GetFreeMemory) + ' РњР±';
 
-        // Сохраняем настройки в реестре:
+        // РЎРѕС…СЂР°РЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё РІ СЂРµРµСЃС‚СЂРµ:
         SaveStringToRegistry(RegistryPath, 'Login', LoginEdit.Text);
         SaveStringToRegistry(RegistryPath, 'Password', PasswordEdit.Text);
         SaveBooleanToRegistry(RegistryPath, 'AutoLogin', AutoLoginCheckbox.Checked);
@@ -709,7 +709,7 @@ begin
 
       TYPE_REG:
       begin
-        MessageBox(Handle, 'Успешная регистрация!', 'Успешно!', MB_ICONASTERISK);
+        MessageBox(Handle, 'РЈСЃРїРµС€РЅР°СЏ СЂРµРіРёСЃС‚СЂР°С†РёСЏ!', 'РЈСЃРїРµС€РЅРѕ!', MB_ICONASTERISK);
         RegLabel.OnClick(Sender);
       end;
 
@@ -755,15 +755,15 @@ begin
         begin
           FreeAndNil(WinSocketStream);
           ClientSocket.Close;
-          MessageBox(Handle, PAnsiChar('Java-машина не найдена!' + #13#10 + 'Предполагаемый путь:' + #13#10 + MCData.Java), 'Ошибка!', MB_ICONERROR);
+          MessageBox(Handle, PAnsiChar('Java-РјР°С€РёРЅР° РЅРµ РЅР°Р№РґРµРЅР°!' + #13#10 + 'РџСЂРµРґРїРѕР»Р°РіР°РµРјС‹Р№ РїСѓС‚СЊ:' + #13#10 + MCData.Java), 'РћС€РёР±РєР°!', MB_ICONERROR);
           Exit;
         end;
 
-        // Сохраняем настройки в реестре:
+        // РЎРѕС…СЂР°РЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё РІ СЂРµРµСЃС‚СЂРµ:
         SaveStringToRegistry(RegistryPath, 'RAM', RAMEdit.Text);
         SaveStringToRegistry(RegistryPath, 'Java', JavaEdit.Text);
 
-        // Запускаем игру:
+        // Р—Р°РїСѓСЃРєР°РµРј РёРіСЂСѓ:
         {$IFNDEF OLD_MINECRAFT}
         CommandLine := ExecuteMinecraft(MCData, MCProcessInfo);
         {$ELSE}
@@ -783,17 +783,17 @@ begin
         {$ENDIF}
 
         {$IFDEF CONTROL_PROCESSES}
-        // Запускаем защиту процессов:
+        // Р—Р°РїСѓСЃРєР°РµРј Р·Р°С‰РёС‚Сѓ РїСЂРѕС†РµСЃСЃРѕРІ:
         StartDefence(MCProcessInfo.Handle, MainForm.Handle, LoginEdit.Text, MCProcessInfo.ID, @DeauthThreadProc);
         {$ENDIF}
 
         {$IFDEF BEACON}
-        // Запускаем маячок:
+        // Р—Р°РїСѓСЃРєР°РµРј РјР°СЏС‡РѕРє:
         StartBeacon(MCProcessInfo.Handle, BeaconDelay, @BeaconThreadProc);
         {$ENDIF}
 
         {$IFDEF EURISTIC_DEFENCE}
-        // Запускаем поиск параллельных клиентов:
+        // Р—Р°РїСѓСЃРєР°РµРј РїРѕРёСЃРє РїР°СЂР°Р»Р»РµР»СЊРЅС‹С… РєР»РёРµРЅС‚РѕРІ:
         StartEuristicDefence(MCProcessInfo.Handle, MCProcessInfo.ID, EuristicDelay);
         {$ENDIF}
       end;
@@ -809,7 +809,7 @@ end;
 
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 //
-//           Второстепенный функционал: скины, плащи, доп. кнопки
+//           Р’С‚РѕСЂРѕСЃС‚РµРїРµРЅРЅС‹Р№ С„СѓРЅРєС†РёРѕРЅР°Р»: СЃРєРёРЅС‹, РїР»Р°С‰Рё, РґРѕРї. РєРЅРѕРїРєРё
 //
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
@@ -825,7 +825,7 @@ begin
   SetLauncherSettings(Index);
 
   {$IFDEF MONITORING}
-  // Переключаем сервер для мониторинга:
+  // РџРµСЂРµРєР»СЋС‡Р°РµРј СЃРµСЂРІРµСЂ РґР»СЏ РјРѕРЅРёС‚РѕСЂРёРЅРіР°:
   MonitoringThread.PrimaryIP := PrimaryIP;
   MonitoringThread.SecondaryIP := SecondaryIP;
   MonitoringThread.Port := StrToInt(GamePort);
@@ -851,13 +851,13 @@ var
 begin
   if TempCloakPath = '' then
   begin
-    MessageBox(Handle, 'Плащ не выбран!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'РџР»Р°С‰ РЅРµ РІС‹Р±СЂР°РЅ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
     Exit;
   end;
 
   if not FileExists(TempCloakPath) then
   begin
-    MessageBox(Handle, 'Плащ не найден!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'РџР»Р°С‰ РЅРµ РЅР°Р№РґРµРЅ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
     Exit;
   end;
 
@@ -867,9 +867,9 @@ begin
   AddPOSTField(Data, Size, 'user', LoginEdit.Text);
   AddPOSTFile(Data, Size, 'cloak', LoginEdit.Text, TempCloakPath, 'image/png');
   if HTTPPost(CloakUploadAddress, Data, Size) = 'OK' then
-    MessageBox(Handle, 'Плащ успешно установлен!', 'Успех!', MB_ICONASTERISK)
+    MessageBox(Handle, 'РџР»Р°С‰ СѓСЃРїРµС€РЅРѕ СѓСЃС‚Р°РЅРѕРІР»РµРЅ!', 'РЈСЃРїРµС…!', MB_ICONASTERISK)
   else
-    MessageBox(Handle, 'Плащ не установлен!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'РџР»Р°С‰ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
 end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -881,13 +881,13 @@ var
 begin
   if TempSkinPath = '' then
   begin
-    MessageBox(Handle, 'Скин не выбран!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'РЎРєРёРЅ РЅРµ РІС‹Р±СЂР°РЅ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
     Exit;
   end;
 
   if not FileExists(TempSkinPath) then
   begin
-    MessageBox(Handle, 'Скин не найден!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'РЎРєРёРЅ РЅРµ РЅР°Р№РґРµРЅ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
     Exit;
   end;
 
@@ -897,9 +897,9 @@ begin
   AddPOSTField(Data, Size, 'user', LoginEdit.Text);
   AddPOSTFile(Data, Size, 'skin', LoginEdit.Text, TempSkinPath, 'image/png');
   if HTTPPost(SkinUploadAddress, Data, Size) = 'OK' then
-    MessageBox(Handle, 'Скин успешно установлен!', 'Успех!', MB_ICONASTERISK)
+    MessageBox(Handle, 'РЎРєРёРЅ СѓСЃРїРµС€РЅРѕ СѓСЃС‚Р°РЅРѕРІР»РµРЅ!', 'РЈСЃРїРµС…!', MB_ICONASTERISK)
   else
-    MessageBox(Handle, 'Скин не установлен!', 'Ошибка!', MB_ICONERROR);
+    MessageBox(Handle, 'РЎРєРёРЅ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
 end;
 
 
@@ -911,7 +911,7 @@ var
   OpenDialog: TOpenDialog;
   MemoryStream: TMemoryStream;
 begin
-  // Выбираем скин:
+  // Р’С‹Р±РёСЂР°РµРј СЃРєРёРЅ:
   TempSkinPath := '';
   OpenDialog := TOpenDialog.Create(MainForm);
   OpenDialog.Filter := 'PNG|*.png';
@@ -921,7 +921,7 @@ begin
 
   if TempSkinPath = '' then Exit;
 
-  // Рисуем скин:
+  // Р РёСЃСѓРµРј СЃРєРёРЅ:
   MemoryStream := TMemoryStream.Create;
   MemoryStream.LoadFromFile(TempSkinPath);
   DrawSkin(MemoryStream, SkinImage);
@@ -936,7 +936,7 @@ var
   OpenDialog: TOpenDialog;
   MemoryStream: TMemoryStream;
 begin
-  // Выбираем плащ:
+  // Р’С‹Р±РёСЂР°РµРј РїР»Р°С‰:
   TempCloakPath := '';
   OpenDialog := TOpenDialog.Create(MainForm);
   OpenDialog.Filter := 'PNG|*.png';
@@ -946,7 +946,7 @@ begin
 
   if TempCloakPath = '' then Exit;
 
-  // Рисуем плащ:
+  // Р РёСЃСѓРµРј РїР»Р°С‰:
   MemoryStream := TMemoryStream.Create;
   MemoryStream.LoadFromFile(TempCloakPath);
   DrawSkin(MemoryStream, CloakImage);
@@ -996,7 +996,7 @@ begin
 end;
 
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-//                      Загрузка клиента, скинов и плащей
+//                      Р—Р°РіСЂСѓР·РєР° РєР»РёРµРЅС‚Р°, СЃРєРёРЅРѕРІ Рё РїР»Р°С‰РµР№
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
 
@@ -1040,13 +1040,13 @@ begin
   Downloaded := 0;
   Accumulator := 0;
 
-  // Получаем размер файла на сервере:
+  // РџРѕР»СѓС‡Р°РµРј СЂР°Р·РјРµСЂ С„Р°Р№Р»Р° РЅР° СЃРµСЂРІРµСЂРµ:
   FileSize := GetURLSize(URL);
 
-  // Если файла нет, то выходим:
+  // Р•СЃР»Рё С„Р°Р№Р»Р° РЅРµС‚, С‚Рѕ РІС‹С…РѕРґРёРј:
   if FileSize = 0 then
   begin
-    // Сбрасываем флажок:
+    // РЎР±СЂР°СЃС‹РІР°РµРј С„Р»Р°Р¶РѕРє:
     case ArchiveType of
       ARCHIVE_MAIN: SetEvent(ArrayEvents[EVENT_MAIN]);
       ARCHIVE_ASSETS: SetEvent(ArrayEvents[EVENT_ASSETS]);
@@ -1057,21 +1057,21 @@ begin
     Exit;
   end;
 
-  // Засекаем время:
+  // Р—Р°СЃРµРєР°РµРј РІСЂРµРјСЏ:
   QueryPerformanceFrequency(PerformanceFrequency);
   QueryPerformanceCounter(OldTimeCounter);
   StartTimeCounter := OldTimeCounter;
 
-  // Создаём временный файл:
+  // РЎРѕР·РґР°С‘Рј РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р»:
   CreatePath(ExtractFilePath(Destination));
   FileHandle := CreateFile(Destination, CREATE_ALWAYS);
 
-  // Скачиваем файл:
+  // РЎРєР°С‡РёРІР°РµРј С„Р°Р№Р»:
   HTTPClient := THTTPSend.Create;
   HTTPClient.Sock.OnStatus := OnSockStatus;
   HTTPClient.HTTPMethod('GET', URL);
 
-  // Сохраняем итоговый файл и освобождаем память:
+  // РЎРѕС…СЂР°РЅСЏРµРј РёС‚РѕРіРѕРІС‹Р№ С„Р°Р№Р» Рё РѕСЃРІРѕР±РѕР¶РґР°РµРј РїР°РјСЏС‚СЊ:
 {
   HTTPClient.Document.SaveToFile(Destination);
 }
@@ -1079,23 +1079,23 @@ begin
   CloseHandle(FileHandle);
   FreeAndNil(HTTPClient);
 
-  // Распаковываем архив:
+  // Р Р°СЃРїР°РєРѕРІС‹РІР°РµРј Р°СЂС…РёРІ:
   Status := DOWNLOAD_UNPACKING;
   Synchronize(UpdateForm);
   UnpackFile(Destination, ExtractFilePath(Destination));
   DeleteFile(Destination);
 
-  // Посылаем сигнал ожидания:
+  // РџРѕСЃС‹Р»Р°РµРј СЃРёРіРЅР°Р» РѕР¶РёРґР°РЅРёСЏ:
   Status := DOWNLOAD_WAITING;
   Synchronize(UpdateForm);
 
-  // Сбрасываем флажок:
+  // РЎР±СЂР°СЃС‹РІР°РµРј С„Р»Р°Р¶РѕРє:
   case ArchiveType of
     ARCHIVE_MAIN: SetEvent(ArrayEvents[EVENT_MAIN]);
     ARCHIVE_ASSETS: SetEvent(ArrayEvents[EVENT_ASSETS]);
   end;
 
-  // Ждём второй поток:
+  // Р–РґС‘Рј РІС‚РѕСЂРѕР№ РїРѕС‚РѕРє:
   WaitForMultipleObjects(2, @ArrayEvents[0], TRUE, INFINITE);
 
   Status := DOWNLOAD_SUCCESS;
@@ -1121,7 +1121,7 @@ begin
 
     Accumulator := Accumulator + TickDownloaded;
 
-    // Рассчитываем данные после каждого полученного мегабайта:
+    // Р Р°СЃСЃС‡РёС‚С‹РІР°РµРј РґР°РЅРЅС‹Рµ РїРѕСЃР»Рµ РєР°Р¶РґРѕРіРѕ РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ РјРµРіР°Р±Р°Р№С‚Р°:
     if Accumulator > 1048576 then
     begin
       QueryPerformanceCounter(NewTimeCounter);
@@ -1136,7 +1136,7 @@ begin
       OldTimeCounter := NewTimeCounter;
       Accumulator := 0;
 
-      // Сохраняем скачанные данные в файл:
+      // РЎРѕС…СЂР°РЅСЏРµРј СЃРєР°С‡Р°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ РІ С„Р°Р№Р»:
       WriteFile(FileHandle, HTTPClient.Document.Memory^, HTTPClient.Document.Size, WrittenBytes, nil);
       HTTPClient.Document.Clear;
     end;
@@ -1149,7 +1149,7 @@ procedure TDownloadArchiveThread.UpdateForm;
 begin
   case Status of
     DOWNLOAD_FILE_NOT_EXISTS:
-      MessageBox(MainForm.Handle, PChar('Файл ' + URL + ' не существует!'), 'Ошибка!', MB_ICONERROR);
+      MessageBox(MainForm.Handle, PChar('Р¤Р°Р№Р» ' + URL + ' РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚!'), 'РћС€РёР±РєР°!', MB_ICONERROR);
 
     DOWNLOAD_ACTIVE:
     begin
@@ -1157,19 +1157,19 @@ begin
         ARCHIVE_MAIN:
         with MainForm do
         begin
-          MainSizeOfFileLabel.Caption := 'Размер файла: ' + IntToStr(FileSize div 1048576) + ' Мб';
-          MainDownloadedLabel.Caption := 'Загружено: ' + IntToStr(Downloaded div 1048576) + ' Мб';
-          MainSpeedLabel.Caption := 'Скорость: ' + FormatFloat('0.00', Speed / 1024) + ' Кб/сек';
-          MainRemainingTimeLabel.Caption := 'Осталось: ' + FormatFloat('0.00', RemainingTime) + ' сек';
+          MainSizeOfFileLabel.Caption := 'Р Р°Р·РјРµСЂ С„Р°Р№Р»Р°: ' + IntToStr(FileSize div 1048576) + ' РњР±';
+          MainDownloadedLabel.Caption := 'Р—Р°РіСЂСѓР¶РµРЅРѕ: ' + IntToStr(Downloaded div 1048576) + ' РњР±';
+          MainSpeedLabel.Caption := 'РЎРєРѕСЂРѕСЃС‚СЊ: ' + FormatFloat('0.00', Speed / 1024) + ' РљР±/СЃРµРє';
+          MainRemainingTimeLabel.Caption := 'РћСЃС‚Р°Р»РѕСЃСЊ: ' + FormatFloat('0.00', RemainingTime) + ' СЃРµРє';
         end;
 
         ARCHIVE_ASSETS:
         with MainForm do
         begin
-          AssetsSizeOfFileLabel.Caption := 'Размер файла: ' + IntToStr(FileSize div 1048576) + ' Мб';
-          AssetsDownloadedLabel.Caption := 'Загружено: ' + IntToStr(Downloaded div 1048576) + ' Мб';
-          AssetsSpeedLabel.Caption := 'Скорость: ' + FormatFloat('0.00', Speed / 1024) + ' Кб/сек';
-          AssetsRemainingTimeLabel.Caption := 'Осталось: ' + FormatFloat('0.00', RemainingTime) + ' сек';
+          AssetsSizeOfFileLabel.Caption := 'Р Р°Р·РјРµСЂ С„Р°Р№Р»Р°: ' + IntToStr(FileSize div 1048576) + ' РњР±';
+          AssetsDownloadedLabel.Caption := 'Р—Р°РіСЂСѓР¶РµРЅРѕ: ' + IntToStr(Downloaded div 1048576) + ' РњР±';
+          AssetsSpeedLabel.Caption := 'РЎРєРѕСЂРѕСЃС‚СЊ: ' + FormatFloat('0.00', Speed / 1024) + ' РљР±/СЃРµРє';
+          AssetsRemainingTimeLabel.Caption := 'РћСЃС‚Р°Р»РѕСЃСЊ: ' + FormatFloat('0.00', RemainingTime) + ' СЃРµРє';
         end;
       end;
     end;
@@ -1180,19 +1180,19 @@ begin
         ARCHIVE_MAIN:
         with MainForm do
         begin
-          MainSizeOfFileLabel.Caption := 'Размер файла: Распаковка...';
-          MainDownloadedLabel.Caption := 'Загружено: Распаковка...';
-          MainSpeedLabel.Caption := 'Скорость: 0 Кб/сек';
-          MainRemainingTimeLabel.Caption := 'Осталось: 0 сек';
+          MainSizeOfFileLabel.Caption := 'Р Р°Р·РјРµСЂ С„Р°Р№Р»Р°: Р Р°СЃРїР°РєРѕРІРєР°...';
+          MainDownloadedLabel.Caption := 'Р—Р°РіСЂСѓР¶РµРЅРѕ: Р Р°СЃРїР°РєРѕРІРєР°...';
+          MainSpeedLabel.Caption := 'РЎРєРѕСЂРѕСЃС‚СЊ: 0 РљР±/СЃРµРє';
+          MainRemainingTimeLabel.Caption := 'РћСЃС‚Р°Р»РѕСЃСЊ: 0 СЃРµРє';
         end;
 
         ARCHIVE_ASSETS:
         with MainForm do
         begin
-          AssetsSizeOfFileLabel.Caption := 'Размер файла: Распаковка...';
-          AssetsDownloadedLabel.Caption := 'Загружено: Распаковка...';
-          AssetsSpeedLabel.Caption := 'Скорость: 0 Кб/сек';
-          AssetsRemainingTimeLabel.Caption := 'осталось: 0 сек';
+          AssetsSizeOfFileLabel.Caption := 'Р Р°Р·РјРµСЂ С„Р°Р№Р»Р°: Р Р°СЃРїР°РєРѕРІРєР°...';
+          AssetsDownloadedLabel.Caption := 'Р—Р°РіСЂСѓР¶РµРЅРѕ: Р Р°СЃРїР°РєРѕРІРєР°...';
+          AssetsSpeedLabel.Caption := 'РЎРєРѕСЂРѕСЃС‚СЊ: 0 РљР±/СЃРµРє';
+          AssetsRemainingTimeLabel.Caption := 'РѕСЃС‚Р°Р»РѕСЃСЊ: 0 СЃРµРє';
         end;
       end;
     end;
@@ -1203,19 +1203,19 @@ begin
         ARCHIVE_MAIN:
         with MainForm do
         begin
-          MainSizeOfFileLabel.Caption := 'Размер файла: Ожидание...';
-          MainDownloadedLabel.Caption := 'Загружено: Ожидание...';
-          MainSpeedLabel.Caption := 'Скорость: 0 Кб/сек';
-          MainRemainingTimeLabel.Caption := 'Осталось: 0 сек';
+          MainSizeOfFileLabel.Caption := 'Р Р°Р·РјРµСЂ С„Р°Р№Р»Р°: РћР¶РёРґР°РЅРёРµ...';
+          MainDownloadedLabel.Caption := 'Р—Р°РіСЂСѓР¶РµРЅРѕ: РћР¶РёРґР°РЅРёРµ...';
+          MainSpeedLabel.Caption := 'РЎРєРѕСЂРѕСЃС‚СЊ: 0 РљР±/СЃРµРє';
+          MainRemainingTimeLabel.Caption := 'РћСЃС‚Р°Р»РѕСЃСЊ: 0 СЃРµРє';
         end;
 
         ARCHIVE_ASSETS:
         with MainForm do
         begin
-          AssetsSizeOfFileLabel.Caption := 'Размер файла: Ожидание...';
-          AssetsDownloadedLabel.Caption := 'Загружено: Ожидание...';
-          AssetsSpeedLabel.Caption := 'Скорость: 0 Кб/сек';
-          AssetsRemainingTimeLabel.Caption := 'осталось: 0 сек';
+          AssetsSizeOfFileLabel.Caption := 'Р Р°Р·РјРµСЂ С„Р°Р№Р»Р°: РћР¶РёРґР°РЅРёРµ...';
+          AssetsDownloadedLabel.Caption := 'Р—Р°РіСЂСѓР¶РµРЅРѕ: РћР¶РёРґР°РЅРёРµ...';
+          AssetsSpeedLabel.Caption := 'РЎРєРѕСЂРѕСЃС‚СЊ: 0 РљР±/СЃРµРє';
+          AssetsRemainingTimeLabel.Caption := 'РѕСЃС‚Р°Р»РѕСЃСЊ: 0 СЃРµРє';
         end;
       end;
     end;
@@ -1226,10 +1226,10 @@ begin
         ARCHIVE_MAIN:
         with MainForm do
         begin
-          MainSizeOfFileLabel.Caption := 'Размер файла: 0 Мб';
-          MainDownloadedLabel.Caption := 'Загружено: 0 Мб';
-          MainSpeedLabel.Caption := 'Скорость: 0 Кб/сек';
-          MainRemainingTimeLabel.Caption := 'Осталось: 0 сек';
+          MainSizeOfFileLabel.Caption := 'Р Р°Р·РјРµСЂ С„Р°Р№Р»Р°: 0 РњР±';
+          MainDownloadedLabel.Caption := 'Р—Р°РіСЂСѓР¶РµРЅРѕ: 0 РњР±';
+          MainSpeedLabel.Caption := 'РЎРєРѕСЂРѕСЃС‚СЊ: 0 РљР±/СЃРµРє';
+          MainRemainingTimeLabel.Caption := 'РћСЃС‚Р°Р»РѕСЃСЊ: 0 СЃРµРє';
 
           DownloadMainButton.Visible := True;
         end;
@@ -1237,10 +1237,10 @@ begin
         ARCHIVE_ASSETS:
         with MainForm do
         begin
-          AssetsSizeOfFileLabel.Caption := 'Размер файла: 0 Мб';
-          AssetsDownloadedLabel.Caption := 'Загружено: 0 Мб';
-          AssetsSpeedLabel.Caption := 'Скорость: 0 Кб/сек';
-          AssetsRemainingTimeLabel.Caption := 'Осталось: 0 сек';
+          AssetsSizeOfFileLabel.Caption := 'Р Р°Р·РјРµСЂ С„Р°Р№Р»Р°: 0 РњР±';
+          AssetsDownloadedLabel.Caption := 'Р—Р°РіСЂСѓР¶РµРЅРѕ: 0 РњР±';
+          AssetsSpeedLabel.Caption := 'РЎРєРѕСЂРѕСЃС‚СЊ: 0 РљР±/СЃРµРє';
+          AssetsRemainingTimeLabel.Caption := 'РћСЃС‚Р°Р»РѕСЃСЊ: 0 СЃРµРє';
 
           DownloadAssetsButton.Visible := True;
         end;
@@ -1266,10 +1266,10 @@ begin
   HTTPClient := THTTPSend.Create;
   HTTPClient.HTTPMethod('GET', URL);
 
-  // Если мы хоть что-то скачали, то проверяем сигнатуру:
+  // Р•СЃР»Рё РјС‹ С…РѕС‚СЊ С‡С‚Рѕ-С‚Рѕ СЃРєР°С‡Р°Р»Рё, С‚Рѕ РїСЂРѕРІРµСЂСЏРµРј СЃРёРіРЅР°С‚СѓСЂСѓ:
   if HTTPClient.Document.Size > 0 then
   begin
-    // Если этот файл - PNG, то рисуем скин или плащ:
+    // Р•СЃР»Рё СЌС‚РѕС‚ С„Р°Р№Р» - PNG, С‚Рѕ СЂРёСЃСѓРµРј СЃРєРёРЅ РёР»Рё РїР»Р°С‰:
     if Cardinal(HTTPClient.Document.Memory^) = PNGSignature then
     begin
       Synchronize(UpdateForm);
@@ -1338,12 +1338,12 @@ begin
   MessageBox(
               Handle,
               PAnsiChar(
-              'Память очищена!' + #13#10 + #13#10 +
-              ' - Было: ' + IntToStr(OldRAM) + ' Мб' + #13#10 +
-              ' - Стало: ' + IntToStr(NewRAM) + ' Мб' + #13#10 +
-              ' - Разница: ' + IntToStr(Delta) + ' Мб'
+              'РџР°РјСЏС‚СЊ РѕС‡РёС‰РµРЅР°!' + #13#10 + #13#10 +
+              ' - Р‘С‹Р»Рѕ: ' + IntToStr(OldRAM) + ' РњР±' + #13#10 +
+              ' - РЎС‚Р°Р»Рѕ: ' + IntToStr(NewRAM) + ' РњР±' + #13#10 +
+              ' - Р Р°Р·РЅРёС†Р°: ' + IntToStr(Delta) + ' РњР±'
               ),
-              'Успешно!',
+              'РЈСЃРїРµС€РЅРѕ!',
               MB_ICONASTERISK
              );
 end;
@@ -1351,7 +1351,7 @@ end;
 
 
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-//                               Мониторинг
+//                               РњРѕРЅРёС‚РѕСЂРёРЅРі
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
 {$IFDEF MONITORING}
@@ -1364,10 +1364,10 @@ begin
 
   while True do
   begin
-    // Пробуем основной IP:
+    // РџСЂРѕР±СѓРµРј РѕСЃРЅРѕРІРЅРѕР№ IP:
     ServerActive := GetServerInfo(PrimaryIP, Port, ServerInfo, 120);
 
-    // Если основной недоступен - стучимся в запасной:
+    // Р•СЃР»Рё РѕСЃРЅРѕРІРЅРѕР№ РЅРµРґРѕСЃС‚СѓРїРµРЅ - СЃС‚СѓС‡РёРјСЃСЏ РІ Р·Р°РїР°СЃРЅРѕР№:
     if not ServerActive then
       ServerActive := GetServerInfo(SecondaryIP, Port, ServerInfo, 120);
 
@@ -1388,13 +1388,13 @@ begin
     if ServerActive then
     begin
       with ServerInfo do
-        MonitoringLabel.Caption := 'Играют: ' + CurrentPlayers + ' из ' + MaxPlayers;
+        MonitoringLabel.Caption := 'РРіСЂР°СЋС‚: ' + CurrentPlayers + ' РёР· ' + MaxPlayers;
 
       MonitoringLabel.Font.Color := clBlack;
     end
     else
     begin
-      MonitoringLabel.Caption := 'Сервер выключен!';
+      MonitoringLabel.Caption := 'РЎРµСЂРІРµСЂ РІС‹РєР»СЋС‡РµРЅ!';
       MonitoringLabel.Font.Color := clMaroon;
     end;
   end;
@@ -1406,7 +1406,7 @@ end;
 //
 //
 //
-//                     Обработка дизайна формы
+//                     РћР±СЂР°Р±РѕС‚РєР° РґРёР·Р°Р№РЅР° С„РѕСЂРјС‹
 //
 //
 //
@@ -1424,22 +1424,22 @@ begin
     begin
       TypeOfConnection := TYPE_REG;
 
-      // Выставляем окно для регистрации:
+      // Р’С‹СЃС‚Р°РІР»СЏРµРј РѕРєРЅРѕ РґР»СЏ СЂРµРіРёСЃС‚СЂР°С†РёРё:
       MailEdit.Visible := True;
       Label3.Visible := True;
-      AuthButton.Caption := 'Зарегистрироваться';
-      RegLabel.Caption := 'Авторизация';
+      AuthButton.Caption := 'Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ';
+      RegLabel.Caption := 'РђРІС‚РѕСЂРёР·Р°С†РёСЏ';
     end;
 
     TYPE_REG:
     begin
       TypeOfConnection := TYPE_AUTH;
 
-      // Выставляем окно для авторизации:
+      // Р’С‹СЃС‚Р°РІР»СЏРµРј РѕРєРЅРѕ РґР»СЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё:
       MailEdit.Visible := False;
       Label3.Visible := False;
-      AuthButton.Caption := 'Авторизоваться';
-      RegLabel.Caption := 'Регистрация';
+      AuthButton.Caption := 'РђРІС‚РѕСЂРёР·РѕРІР°С‚СЊСЃСЏ';
+      RegLabel.Caption := 'Р РµРіРёСЃС‚СЂР°С†РёСЏ';
     end;
   end;
 end;
@@ -1567,7 +1567,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Ограничение на число строк в TMemo:
+// РћРіСЂР°РЅРёС‡РµРЅРёРµ РЅР° С‡РёСЃР»Рѕ СЃС‚СЂРѕРє РІ TMemo:
 procedure TMainForm.ClientConsoleChange(Sender: TObject);
 var
   I: LongWord;
@@ -1611,7 +1611,7 @@ begin
     StringLen := Length(ConsoleOutput);
     if StringLen = 0 then Continue;
 
-    // Удаляем перевод каретки в конце:
+    // РЈРґР°Р»СЏРµРј РїРµСЂРµРІРѕРґ РєР°СЂРµС‚РєРё РІ РєРѕРЅС†Рµ:
     //Delete(ConsoleOutput, StringLen - 1, 2);
 
     SimpleReplaceParam(ConsoleOutput, #10, #13#10);

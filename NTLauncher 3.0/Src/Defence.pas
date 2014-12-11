@@ -7,7 +7,7 @@ uses
 
 {$I Definitions.inc}
 
-// Поток ожидания завершения любого из процессов:
+// РџРѕС‚РѕРє РѕР¶РёРґР°РЅРёСЏ Р·Р°РІРµСЂС€РµРЅРёСЏ Р»СЋР±РѕРіРѕ РёР· РїСЂРѕС†РµСЃСЃРѕРІ:
 type
   TControlThread = class(TThread)
     protected
@@ -185,26 +185,26 @@ begin
 
     for I := 0 to ProcessLength - 1 do
     begin
-      // Получаем всю информацию о каждом процессе:
+      // РџРѕР»СѓС‡Р°РµРј РІСЃСЋ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РєР°Р¶РґРѕРј РїСЂРѕС†РµСЃСЃРµ:
       GetProcessInfo(ProcessList[I].ProcessID, ProcessInfo);
 
-      // Приводим всё в нижний регистр:
+      // РџСЂРёРІРѕРґРёРј РІСЃС‘ РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ:
       ProcessInfo.CommandLine := LowerCase(ProcessInfo.CommandLine);
 
-      if ProcessInfo.ID = MinecraftID then Continue; // А не наш ли это процесс?
+      if ProcessInfo.ID = MinecraftID then Continue; // Рђ РЅРµ РЅР°С€ Р»Рё СЌС‚Рѕ РїСЂРѕС†РµСЃСЃ?
 
       if
-        (ProcessInfo.ReservedMemory shr 20 > 64) // Процесс не наш, но ест память?
+        (ProcessInfo.ReservedMemory shr 20 > 64) // РџСЂРѕС†РµСЃСЃ РЅРµ РЅР°С€, РЅРѕ РµСЃС‚ РїР°РјСЏС‚СЊ?
         and
         (
-          (FindOverlappings(ProcessInfo.CommandLine, '.jar') > 2) // И джаров там больше двух?
+          (FindOverlappings(ProcessInfo.CommandLine, '.jar') > 2) // Р РґР¶Р°СЂРѕРІ С‚Р°Рј Р±РѕР»СЊС€Рµ РґРІСѓС…?
           or
-          (Pos('net.minecraft.client.main.main', ProcessInfo.CommandLine) <> 0) // И даже классы совпадают?!
+          (Pos('net.minecraft.client.main.main', ProcessInfo.CommandLine) <> 0) // Р РґР°Р¶Рµ РєР»Р°СЃСЃС‹ СЃРѕРІРїР°РґР°СЋС‚?!
           or
-          (Pos('net.minecraft.launchwrapper.launch', ProcessInfo.CommandLine) <> 0) // Да там ещё и фордж!!
+          (Pos('net.minecraft.launchwrapper.launch', ProcessInfo.CommandLine) <> 0) // Р”Р° С‚Р°Рј РµС‰С‘ Рё С„РѕСЂРґР¶!!
         )
       then
-        KillTask(ProcessList[I].ProcessID); // Да провались оно всё, валим его, братан!
+        KillTask(ProcessList[I].ProcessID); // Р”Р° РїСЂРѕРІР°Р»РёСЃСЊ РѕРЅРѕ РІСЃС‘, РІР°Р»РёРј РµРіРѕ, Р±СЂР°С‚Р°РЅ!
     end;
 end;
 
@@ -262,22 +262,22 @@ begin
   MinecraftIDStr := IntToStr(MinecraftID);
   LauncherIDStr := IntToStr(GetCurrentProcessID);
 
-  // Используем ли 64х-битные защитники:
+  // РСЃРїРѕР»СЊР·СѓРµРј Р»Рё 64С…-Р±РёС‚РЅС‹Рµ Р·Р°С‰РёС‚РЅРёРєРё:
   Use64 := Is64BitWindows;
 
-  // Удаляем временные файлы:
+  // РЈРґР°Р»СЏРµРј РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹:
   DeleteFile(Injector32Name);
   DeleteFile(Injector64Name);
   DeleteFile(HookLib32Name);
   DeleteFile(HookLib64Name);
 
-  // Заполняем структуру хэндлов:
+  // Р—Р°РїРѕР»РЅСЏРµРј СЃС‚СЂСѓРєС‚СѓСЂСѓ С…СЌРЅРґР»РѕРІ:
   ControlThread.Handles.Minecraft := MinecraftHandle;
   ControlThread.Handles.Injectors.x32 := INVALID_HANDLE_VALUE;
   ControlThread.Handles.Injectors.x64 := INVALID_HANDLE_VALUE;
 
   {$IFDEF USE_INJECTORS}
-  // Настраиваем перехват:
+  // РќР°СЃС‚СЂР°РёРІР°РµРј РїРµСЂРµС…РІР°С‚:
   ControlThread.MappingObject := 0;
   FillChar(HookInfo, SizeOf(THookInfo), #0);
   HookInfo.ProtectedProcess := GetCurrentProcessID;
@@ -285,7 +285,7 @@ begin
   ControlThread.MappingObject := SetDefenceParameters(HookInfo, ControlThread.MappingObject);
   {$ENDIF}
 
-  // Распаковываем и запускаем защитников:
+  // Р Р°СЃРїР°РєРѕРІС‹РІР°РµРј Рё Р·Р°РїСѓСЃРєР°РµРј Р·Р°С‰РёС‚РЅРёРєРѕРІ:
   if not FileExists(Injector32Name) then
     ExtractRes('DEFENCE32', Injector32Name);
 
@@ -331,7 +331,7 @@ begin
   end;
 
 
-  // Запускаем поток:
+  // Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє:
   ControlThread.FreeOnTerminate := True;
   ControlThread.Priority := tpLower;
   ControlThread.SendProc := SendProcPtr;
@@ -348,20 +348,20 @@ procedure TControlThread.Execute;
 begin
   inherited;
 
-  // Ждём, пока кто-либо закроется:
+  // Р–РґС‘Рј, РїРѕРєР° РєС‚Рѕ-Р»РёР±Рѕ Р·Р°РєСЂРѕРµС‚СЃСЏ:
   WaitForMultipleObjects(3, @Handles, FALSE, INFINITE);
 
-  // Убиваем процесс майна:
+  // РЈР±РёРІР°РµРј РїСЂРѕС†РµСЃСЃ РјР°Р№РЅР°:
   TerminateProcess(Handles.Minecraft, 0);
 
-  // Ждём, пока закроются инъекторы:
+  // Р–РґС‘Рј, РїРѕРєР° Р·Р°РєСЂРѕСЋС‚СЃСЏ РёРЅСЉРµРєС‚РѕСЂС‹:
   WaitForMultipleObjects(2, @Handles.Injectors, TRUE, 7000);
 
-  // Убиваем процессы инъекторов:
+  // РЈР±РёРІР°РµРј РїСЂРѕС†РµСЃСЃС‹ РёРЅСЉРµРєС‚РѕСЂРѕРІ:
   TerminateProcess(Handles.Injectors.x32, 0);
   TerminateProcess(Handles.Injectors.x64, 0);
 
-  // Закрываем хэндлы:
+  // Р—Р°РєСЂС‹РІР°РµРј С…СЌРЅРґР»С‹:
   CloseHandle(Handles.Minecraft);
   CloseHandle(Handles.Injectors.x32);
   CloseHandle(Handles.Injectors.x64);
@@ -392,7 +392,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Запуск маячка:
+// Р—Р°РїСѓСЃРє РјР°СЏС‡РєР°:
 procedure StartBeacon(MinecraftHandle: THandle; Delay: LongWord; SendProcPtr: Pointer);
 var
   BeaconThread: TBeaconThread;
