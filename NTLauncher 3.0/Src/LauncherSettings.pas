@@ -128,10 +128,10 @@ var
   RegistryPath: string = 'NTLauncher'; // Название пункта в реестре в ветке HKEY_CURRENT_USER\\Software\\
 
 // Путь к папке с Natives относительно папки MainFolder (%APPDATA%\MainFolder\NativesPath):
-  NativesPath: string = 'versions\LL4GOF\natives';
+  NativesPath: string = 'versions\30FPS (1.7.10)\natives';
 
 // Путь к папке с клиентом относительно MainFolder (%APPDATA%\MainFolder\MineJarPath):
-  MineJarFolder: string = 'versions\LL4GOF';
+  MineJarFolder: string = 'versions\30FPS (1.7.10)';
 
 // Путь к папке с библиотеками относительно MainFolder (%APPDATA%\MainFolder\LibrariesFolder):
   LibrariesFolder: string = 'libraries'; // Для старых версий (1.5.2 и старше) должен быть пустой строкой!
@@ -159,7 +159,6 @@ var
 // Дополнительные классы для поддержки Forge, LiteLoader, Optifine, GLSL Shaders и т.д.:
 // TweakClass'ы можно комбинировать
 
-
   // Чистый Minecraft:
   //TweakClass: string = '';
 
@@ -170,13 +169,13 @@ var
   //TweakClass: string = '--tweakClass optifine.OptiFineTweaker';
 
   // OptiFine + GLSL Shaders без Forge:
-  //TweakClass: string = '--tweakClass optifine.OptiFineTweaker --tweakClass shadersmodcore.loading.SMCTweaker';
+  TweakClass: string = '--tweakClass optifine.OptiFineTweaker --tweakClass shadersmodcore.loading.SMCTweaker';
 
   // LiteLoader:
   //TweakClass: string = '--tweakClass com.mumfrey.liteloader.launch.LiteLoaderTweaker';
 
   // LiteLoader с Forge:
-  TweakClass: string = '--tweakClass com.mumfrey.liteloader.launch.LiteLoaderTweaker --tweakClass cpw.mods.fml.common.launcher.FMLTweaker';
+  //TweakClass: string = '--tweakClass com.mumfrey.liteloader.launch.LiteLoaderTweaker --tweakClass cpw.mods.fml.common.launcher.FMLTweaker';
 
 implementation
 

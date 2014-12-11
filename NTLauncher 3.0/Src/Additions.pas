@@ -1,4 +1,4 @@
-﻿unit Additions;
+unit Additions;
 
 interface
 
