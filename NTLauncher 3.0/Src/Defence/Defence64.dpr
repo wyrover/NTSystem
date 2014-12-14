@@ -14,7 +14,7 @@ uses
   Ratibor in '..\..\..\# Common Modules\Ratibor.pas';
 
 const
-  Salt: string = 'Соль';
+  Salt: string = 'РЎРѕР»СЊ';
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -89,36 +89,36 @@ var
 const
   PROCESS_MODE_BACKGROUND_BEGIN = $100000;
 begin
-  // Ставим минимальный приоритет:
+  // РЎС‚Р°РІРёРј РјРёРЅРёРјР°Р»СЊРЅС‹Р№ РїСЂРёРѕСЂРёС‚РµС‚:
   SetPriorityClass(GetCurrentProcess, PROCESS_MODE_BACKGROUND_BEGIN);
   SetThreadPriority(GetCurrentThread, THREAD_PRIORITY_LOWEST);
 
   CommandLine := GetCommandLine;
 
-  // Получаем идентификаторы:
+  // РџРѕР»СѓС‡Р°РµРј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹:
   if not TryStrToInt(GetXMLParameter(CommandLine, 'launcher_id'), LauncherID) then Exit;
   if not TryStrToInt(GetXMLParameter(CommandLine, 'minecraft_id'), MinecraftID) then Exit;
 
-  // Получаем данные для соединения:
+  // РџРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ РґР»СЏ СЃРѕРµРґРёРЅРµРЅРёСЏ:
   Login       := GetXMLParameter(CommandLine, 'login');
   PrimaryIP   := GetXMLParameter(CommandLine, 'primary_ip');
   SecondaryIP := GetXMLParameter(CommandLine, 'secondary_ip');
   if not TryStrToInt(GetXMLParameter(CommandLine, 'port'), Port) then Exit;
 
-  // Параметры защиты:
+  // РџР°СЂР°РјРµС‚СЂС‹ Р·Р°С‰РёС‚С‹:
   UseWatchDog  := Pos('<wd>', CommandLine) <> 0;
   UseInjectors := Pos('<injectors>', CommandLine) <> 0;
 
   if not (UseWatchDog or UseInjectors) then Exit;
 
-  // Включаем защиту:
+  // Р’РєР»СЋС‡Р°РµРј Р·Р°С‰РёС‚Сѓ:
   if UseInjectors then StartDefence;
 
-  // Запускаем два потока ожидания:
+  // Р—Р°РїСѓСЃРєР°РµРј РґРІР° РїРѕС‚РѕРєР° РѕР¶РёРґР°РЅРёСЏ:
   Threads.MinecraftWait := BeginThread(nil, 0, @WaitProcess, Pointer(MinecraftID), 0, ThreadID);
   Threads.LauncherWait := BeginThread(nil, 0, @WaitProcess, Pointer(LauncherID), 0, ThreadID);
 
-  // Ждём, пока кто-либо из них завершится:
+  // Р–РґС‘Рј, РїРѕРєР° РєС‚Рѕ-Р»РёР±Рѕ РёР· РЅРёС… Р·Р°РІРµСЂС€РёС‚СЃСЏ:
   WaitForMultipleObjects(2, @Threads, FALSE, INFINITE);
 
   CloseHandle(Threads.MinecraftWait);

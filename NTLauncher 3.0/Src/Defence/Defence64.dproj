@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{39043DA9-57E6-4492-8C05-A3E853BFCAAE}</ProjectGuid>
         <MainSource>Defence64.dpr</MainSource>
