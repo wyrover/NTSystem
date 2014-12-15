@@ -8,7 +8,7 @@ type
   NTStatus = Cardinal;
 
 
-CONST  //РЎС‚Р°С‚СѓСЃ РєРѕРЅСЃС‚Р°РЅС‚С‹
+CONST  //Статус константы
   STATUS_SUCCESS              = NTStatus($00000000);
   STATUS_ACCESS_DENIED        = NTStatus($C0000022);
   STATUS_INFO_LENGTH_MISMATCH = NTStatus($C0000004);

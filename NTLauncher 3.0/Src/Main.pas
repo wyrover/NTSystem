@@ -18,7 +18,8 @@ uses
   Windows, Messages, SysUtils, Classes, Controls, Forms,
   ScktComp, ExtCtrls, StdCtrls, HTTPSend, BlckSock,
   Additions, RegistryUtils, LauncherSettings, HashUtils, FileAPI,
-  Perimeter, SkinSystem, HWID, MinecraftLauncher, MultiserverUtils,
+  {$IFDEF LAUNCH_PERIMETER}Perimeter,{$ENDIF}
+  SkinSystem, HWID, MinecraftLauncher, MultiserverUtils,
   PostRequest, Dialogs, Defence, PNGImage,
   ShellAPI, ComCtrls, Graphics, ProcessAPI, ServerQuery, TlHelp32, PipesAPI,
   StringsAPI;
@@ -1616,7 +1617,7 @@ begin
 
     SimpleReplaceParam(ConsoleOutput, #10, #13#10);
     Synchronize(UpdateConsole);
-  until WaitForSingleObject(MCHandle, 8) <> WAIT_TIMEOUT;
+  until WaitForSingleObject(MCHandle, 2) <> WAIT_TIMEOUT;
 
   CloseHandle(ReadStdOut);
 end;

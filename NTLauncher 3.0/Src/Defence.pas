@@ -17,6 +17,8 @@ type
     MappingObject: THandle;
     {$ENDIF}
 
+    Use64: Boolean;
+
     Handles: packed record
       Minecraft: THandle;
       Injectors: packed record
@@ -264,6 +266,7 @@ begin
 
   // Используем ли 64х-битные защитники:
   Use64 := Is64BitWindows;
+  ControlThread.Use64 := Use64;
 
   // Удаляем временные файлы:
   DeleteFile(Injector32Name);
@@ -349,7 +352,10 @@ begin
   inherited;
 
   // Ждём, пока кто-либо закроется:
-  WaitForMultipleObjects(3, @Handles, FALSE, INFINITE);
+  if Use64 then
+    WaitForMultipleObjects(3, @Handles, FALSE, INFINITE)
+  else
+    WaitForMultipleObjects(2, @Handles, FALSE, INFINITE);
 
   // Убиваем процесс майна:
   TerminateProcess(Handles.Minecraft, 0);

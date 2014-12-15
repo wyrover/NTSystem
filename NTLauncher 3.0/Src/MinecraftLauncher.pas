@@ -68,7 +68,7 @@ implementation
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Р—Р°РїСѓСЃРє Minecraft:
+// Запуск Minecraft:
 function ExecuteMinecraft(MinecraftData: TMinecraftData; out MCProcessInfo: TMCProcessInfo): string;
 var
   lpDirectory, lpFile, lpParameters: PANSIChar;
@@ -140,7 +140,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Р—Р°РїСѓСЃРє Minecraft РґРѕ 1.5.2 РІРєР»СЋС‡РёС‚РµР»СЊРЅРѕ:
+// Запуск Minecraft до 1.5.2 включительно:
 function ExecuteMinecraftOLD(MinecraftData: TOldMinecraftData; out MCProcessInfo: TMCProcessInfo): string;
 var
   lpDirectory, lpFile, lpParameters: PANSIChar;
@@ -230,7 +230,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// РџРѕР»СѓС‡РµРЅРёРµ СЃРїРёСЃРєР° РІСЃРµС… С„Р°Р№Р»РѕРІ Рё СЃСѓРјРјР°СЂРЅРѕРіРѕ С…СЌС€Р°:
+// Получение списка всех файлов и суммарного хэша:
 procedure GetGameFileListAndHash(const RootDirectory, MineJarFolder, LibrariesFolder: string; var FileList, SummaryHash: string); inline;
 begin
   FileList := GetGameFileList(RootDirectory, MineJarFolder, LibrariesFolder);
@@ -241,7 +241,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Р”РѕР±Р°РІР»СЏР№С‚Рµ СЃСЋРґР° СЃРІРѕРё РїР°РїРєРё С‡РµСЂРµР· GetFileList, РµСЃР»Рё С„Р°Р№Р»С‹ РёР· РЅРёС… РЅСѓР¶РЅРѕ РІСЃС‚Р°РІРёС‚СЊ РІ СЃС‚СЂРѕРєСѓ Р·Р°РїСѓСЃРєР°:
+// Добавляйте сюда свои папки через GetFileList, если файлы из них нужно вставить в строку запуска:
 function GetGameFileList(const RootDirectory, MineJarFolder, LibrariesFolder: string): string; inline;
 var
   FileList: string;
@@ -258,7 +258,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Р”РѕР±Р°РІР»СЏР№С‚Рµ СЃСЋРґР° СЃРІРѕРё РїР°РїРєРё С‡РµСЂРµР· GetFolderChecksum, РµСЃР»Рё РёС… РЅСѓР¶РЅРѕ РїСЂРѕРІРµСЂСЏС‚СЊ:
+// Добавляйте сюда свои папки через GetFolderChecksum, если их нужно проверять:
 function GetGameHash(const RootDirectory, MineJarFolder, LibrariesFolder: string): string;
 var
   SummaryHash: string;
@@ -286,7 +286,7 @@ end;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// Р”РѕР±Р°РІР»СЏР№С‚Рµ СЃСЋРґР° СЃРІРѕРё РїР°РїРєРё РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РїСЂРё РїРµСЂРµРєР°С‡РёРІР°РЅРёРё РєР»РёРµРЅС‚Р°:
+// Добавляйте сюда свои папки для удаления при перекачивании клиента:
 procedure FlushGameFolder(const Minepath, MineJarFolder, LibrariesFolder: string); inline;
 begin
   DeleteDirectory(Minepath + '\' + MineJarFolder);

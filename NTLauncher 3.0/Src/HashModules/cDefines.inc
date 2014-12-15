@@ -5,7 +5,7 @@
 {                                                                              }
 {   Library:          Fundamentals 4.00                                        }
 {   Home page:        http://fundementals.sourceforge.net                      }
-{   Copyright:        Copyright © 1998-2011, David J Butler                    }
+{   Copyright:        Copyright В© 1998-2011, David J Butler                    }
 {                     All rights reserved.                                     }
 {                                                                              }
 { Conditionals defined elsewhere:                                              }

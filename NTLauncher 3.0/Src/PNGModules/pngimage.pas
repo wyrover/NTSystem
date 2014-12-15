@@ -75,7 +75,7 @@
                Thanks !!
 
   Version 1.5
-  2005-06-29 - Fixed a lot of bugs using tips from mails that Iґve
+  2005-06-29 - Fixed a lot of bugs using tips from mails that IТ‘ve
 	       being receiving for some time
                  BUG 1 - Loosing palette when assigning to TBitmap. fixed
                  BUG 2 - SetPixels and GetPixels worked only with
@@ -180,7 +180,7 @@
                New translation for Brazilian Portuguese.
                Bugs fixed.
 
- IMPORTANT: As always Iґm looking for bugs on the library. If
+ IMPORTANT: As always IТ‘m looking for bugs on the library. If
             anyone has found one, please send me an email and
             I will fix asap. Thanks for all the help and ideas
             I'm receiving so far.}
@@ -2805,7 +2805,7 @@ begin
   until Col >= ImageWidth;
 end;
 
-{Copy нmages with palette using bit depths 1, 4 or 8}
+{Copy РЅmages with palette using bit depths 1, 4 or 8}
 procedure TChunkIDAT.CopyInterlacedPalette148(const Pass: Byte;
   Src, Dest, Trans{$IFDEF Store16bits}, Extra{$ENDIF}: pChar);
 const
@@ -2839,7 +2839,7 @@ begin
   until Col >= ImageWidth;
 end;
 
-{Copy нmages with palette using bit depth 2}
+{Copy РЅmages with palette using bit depth 2}
 procedure TChunkIDAT.CopyInterlacedPalette2(const Pass: Byte; Src, Dest,
   Trans{$IFDEF Store16bits}, Extra{$ENDIF}: pChar);
 var
@@ -2868,7 +2868,7 @@ begin
   until Col >= ImageWidth;
 end;
 
-{Copy нmages with grayscale using bit depth 2}
+{Copy РЅmages with grayscale using bit depth 2}
 procedure TChunkIDAT.CopyInterlacedGray2(const Pass: Byte;
   Src, Dest, Trans{$IFDEF Store16bits}, Extra{$ENDIF}: pChar);
 var
@@ -2897,7 +2897,7 @@ begin
   until Col >= ImageWidth;
 end;
 
-{Copy нmages with palette using 2 bytes for each pixel}
+{Copy РЅmages with palette using 2 bytes for each pixel}
 procedure TChunkIDAT.CopyInterlacedGrayscale16(const Pass: Byte;
   Src, Dest, Trans{$IFDEF Store16bits}, Extra{$ENDIF}: pChar);
 var
@@ -4803,7 +4803,7 @@ begin
         FOR i := 0 TO W - 1 DO
         begin
           if Stretch then i2 := trunc(i / FactorX) else i2 := i;
-          {Optmize when we donґt have transparency}
+          {Optmize when we donТ‘t have transparency}
           if (AlphaSource[i2] <> 0) then
             if (AlphaSource[i2] = 255) then
               ImageData[i] := pRGBQuad(@ImageSource[i2 * 3])^

@@ -17,22 +17,22 @@ procedure FillServerComboBox(var ComboBox: TComboBox);
 
 type
   TServer = record
-    Name          : string; // РРјСЏ СЃРµСЂРІРµСЂР°
-    Folder        : string; // РџР°РїРєР° РІ Minepath
-    Natives       : string; // РџР°РїРєР° РґР»СЏ *.dll РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Folder
-    MineJar       : string; // РџСѓС‚СЊ РґРѕ РєР»РёРµРЅС‚Р° РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Folder
-    Libraries     : string; // РџСѓС‚СЊ РґРѕ Р±РёР±Р»РёРѕС‚РµРє
-    AssetsFolder  : string; // РџСѓС‚СЊ РґРѕ Assets РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Folder
-    MainClass     : string; // Р“Р»Р°РІРЅС‹Р№ РєР»Р°СЃСЃ
-    ClientAddress : string; // РђРґСЂРµСЃ Main.zip
-    AssetsAddress : string; // РђРґСЂРµСЃ Assets.zip
-    GameVersion   : string; // Р’РµСЂСЃРёСЏ Р·Р°РїСѓСЃРєР°РµРјРѕРіРѕ РєР»РёРµРЅС‚Р°
-    AssetIndex    : string; // РРЅРґРµРєСЃ РґР»СЏ Assets
-    TweakClass    : string; // Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РєР»Р°СЃСЃРѕРІ
-    PrimaryIP     : string; // РћСЃРЅРѕРІРЅРѕР№ IP РѕР±РІСЏР·РєРё Рё СЃРµСЂРІРµСЂР°
-    SecondaryIP   : string; // Р—Р°РїР°СЃРЅРѕР№ IP РѕР±РІСЏР·РєРё Рё СЃРµСЂРІРµСЂР°
-    Port          : string; // РџРѕСЂС‚ РѕР±РІСЏР·РєРё
-    BukkitPort    : string; // РџРѕСЂС‚ СЃРµСЂРІРµСЂР°
+    Name          : string; // Имя сервера
+    Folder        : string; // Папка в Minepath
+    Natives       : string; // Папка для *.dll относительно Folder
+    MineJar       : string; // Путь до клиента относительно Folder
+    Libraries     : string; // Путь до библиотек
+    AssetsFolder  : string; // Путь до Assets относительно Folder
+    MainClass     : string; // Главный класс
+    ClientAddress : string; // Адрес Main.zip
+    AssetsAddress : string; // Адрес Assets.zip
+    GameVersion   : string; // Версия запускаемого клиента
+    AssetIndex    : string; // Индекс для Assets
+    TweakClass    : string; // Дополнительные параметры классов
+    PrimaryIP     : string; // Основной IP обвязки и сервера
+    SecondaryIP   : string; // Запасной IP обвязки и сервера
+    Port          : string; // Порт обвязки
+    BukkitPort    : string; // Порт сервера
   end;
 
 var
@@ -44,7 +44,7 @@ var
 
 implementation
 
-// РџРѕР»СѓС‡РµРЅРёРµ СЃРїРёСЃРєР° СЃРµСЂРІРµСЂРѕРІ:
+// Получение списка серверов:
 procedure GetServerList(Response: string);
 var
   I: byte;

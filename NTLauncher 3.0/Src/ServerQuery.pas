@@ -23,7 +23,7 @@ implementation
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// РљРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ CodePage:
+// Константы для CodePage:
 const
   CP_ACP                   = 0;             { default to ANSI code page }
   CP_OEMCP                 = 1;             { default to OEM  code page }
@@ -119,7 +119,7 @@ begin
   Result := False;
   FillChar(ServerInfo, SizeOf(ServerInfo), #0);
 
-  // РџС‹С‚Р°РµРјСЃСЏ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ:
+  // Пытаемся установить соединение:
   ClientSocket := Socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
   if ClientSocket = INVALID_SOCKET then
   begin
@@ -128,13 +128,13 @@ begin
     Exit;
   end;
 
-  // РЎС‚СЂСѓРєС‚СѓСЂР° СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ Рѕ РїРѕРґРєР»СЋС‡РµРЅРёРё:
+  // Структура с информацией о подключении:
   FillChar(SockAddr, SizeOf(TSockAddr), 0);
   SockAddr.sin_family := AF_INET;
   SockAddr.sin_port := htons(Port);
   SockAddr.sin_addr.S_addr := inet_addr(PAnsiChar(DNStoIP(IP)));
 
-  // РџС‹С‚Р°РµРјСЃСЏ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ:
+  // Пытаемся подключиться:
   if Timeout > 0 then
   begin
     NonBlockingMode := 1;
@@ -169,18 +169,18 @@ begin
   end;
 
 
-  // РџРѕСЃС‹Р»Р°РµРј РґР°РЅРЅС‹Рµ:
+  // Посылаем данные:
   Data := $01FE;
   Send(ClientSocket, Data, 2, 0);
 
 
-  // Р–РґС‘Рј РѕС‚РІРµС‚:
+  // Ждём ответ:
   GetMem(Buffer, BufferSize);
   FillChar(Buffer^, BufferSize, #0);
 
   Size := LongWord(Recv(ClientSocket, Buffer^, BufferSize, 0));
 
-  // Р—Р°РєСЂС‹РІР°РµРј СЃРѕРµРґРёРЅРµРЅРёРµ:
+  // Закрываем соединение:
   Shutdown(ClientSocket, SD_BOTH);
   CloseSocket(ClientSocket);
 
@@ -190,12 +190,12 @@ begin
     Exit;
   end;
 
-  // Р‘Р»РѕРє РїРѕР»СѓС‡РёР»Рё, РјРѕР¶РЅРѕ РїР°СЂСЃРёС‚СЊ:
+  // Блок получили, можно парсить:
   Result := True;
 
-// Р”Р»СЏ РЅР°С‡Р°Р»Р° РїРµСЂРµРІРµРґС‘Рј РЅР°С€ Р±Р»РѕРє РІ ANSI:
+// Для начала переведём наш блок в ANSI:
 
-  // РќСѓР»СЊ-С‚РµСЂРјРёРЅР°С‚РѕСЂС‹ РїРµСЂРµРІРµРґС‘Рј РІ $A7 (Р°РЅР°Р»РѕРі Р·Р°РїСЂРѕСЃР° $FE):
+  // Нуль-терминаторы переведём в $A7 (аналог запроса $FE):
   I := 0;
   while I < Size do
   begin
@@ -208,25 +208,25 @@ begin
   FreeMem(Buffer);
   Response := WideStringToString(WideResponse, CP_ACP);
 
-// Р’С‹РґРµР»СЏРµРј РЅСѓР¶РЅС‹Рµ Р±Р»РѕРєРё:
+// Выделяем нужные блоки:
 
-  // РџРѕР»СѓС‡Р°РµРј РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РёРіСЂРѕРєРѕРІ:
+  // Получаем максимальное количество игроков:
   StringLen := Length(Response);
   Position := LastDelimiter(#$A7, Response);
   ServerInfo.MaxPlayers := Copy(Response, Position + 1, StringLen - Position);
 
-  // РЈРґР°Р»СЏРµРј СЃРєРѕРїРёСЂРѕРІР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ:
+  // Удаляем скопированную строку:
   Response := Copy(Response, 1, Position - 1);
 
-  // РџРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РёРіСЂРѕРєРѕРІ РЅР° СЃРµСЂРІРµСЂРµ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚:
+  // Получаем количество игроков на сервере в данный момент:
   StringLen := Length(Response);
   Position := LastDelimiter(#$A7, Response);
   ServerInfo.CurrentPlayers := Copy(Response, Position + 1, StringLen - Position);
 
-  // РЈРґР°Р»СЏРµРј СЃРєРѕРїРёСЂРѕРІР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ:
+  // Удаляем скопированную строку:
   Response := Copy(Response, 1, Position - 1);
 
-  // РџРѕР»СѓС‡Р°РµРј MOTD:
+  // Получаем MOTD:
   StringLen := Length(Response);
   ServerInfo.MOTD := Copy(Response, 3, StringLen - 2);
 end;

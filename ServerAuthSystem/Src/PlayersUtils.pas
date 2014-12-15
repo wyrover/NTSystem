@@ -5,7 +5,7 @@ interface
 uses
   Windows, SysUtils, BaseUtils, Classes;
 
-// ÐÐ²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð°Ñ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð°:
+// Àâòîðèçàöèîííàÿ ñòðóêòóðà:
 type
   TPlayerInfo = record
     Name: string;
@@ -13,13 +13,13 @@ type
   end;
 
 var
-  // Ð˜Ð³Ñ€Ð¾ÐºÐ¸ Ð² Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð¸ Ð½Ð° Ð°Ð²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸ÑŽ:
+  // Èãðîêè â î÷åðåäè íà àâòîðèçàöèþ:
   Players: array of TPlayerInfo;
 
-  // Ð˜Ð³Ñ€Ð¾ÐºÐ¸ Ð½Ð° ÑÐµÑ€Ð²ÐµÑ€Ðµ:
+  // Èãðîêè íà ñåðâåðå:
   OnlinePlayers: array of string;
 
-  // Ð˜Ð³Ñ€Ð¾ÐºÐ¸ Ð² Ð±Ð°Ð·Ðµ:
+  // Èãðîêè â áàçå:
   BasePlayers: array of string;
 
   PlayersCriticalSection: _RTL_CRITICAL_SECTION;
@@ -46,7 +46,7 @@ begin
   EnterCriticalSection(PlayersCriticalSection);
   PlayersCount := Length(Players);
 
-  // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, Ð½ÐµÑ‚ Ð»Ð¸ Ð¸Ð³Ñ€Ð¾ÐºÐ° Ð² ÑÐ¿Ð¸ÑÐºÐµ:
+  // Ïðîâåðÿåì, íåò ëè èãðîêà â ñïèñêå:
   if PlayersCount > 0 then
     for I := 0 to PlayersCount - 1 do
       if Players[I].Name = Login then

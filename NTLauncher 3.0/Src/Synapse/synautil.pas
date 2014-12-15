@@ -395,16 +395,16 @@ var
      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'),
     ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',  //English
      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'),
-    ('jan', 'fйv', 'mar', 'avr', 'mai', 'jun', //French
-     'jul', 'aoы', 'sep', 'oct', 'nov', 'dйc'),
+    ('jan', 'fР№v', 'mar', 'avr', 'mai', 'jun', //French
+     'jul', 'aoС‹', 'sep', 'oct', 'nov', 'dР№c'),
     ('jan', 'fev', 'mar', 'avr', 'mai', 'jun',  //French#2
      'jul', 'aou', 'sep', 'oct', 'nov', 'dec'),
     ('Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun',  //German
      'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'),
-    ('Jan', 'Feb', 'Mдr', 'Apr', 'Mai', 'Jun',  //German#2
+    ('Jan', 'Feb', 'MРґr', 'Apr', 'Mai', 'Jun',  //German#2
      'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'),
-    ('Led', 'Ъno', 'Bшe', 'Dub', 'Kvм', 'Иen',  //Czech
-     'Иec', 'Srp', 'Zбш', 'Шнj', 'Lis', 'Pro')
+    ('Led', 'РЄno', 'BС€e', 'Dub', 'KvРј', 'Рen',  //Czech
+     'Рec', 'Srp', 'ZР±С€', 'РЁРЅj', 'Lis', 'Pro')
      );
 
 

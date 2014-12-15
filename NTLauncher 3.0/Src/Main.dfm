@@ -4,7 +4,7 @@ object MainForm: TMainForm
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'NTLauncher 3.0'
-  ClientHeight = 442
+  ClientHeight = 463
   ClientWidth = 592
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -34,10 +34,6 @@ object MainForm: TMainForm
       Font.Name = 'Calibri'
       Font.Style = []
       ParentFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label1: TLabel
         Left = 152
         Top = 159
@@ -171,10 +167,6 @@ object MainForm: TMainForm
       Font.Style = []
       ImageIndex = 1
       ParentFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object CloakImage: TImage
         Left = 198
         Top = 200
@@ -380,7 +372,7 @@ object MainForm: TMainForm
         Width = 182
         Height = 22
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 14
         TabOrder = 7
         Visible = False
         OnSelect = ServerListComboBoxSelect

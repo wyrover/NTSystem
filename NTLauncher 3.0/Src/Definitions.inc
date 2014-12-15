@@ -44,7 +44,7 @@
 
 //{$DEFINE LAUNCH_PERIMETER}    // Включение антиотладочной защиты (СЗПУ "Периметр")
 
-{$DEFINE CONTROL_PROCESSES}   // Запуск контролирующих процессов:
+//{$DEFINE CONTROL_PROCESSES}   // Запуск контролирующих процессов:
    {$DEFINE USE_INJECTORS}    //  - инъекторы
    {$DEFINE USE_WATCHDOG}     //  - следящий пёс
 
