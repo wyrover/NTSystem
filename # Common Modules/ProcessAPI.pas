@@ -1,4 +1,4 @@
-п»їunit ProcessAPI;
+unit ProcessAPI;
 
 interface
 
@@ -6,9 +6,9 @@ uses
   Windows, TlHelp32;
 
 
-// Р РµР·СѓР»СЊС‚Р°С‚ С„СѓРЅРєС†РёРё GetProcessList - РјР°СЃСЃРёРІ РїСЂРѕС†РµСЃСЃРѕРІ:
+// Результат функции GetProcessList - массив процессов:
 type
-  // РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РїСЂРѕС†РµСЃСЃРµ (TlHelp32):
+  // Информация о процессе (TlHelp32):
   PROCESSENTRY32A = record
     Size: DWORD;
     Usage: DWORD;
@@ -23,7 +23,7 @@ type
   end;
   TProcessEntry32A = PROCESSENTRY32A;
 
-  // РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РїРѕС‚РѕРєРµ (TlHelp32):
+  // Информация о потоке (TlHelp32):
   THREADENTRY32 = record
     Size: DWORD;
     Usage: DWORD;
@@ -38,16 +38,16 @@ type
   TProcessInfo = TProcessEntry32A;
   TProcessList = array of TProcessInfo;
 
-// РРЅС„РѕСЂРјР°С†РёСЏ Рѕ Р·Р°РіСЂСѓР¶РµРЅРЅРѕС‹С… РјРѕРґСѓР»СЏС…:
+// Информация о загруженноых модулях:
   TModuleInfo = record
-    FullPath: AnsiString;   // РџРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє РјРѕРґСѓР»СЋ
-    ModuleName: AnsiString; // РРјСЏ РјРѕРґСѓР»СЏ
-    BaseAddress: UInt64;    // Р‘Р°Р·РѕРІС‹Р№ Р°РґСЂРµСЃ Р·Р°РіСЂСѓР·РєРё (РЅР°С‡Р°Р»Рѕ СЂР°СЃРїР°РєРѕРІР°РЅРЅРѕРіРѕ С„Р°Р№Р»Р° РІ РћР—РЈ)
-    EntryAddress: UInt64;   // РўРѕС‡РєР° РІС…РѕРґР°
-    SizeOfImage: Cardinal;  // Р Р°Р·РјРµСЂ РѕР±СЂР°Р·Р° РІ Р±Р°Р№С‚Р°С…
+    FullPath: AnsiString;   // Полный путь к модулю
+    ModuleName: AnsiString; // Имя модуля
+    BaseAddress: UInt64;    // Базовый адрес загрузки (начало распакованного файла в ОЗУ)
+    EntryAddress: UInt64;   // Точка входа
+    SizeOfImage: Cardinal;  // Размер образа в байтах
   end;
 
-// Р‘Р°Р·РѕРІР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РїСЂРѕС†РµСЃСЃРµ:
+// Базовая информация о процессе:
   TProcessBasicInfo = record
     ExitStatus: LongWord;
     AffinityMask: UInt64;
@@ -57,92 +57,92 @@ type
   end;
 
   TModulesList = record
-    Length: Cardinal;               // Р’СЃРµРіРѕ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РјРѕРґСѓР»РµР№
-    Modules: array of TModuleInfo;  // РњР°СЃСЃРёРІ РёР· РёРЅС„РѕСЂРјР°С†РёРё Рѕ РєР°Р¶РґРѕРј РјРѕРґСѓР»Рµ
+    Length: Cardinal;               // Всего загруженных модулей
+    Modules: array of TModuleInfo;  // Массив из информации о каждом модуле
   end;
 
-// РЎС‚СЂСѓРєС‚СѓСЂР° СЂРµР·СѓР»СЊС‚Р°С‚Р° С„СѓРЅРєС†РёРё GetProcessInfo:
+// Структура результата функции GetProcessInfo:
   PROCESS_INFO = record
-  // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹:
-    Handle: LongWord;         // РҐСЌРЅРґР» РїСЂРѕС†РµСЃСЃР° РїСЂРё РїРѕР»СѓС‡РµРЅРёРё РёРЅС„РѕСЂРјР°С†РёРё
-    ID: UInt64;               // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїСЂРѕС†РµСЃСЃР°
-    InheritedFromID: UInt64;  // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїСЂРѕС†РµСЃСЃР°-СЂРѕРґРёС‚РµР»СЏ
-    SessionID: LongWord;      // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРµСЃСЃРёРё
+  // Идентификаторы:
+    Handle: LongWord;         // Хэндл процесса при получении информации
+    ID: UInt64;               // Идентификатор процесса
+    InheritedFromID: UInt64;  // Идентификатор процесса-родителя
+    SessionID: LongWord;      // Идентификатор сессии
 
-  // РЎРІРѕР№СЃС‚РІР° РїСЂРѕС†РµСЃСЃР°:
-    Priority: UInt64;         // РџСЂРёРѕСЂРёС‚РµС‚ РїСЂРѕС†РµСЃСЃР°
-    AffinityMask: UInt64;     // РњР°СЃРєР° СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ РїСЂРѕС†РµСЃСЃР° СЏРґСЂР°Рј (С‡РёСЃР»Рѕ РЅР°РґРѕ РїРµСЂРµРІРµСЃС‚Рё РІ РґРІРѕРёС‡РЅС‹Р№ РІРёРґ)
+  // Свойства процесса:
+    Priority: UInt64;         // Приоритет процесса
+    AffinityMask: UInt64;     // Маска соответствия процесса ядрам (число надо перевести в двоичный вид)
 
-  // Р Р°Р·РЅРѕРµ:
-    IsDebugged: Boolean;      // РћС‚Р»Р°Р¶РёРІР°РµС‚СЃСЏ Р»Рё РїСЂРѕС†РµСЃСЃ
-    ExitStatus: LongWord;     // РљРѕРґ РІС‹С…РѕРґР°
-    ThreadsCount: LongWord;   // РљРѕР»РёС‡РµСЃС‚РІРѕ РїРѕС‚РѕРєРѕРІ
-    HandlesCount: LongWord;   // РљРѕР»РёС‡РµСЃС‚РІРѕ РѕС‚РєСЂС‹С‚С‹С… С…СЌРЅРґР»РѕРІ
-    ReservedMemory: LongWord; // Р—Р°СЂРµР·РµСЂРІРёСЂРѕРІР°РЅРЅР°СЏ РїР°РјСЏС‚СЊ РІ Р±Р°Р№С‚Р°С…
+  // Разное:
+    IsDebugged: Boolean;      // Отлаживается ли процесс
+    ExitStatus: LongWord;     // Код выхода
+    ThreadsCount: LongWord;   // Количество потоков
+    HandlesCount: LongWord;   // Количество открытых хэндлов
+    ReservedMemory: LongWord; // Зарезервированная память в байтах
 
-  // РђРґСЂРµСЃР°:
-    ImageBaseAddress: UInt64; // РђРґСЂРµСЃ Р·Р°РіСЂСѓР·РєРё РѕР±СЂР°Р·Р° РІ РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё
-    LdrAddress: UInt64;       // РђРґСЂРµСЃ Р·Р°РіСЂСѓР·РѕС‡РЅРѕР№ РёРЅС„РѕСЂРјР°С†РёРё
-    PEBAddress: UInt64;       // РђРґСЂРµСЃ Р±Р»РѕРєР° РѕРєСЂСѓР¶РµРЅРёСЏ РїСЂРѕС†РµСЃСЃР° (СЃС‚СЂСѓРєС‚СѓСЂР° PEB)
+  // Адреса:
+    ImageBaseAddress: UInt64; // Адрес загрузки образа в оперативной памяти
+    LdrAddress: UInt64;       // Адрес загрузочной информации
+    PEBAddress: UInt64;       // Адрес блока окружения процесса (структура PEB)
 
-  // РҐСЌРЅРґР»С‹ РІРІРѕРґР°-РІС‹РІРѕРґР°:
-    ConsoleHandle: UInt64;    // РҐСЌРЅРґР» РєРѕРЅСЃРѕР»Рё
-    StdInputHandle: UInt64;   // РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ С…СЌРЅРґР» РІРІРѕРґР°
-    StdOutputHandle: UInt64;  // РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ С…СЌРЅРґР» РІС‹РІРѕРґР°
-    StdErrorHandle: UInt64;   // РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ С…СЌРЅРґР» РІС‹РІРѕРґР° РѕС€РёР±РѕРє
+  // Хэндлы ввода-вывода:
+    ConsoleHandle: UInt64;    // Хэндл консоли
+    StdInputHandle: UInt64;   // Стандартный хэндл ввода
+    StdOutputHandle: UInt64;  // Стандартный хэндл вывода
+    StdErrorHandle: UInt64;   // Стандартный хэндл вывода ошибок
 
-  // РЎС‚СЂРѕРєРѕРІС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
-    ProcessName: AnsiString;          // РРјСЏ РїСЂРѕС†РµСЃСЃР°
-    CurrentDirectoryPath: AnsiString; // РўРµРєСѓС‰Р°СЏ РїР°РїРєР°
-    ImagePathName: AnsiString;        // РРјСЏ РѕР±СЂР°Р·Р° РїСЂРѕС†РµСЃСЃР°
-    CommandLine: AnsiString;          // РљРѕРјР°РЅРґРЅР°СЏ СЃС‚СЂРѕРєР°
+  // Строковые параметры:
+    ProcessName: AnsiString;          // Имя процесса
+    CurrentDirectoryPath: AnsiString; // Текущая папка
+    ImagePathName: AnsiString;        // Имя образа процесса
+    CommandLine: AnsiString;          // Командная строка
 
-  // РЎРїРёСЃРѕРє Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РјРѕРґСѓР»РµР№:
+  // Список загруженных модулей:
     ModulesList: TModulesList;
 
-  // Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ СЃРёСЃС‚РµРјРЅС‹Рµ СЃРІРѕР№СЃС‚РІР°:
-    Is64BitProcess: BOOL; // 64С…-Р±РёС‚РЅС‹Р№ Р»Рё РїСЂРѕС†РµСЃСЃ
+  // Глобальные системные свойства:
+    Is64BitProcess: BOOL; // 64х-битный ли процесс
   end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ WideString -> AnsiString Рё РѕР±СЂР°С‚РЅРѕ:
+// Преобразования WideString -> AnsiString и обратно:
 function WideStringToString(const WideStringToConversion: WideString; CodePage: Word): AnsiString;
 function StringToWideString(const AnsiStringToConversion: AnsiString; CodePage: Word): WideString;
 
-// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ ProcessID РІ Handle:
+// Преобразование ProcessID в Handle:
 function ProcessIDToHandle(ProcessID: LongWord): THandle;
 
-// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Handle РІ ProcessID:
+// Преобразование Handle в ProcessID:
 function HandleToProcessID(ProcessHandle: THandle): LongWord;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// РџРѕР»СѓС‡РµРЅРёРµ РїРѕРґСЂРѕР±РЅРѕР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїСЂРѕС†РµСЃСЃРµ РїРѕ РµРіРѕ ID:
+// Получение подробной информации о процессе по его ID:
 procedure GetProcessInfo(ProcessID: LongWord; out ProcessInfo: PROCESS_INFO; Process32_64CompatibleMode: Boolean = false);
 
-// РџРѕР»СѓС‡РµРЅРёРµ Р±Р°Р·РѕРІРѕР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїСЂРѕС†РµСЃСЃРµ РїРѕ РµРіРѕ ID:
+// Получение базовой информации о процессе по его ID:
 procedure GetProcessBasicInfo(ProcessID: LongWord; out ProcessBasicInfo: TProcessBasicInfo);
 
-// 64С…-Р±РёС‚РЅС‹Р№ Р»Рё РїСЂРѕС†РµСЃСЃ:
+// 64х-битный ли процесс:
 function Is64BitProcess(ProcessID: LongWord): LongBool;
 
-// Р—Р°РїСѓС‰РµРЅ Р»Рё РїСЂРѕС†РµСЃСЃ:
+// Запущен ли процесс:
 function IsProcessLaunched(ProcessName: AnsiString): Boolean;
 
-// РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє Р·Р°РїСѓС‰РµРЅРЅС‹С… РїСЂРѕС†РµСЃСЃРѕРІ СЃ РєСЂР°С‚РєРѕР№ РёРЅС„РѕСЂРјР°С†РёРµР№:
+// Получить список запущенных процессов с краткой информацией:
 procedure GetProcessList(out ProcessList: TProcessList);
 
-// РџРѕР»СѓС‡РёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РёР· TlHelp32 РїРѕ ID РїСЂРѕС†РµСЃСЃР°:
+// Получить информацию из TlHelp32 по ID процесса:
 function GetTlHelp32ProcessInfo(ProcessID: LongWord): TProcessInfo; overload;
 
-// РџРѕР»СѓС‡РёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РёР· TlHelp32 РїРѕ РёРјРµРЅРё РїСЂРѕС†РµСЃСЃР°:
+// Получить информацию из TlHelp32 по имени процесса:
 function GetTlHelp32ProcessInfo(ProcessName: AnsiString): TProcessInfo; overload;
 
-// Р—Р°РїСѓСЃРє РїСЂРѕС†РµСЃСЃР°:
+// Запуск процесса:
 procedure StartProcess(const CommandLine: string; out ProcessHandle: THandle; out ProcessID: LongWord);
 
-// РџРѕР»СѓС‡РёС‚СЊ Р·Р°РіСЂСѓР·РєСѓ Р¦Рџ РґР°РЅРЅС‹Рј РїСЂРѕС†РµСЃСЃРѕРј (Delay СЃС‚Р°РІРёС‚СЊ РІ РїСЂРµРґРµР»Р°С… РѕС‚ 25 РґРѕ 500, РјРµРЅСЊС€Рµ - РЅРµС‚РѕС‡РЅРѕ, Р±РѕР»СЊС€Рµ - РЅРё Рє С‡РµРјСѓ):
+// Получить загрузку ЦП данным процессом (Delay ставить в пределах от 25 до 500, меньше - неточно, больше - ни к чему):
 function GetProcessCPULoading(ProcessID: LongWord; Delay: Cardinal): Single;
 
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
@@ -151,7 +151,7 @@ type
   Pointer64 = UInt64;
   Pointer32 = UInt;
 
-// РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С… Рѕ РїСЂРѕС†РµСЃСЃРµ РїРѕРґ Win32
+// Структура для получения данных о процессе под Win32
   PROCESS_BASIC_INFORMATION = record
     ExitStatus: LongWord;
     PebBaseAddress: Pointer;
@@ -179,7 +179,7 @@ type
 
   UCHAR = AnsiChar;
 
-// Р®РЅРёРєРѕРґРЅР°СЏ СЃС‚СЂРѕРєР° РІ Win32
+// Юникодная строка в Win32
   UNICODE_STRING = record
     Length: Word;
     MaximumLength: Word;
@@ -347,7 +347,7 @@ type
     SessionID: LongWord;
   end;
 
-// РЎС‚СЂСѓРєС‚СѓСЂР° RTL_USER_PROCESS_PARAMETERS РїРѕРґ Win32
+// Структура RTL_USER_PROCESS_PARAMETERS под Win32
   RTL_USER_PROCESS_PARAMETERS = record
     MaximumLength: LongWord;
     Length: LongWord;
@@ -531,7 +531,7 @@ function NtQuerySystemInformation(
                                   ): NTStatus; stdcall; external 'ntdll.dll';
 
 
-// 64С…-Р±РёС‚РЅС‹Рµ Р°РЅР°Р»РѕРіРё:
+// 64х-битные аналоги:
 var
   NtWow64QueryInformationProcess64: function(
                                            ProcessHandle: THandle;
@@ -664,7 +664,7 @@ end;
 const
   SE_DEBUG_NAME = 'SeDebugPrivilege';
 
-// РЈСЃС‚Р°РЅРѕРІРєР° РїСЂРёРІРёР»РµРіРёР№
+// Установка привилегий
 function NTSetPrivilege(sPrivilege: AnsiString; bEnabled: Boolean): Boolean;
 var
   hToken: THandle;
@@ -719,7 +719,7 @@ begin
   Is64BitWindows := _Is64BitWindows;
   if Is64BitWindows then
   begin
-    // РС‰РµРј Р°РґСЂРµСЃР° 64С…-Р±РёС‚РЅС‹С… С„СѓРЅРєС†РёР№:
+    // Ищем адреса 64х-битных функций:
     NtdllHandle := GetModuleHandleA('ntdll.dll');
     {$IFDEF CPUX64}
     NtWow64QueryInformationProcess64 := GetProcAddress(NtdllHandle, 'NtQueryInformationProcess');
@@ -750,10 +750,10 @@ var
 
   BytesRead: LongWord;
 begin
-// Р§РёС‚Р°РµРј PEB_LDR_DATA:
+// Читаем PEB_LDR_DATA:
   NtReadVirtualMemory(ProcessHandle, LDRAddress, @LdrInfo, SizeOf(LdrInfo), BytesRead);
 
-// Р§РёС‚Р°РµРј LDR_MODULE_INFO:
+// Читаем LDR_MODULE_INFO:
   NtReadVirtualMemory(ProcessHandle, LdrInfo.InLoadModuleOrderList.ForwardLDRModule, @ModuleInfo, SizeOf(ModuleInfo), BytesRead);
 
   FillChar(Modules, SizeOf(Modules), #0);
@@ -763,7 +763,7 @@ begin
     Inc(Modules.Length);
     SetLength(Modules.Modules, Modules.Length);
 
-  // РџРѕР»СѓС‡Р°РµРј С‡РёСЃР»РµРЅРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ:
+  // Получаем численную информацию:
     with Modules do
     begin
       Modules[Length - 1].BaseAddress := UInt64(ModuleInfo.BaseAddress);
@@ -771,7 +771,7 @@ begin
       Modules[Length - 1].SizeOfImage := UInt64(ModuleInfo.SizeOfImage);
     end;
 
-  // Р§РёС‚Р°РµРј РїРѕР»РЅС‹Р№ РїСѓС‚СЊ:
+  // Читаем полный путь:
     StringPointer := ModuleInfo.FullDLLName.Buffer;
     StringLength := ModuleInfo.FullDLLName.Length;
     GetMem(StringBuffer, StringLength + 2);
@@ -780,7 +780,7 @@ begin
     Modules.Modules[Modules.Length - 1].FullPath := WideStringToString(PWideChar(StringBuffer), 0);
     FreeMem(StringBuffer);
 
-  // Р§РёС‚Р°РµРј РёРјСЏ Р±РёР±Р»РёРѕС‚РµРєРё:
+  // Читаем имя библиотеки:
     StringPointer := ModuleInfo.BaseDLLName.Buffer;
     StringLength := ModuleInfo.BaseDLLName.Length;
     GetMem(StringBuffer, StringLength + 2);
@@ -789,7 +789,7 @@ begin
     Modules.Modules[Modules.Length - 1].ModuleName := WideStringToString(PWideChar(StringBuffer), 0);
     FreeMem(StringBuffer);
 
-  // Р§РёС‚Р°РµРј СЃР»РµРґСѓСЋС‰РёР№ РІ СЃРїРёСЃРєРµ LDR_MODULE_INFO:
+  // Читаем следующий в списке LDR_MODULE_INFO:
     NtReadVirtualMemory(ProcessHandle, ModuleInfo.InLoadModuleOrderList.ForwardLDRModule, @ModuleInfo, SizeOf(ModuleInfo), BytesRead);
   end;
 end;
@@ -833,20 +833,20 @@ begin
   NTSetPrivilege(SE_DEBUG_NAME, true);
   ProcessHandle := OpenProcess(PROCESS_QUERY_INFORMATION + PROCESS_VM_READ, FALSE, ProcessID);
 
-// РџРѕР»СѓС‡Р°РµРј СЂР°Р·СЂСЏРґРЅРѕСЃС‚СЊ РїСЂРѕС†РµСЃСЃР°:
-  _Is64BitProcess := FALSE; // РџСЂРѕС†РµСЃСЃС‹ Р·Р°РІРµРґРѕРјРѕ 32С…-Р±РёС‚РЅС‹Рµ
+// Получаем разрядность процесса:
+  _Is64BitProcess := FALSE; // Процессы заведомо 32х-битные
 
-// Р—Р°РїРѕР»РЅСЏРµРј PROCESS_BASIC_INFORMATION:
+// Заполняем PROCESS_BASIC_INFORMATION:
   NtQueryInformationProcess(ProcessHandle, ProcessBasicInformation, @ProcessBasicInfo, SizeOf(ProcessBasicInfo), ReturnLength);
-// Р§РёС‚Р°РµРј PEB:
+// Читаем PEB:
   NtReadVirtualMemory(ProcessHandle, ProcessBasicInfo.PebBaseAddress, @PEBInfo, SizeOf(PEBInfo), BytesRead);
-// Р§РёС‚Р°РµРј RTL_USER_PROCESS_PARAMETERS:
+// Читаем RTL_USER_PROCESS_PARAMETERS:
   NtReadVirtualMemory(ProcessHandle, PEBInfo.ProcessParameters, @UserParameters, SizeOf(UserParameters), BytesRead);
 
-// РџРѕР»СѓС‡Р°РµРј СЃРїРёСЃРѕРє Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РјРѕРґСѓР»РµР№:
+// Получаем список загруженных модулей:
   _GetModulesList32(ProcessHandle, PEBInfo.Ldr, ProcessInfo.ModulesList);
 
-// Р§РёС‚Р°РµРј СЃС‚СЂРѕРєРё:
+// Читаем строки:
   // CommandLine:
   StringPointer := UserParameters.CommandLine.Buffer;
   StringLength := UserParameters.CommandLine.Length;
@@ -874,18 +874,18 @@ begin
   CurrentDirectory := WideStringToString(PWideChar(StringBuffer), 0);
   FreeMem(StringBuffer);
 
-// РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїР°РјСЏС‚Рё РїСЂРѕС†РµСЃСЃР°:
+// Получаем информацию о памяти процесса:
   FillChar(MemoryCounters, SizeOf(MemoryCounters), #0);
   GetProcessMemoryInfo(ProcessHandle, MemoryCounters, SizeOf(MemoryCounters));
 
-// РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ РёР· TlHelp32:
+// Получаем информацию из TlHelp32:
   FillChar(TlHelp32Info, SizeOf(TlHelp32Info), #0);
   TlHelp32Info := GetTlHelp32ProcessInfo(ProcessID);
 
-// РџРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РѕС‚РєСЂС‹С‚С‹С… С…СЌРЅРґР»РѕРІ:
+// Получаем количество открытых хэндлов:
   GetProcessHandleCount(ProcessHandle, @LocalHandlesCount);
 
-  // Р’РѕР·РІСЂР°С‰Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚:
+  // Возвращаем результат:
   with ProcessInfo do
   begin
     Handle := ProcessHandle;
@@ -937,9 +937,9 @@ var
 
   BytesRead: UInt64;
 begin
-// Р§РёС‚Р°РµРј PEB_LDR_DATA:
+// Читаем PEB_LDR_DATA:
   NtWow64ReadVirtualMemory64(ProcessHandle, LDRAddress, @LdrInfo, SizeOf(LdrInfo), BytesRead);
-// Р§РёС‚Р°РµРј LDR_MODULE_INFO:
+// Читаем LDR_MODULE_INFO:
   NtWow64ReadVirtualMemory64(ProcessHandle, UInt64(LdrInfo.InLoadModuleOrderList.ForwardLDRModule), @ModuleInfo, SizeOf(ModuleInfo), BytesRead);
 
   FillChar(Modules, SizeOf(Modules), #0);
@@ -949,7 +949,7 @@ begin
     Inc(Modules.Length);
     SetLength(Modules.Modules, Modules.Length);
 
-  // РџРѕР»СѓС‡Р°РµРј С‡РёСЃР»РµРЅРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ:
+  // Получаем численную информацию:
     with Modules do
     begin
       Modules[Length - 1].BaseAddress := ModuleInfo.BaseAddress;
@@ -957,7 +957,7 @@ begin
       Modules[Length - 1].SizeOfImage := ModuleInfo.SizeOfImage;
     end;
 
-  // Р§РёС‚Р°РµРј РїРѕР»РЅС‹Р№ РїСѓС‚СЊ:
+  // Читаем полный путь:
     StringPointer := ModuleInfo.FullDLLName.Buffer;
     StringLength := ModuleInfo.FullDLLName.Length;
     GetMem(StringBuffer, StringLength + 2);
@@ -966,7 +966,7 @@ begin
     Modules.Modules[Modules.Length - 1].FullPath := WideStringToString(PWideChar(StringBuffer), 0);
     FreeMem(StringBuffer);
 
-  // Р§РёС‚Р°РµРј РёРјСЏ Р±РёР±Р»РёРѕС‚РµРєРё:
+  // Читаем имя библиотеки:
     StringPointer := ModuleInfo.BaseDLLName.Buffer;
     StringLength := ModuleInfo.BaseDLLName.Length;
     GetMem(StringBuffer, StringLength + 2);
@@ -975,7 +975,7 @@ begin
     Modules.Modules[Modules.Length - 1].ModuleName := WideStringToString(PWideChar(StringBuffer), 0);
     FreeMem(StringBuffer);
 
-  // Р§РёС‚Р°РµРј СЃР»РµРґСѓСЋС‰РёР№ РІ СЃРїРёСЃРєРµ LDR_MODULE_INFO:
+  // Читаем следующий в списке LDR_MODULE_INFO:
     NtWow64ReadVirtualMemory64(ProcessHandle, ModuleInfo.InLoadModuleOrderList.ForwardLDRModule, @ModuleInfo, SizeOf(ModuleInfo), BytesRead);
   end;
 end;
@@ -1018,21 +1018,21 @@ begin
   NTSetPrivilege(SE_DEBUG_NAME, true);
   ProcessHandle := OpenProcess(PROCESS_QUERY_INFORMATION + PROCESS_VM_READ, FALSE, ProcessID);
 
-// РџРѕР»СѓС‡Р°РµРј СЂР°Р·СЂСЏРґРЅРѕСЃС‚СЊ РїСЂРѕС†РµСЃСЃР°:
+// Получаем разрядность процесса:
   IsWow64Process(ProcessHandle, _Is64BitProcess);
   _Is64BitProcess := not _Is64BitProcess;
 
-// Р—Р°РїРѕР»РЅСЏРµРј PROCESS_BASIC_INFORMATION:
+// Заполняем PROCESS_BASIC_INFORMATION:
   NtWow64QueryInformationProcess64(ProcessHandle, ProcessBasicInformation, @ProcessBasicInfo, SizeOf(ProcessBasicInfo), ReturnLength);
-// Р§РёС‚Р°РµРј PEB:
+// Читаем PEB:
   NtWow64ReadVirtualMemory64(ProcessHandle, ProcessBasicInfo.PebBaseAddress, @PEBInfo, SizeOf(PEBInfo), BytesRead);
-// Р§РёС‚Р°РµРј RTL_USER_PROCESS_PARAMETERS:
+// Читаем RTL_USER_PROCESS_PARAMETERS:
   NtWow64ReadVirtualMemory64(ProcessHandle, PEBInfo.ProcessParameters, @UserParameters, SizeOf(UserParameters), BytesRead);
 
-// РџРѕР»СѓС‡Р°РµРј СЃРїРёСЃРѕРє Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РјРѕРґСѓР»РµР№:
+// Получаем список загруженных модулей:
   _GetModulesList64(ProcessHandle, PEBInfo.Ldr, ProcessInfo.ModulesList);
 
-// Р§РёС‚Р°РµРј СЃС‚СЂРѕРєРё:
+// Читаем строки:
   // CommandLine:
   StringPointer := UserParameters.CommandLine.Buffer;
   StringLength := UserParameters.CommandLine.Length;
@@ -1060,18 +1060,18 @@ begin
   CurrentDirectory := WideStringToString(PWideChar(StringBuffer), 0);
   FreeMem(StringBuffer);
 
-// РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїР°РјСЏС‚Рё РїСЂРѕС†РµСЃСЃР°:
+// Получаем информацию о памяти процесса:
   FillChar(MemoryCounters, SizeOf(MemoryCounters), #0);
   GetProcessMemoryInfo(ProcessHandle, MemoryCounters, SizeOf(MemoryCounters));
 
-// РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ РёР· TlHelp32:
+// Получаем информацию из TlHelp32:
   FillChar(TlHelp32Info, SizeOf(TlHelp32Info), #0);
   TlHelp32Info := GetTlHelp32ProcessInfo(ProcessID);
 
-// РџРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РѕС‚РєСЂС‹С‚С‹С… С…СЌРЅРґР»РѕРІ:
+// Получаем количество открытых хэндлов:
   GetProcessHandleCount(ProcessHandle, @LocalHandlesCount);
 
-  // Р’РѕР·РІСЂР°С‰Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚:
+  // Возвращаем результат:
   with ProcessInfo do
   begin
     Handle := ProcessHandle;
@@ -1123,9 +1123,9 @@ var
 
   BytesRead: UInt64;
 begin
-// Р§РёС‚Р°РµРј PEB_LDR_DATA:
+// Читаем PEB_LDR_DATA:
   NtWow64ReadVirtualMemory64(ProcessHandle, UInt64(LDRAddress), @LdrInfo, SizeOf(LdrInfo), BytesRead);
-// Р§РёС‚Р°РµРј LDR_MODULE_INFO:
+// Читаем LDR_MODULE_INFO:
   NtWow64ReadVirtualMemory64(ProcessHandle, UInt64(LdrInfo.InLoadModuleOrderList.ForwardLDRModule), @ModuleInfo, SizeOf(ModuleInfo), BytesRead);
 
   FillChar(Modules, SizeOf(Modules), #0);
@@ -1135,7 +1135,7 @@ begin
     Inc(Modules.Length);
     SetLength(Modules.Modules, Modules.Length);
 
-  // РџРѕР»СѓС‡Р°РµРј С‡РёСЃР»РµРЅРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ:
+  // Получаем численную информацию:
     with Modules do
     begin
       Modules[Length - 1].BaseAddress := ModuleInfo.BaseAddress;
@@ -1143,7 +1143,7 @@ begin
       Modules[Length - 1].SizeOfImage := ModuleInfo.SizeOfImage;
     end;
 
-  // Р§РёС‚Р°РµРј РїРѕР»РЅС‹Р№ РїСѓС‚СЊ:
+  // Читаем полный путь:
     StringPointer := ModuleInfo.FullDLLName.Buffer;
     StringLength := ModuleInfo.FullDLLName.Length;
     GetMem(StringBuffer, StringLength + 2);
@@ -1152,7 +1152,7 @@ begin
     Modules.Modules[Modules.Length - 1].FullPath := WideStringToString(PWideChar(StringBuffer), 0);
     FreeMem(StringBuffer);
 
-  // Р§РёС‚Р°РµРј РёРјСЏ Р±РёР±Р»РёРѕС‚РµРєРё:
+  // Читаем имя библиотеки:
     StringPointer := ModuleInfo.BaseDLLName.Buffer;
     StringLength := ModuleInfo.BaseDLLName.Length;
     GetMem(StringBuffer, StringLength + 2);
@@ -1161,7 +1161,7 @@ begin
     Modules.Modules[Modules.Length - 1].ModuleName := WideStringToString(PWideChar(StringBuffer), 0);
     FreeMem(StringBuffer);
 
-  // Р§РёС‚Р°РµРј СЃР»РµРґСѓСЋС‰РёР№ РІ СЃРїРёСЃРєРµ LDR_MODULE_INFO:
+  // Читаем следующий в списке LDR_MODULE_INFO:
     NtWow64ReadVirtualMemory64(ProcessHandle, ModuleInfo.InLoadModuleOrderList.ForwardLDRModule, @ModuleInfo, SizeOf(ModuleInfo), BytesRead);
   end;
 end;
@@ -1205,24 +1205,24 @@ begin
   NTSetPrivilege(SE_DEBUG_NAME, true);
   ProcessHandle := OpenProcess(PROCESS_QUERY_INFORMATION + PROCESS_VM_READ, FALSE, ProcessID);
 
-// РџРѕР»СѓС‡Р°РµРј СЂР°Р·СЂСЏРґРЅРѕСЃС‚СЊ РїСЂРѕС†РµСЃСЃР°:
+// Получаем разрядность процесса:
   IsWow64Process(ProcessHandle, _Is64BitProcess);
   _Is64BitProcess := not _Is64BitProcess;
 
-// Р—Р°РїРѕР»РЅСЏРµРј PROCESS_BASIC_INFORMATION:
+// Заполняем PROCESS_BASIC_INFORMATION:
   NtWow64QueryInformationProcess64(ProcessHandle, ProcessBasicInformation, @ProcessBasicInfo, SizeOf(ProcessBasicInfo), ReturnLength);
-// РџРѕР»СѓС‡Р°РµРј Р°РґСЂРµСЃ 32С…-Р±РёС‚РЅРѕРіРѕ PEB:
+// Получаем адрес 32х-битного PEB:
   NtWow64QueryInformationProcess64(ProcessHandle, ProcessWow64Information, @ProcessBasicInfoWow64, SizeOf(ProcessBasicInfoWow64), ReturnLength);
-// Р§РёС‚Р°РµРј PEB:
+// Читаем PEB:
   //NtWow64ReadVirtualMemory64(ProcessHandle, ProcessBasicInfo.PebBaseAddress, @PEBInfo, SizeOf(PEBInfo), BytesRead);
   NtWow64ReadVirtualMemory64(ProcessHandle, ProcessBasicInfoWow64.Wow64PebAddress, @PEBInfo, SizeOf(PEBInfo), BytesRead);
-// Р§РёС‚Р°РµРј RTL_USER_PROCESS_PARAMETERS:
+// Читаем RTL_USER_PROCESS_PARAMETERS:
   NtWow64ReadVirtualMemory64(ProcessHandle, UInt64(PEBInfo.ProcessParameters), @UserParameters, SizeOf(UserParameters), BytesRead);
 
-// РџРѕР»СѓС‡Р°РµРј СЃРїРёСЃРѕРє Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РјРѕРґСѓР»РµР№:
+// Получаем список загруженных модулей:
   _GetModulesListWow64(ProcessHandle, UInt64(PEBInfo.Ldr), ProcessInfo.ModulesList);
 
-// Р§РёС‚Р°РµРј СЃС‚СЂРѕРєРё:
+// Читаем строки:
   // CommandLine:
   StringPointer := UserParameters.CommandLine.Buffer;
   StringLength := UserParameters.CommandLine.Length;
@@ -1250,18 +1250,18 @@ begin
   CurrentDirectory := WideStringToString(PWideChar(StringBuffer), 0);
   FreeMem(StringBuffer);
 
-// РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїР°РјСЏС‚Рё РїСЂРѕС†РµСЃСЃР°:
+// Получаем информацию о памяти процесса:
   FillChar(MemoryCounters, SizeOf(MemoryCounters), #0);
   GetProcessMemoryInfo(ProcessHandle, MemoryCounters, SizeOf(MemoryCounters));
 
-// РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ РёР· TlHelp32:
+// Получаем информацию из TlHelp32:
   FillChar(TlHelp32Info, SizeOf(TlHelp32Info), #0);
   TlHelp32Info := GetTlHelp32ProcessInfo(ProcessID);
 
-// РџРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РѕС‚РєСЂС‹С‚С‹С… С…СЌРЅРґР»РѕРІ:
+// Получаем количество открытых хэндлов:
   GetProcessHandleCount(ProcessHandle, @LocalHandlesCount);
 
-  // Р’РѕР·РІСЂР°С‰Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚:
+  // Возвращаем результат:
   with ProcessInfo do
   begin
     Handle := ProcessHandle;
@@ -1602,33 +1602,33 @@ var
 begin
   ProcessHandle := ProcessIDtoHandle(ProcessID);
 
-  // РџРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ СЏРґРµСЂ:
+  // Получаем количество ядер:
   GetSystemInfo(SystemInfo);
   ProcessorsCount := SystemInfo.dwNumberOfProcessors;
 
-  // РџРѕР»СѓС‡Р°РµРј РІСЂРµРјРµРЅР° РїСЂРѕС†РµСЃСЃР°:
+  // Получаем времена процесса:
   GetProcessTimes(ProcessHandle, lpCreationTime, lpExitTime, lpKernelTime, lpUserTime);
   FirstUpdateTime := GetTickCount;
-  // Р Р°Р±РѕС‡РµРµ РІСЂРµРјСЏ РІ РЅР°С‡Р°Р»Рµ РёРЅС‚РµСЂРІР°Р»Р°:
+  // Рабочее время в начале интервала:
   FirstWorkingTime := Int64(lpKernelTime) + Int64(lpUserTime);
 
   Sleep(Delay);
 
-  // РџРѕР»СѓС‡Р°РµРј РІСЂРµРјРµРЅР° РїСЂРѕС†РµСЃСЃР° С‡РµСЂРµР· РёРЅС‚РµСЂРІР°Р»:
+  // Получаем времена процесса через интервал:
   GetProcessTimes(ProcessHandle, lpCreationTime, lpExitTime, lpKernelTime, lpUserTime);
   SecondUpdateTime := GetTickCount;
 
-  // РРЅС‚РµСЂРІР°Р», РІРѕ РІСЂРµРјСЏ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґРµРј РёР·РјРµСЂСЏС‚СЊ РЅР°РіСЂСѓР·РєСѓ:
+  // Интервал, во время которого будем измерять нагрузку:
   LifeInterval := SecondUpdateTime - FirstUpdateTime;
   if LifeInterval <= 0 then LifeInterval := 0.01;
 
-  // Р Р°Р±РѕС‡РµРµ РІСЂРµРјСЏ РІ РєРѕРЅС†Рµ РёРЅС‚РµСЂРІР°Р»Р°:
+  // Рабочее время в конце интервала:
   WorkingTime := Int64(lpKernelTime) + Int64(lpUserTime);
 
-  // Р Р°Р·РЅРѕСЃС‚СЊ РјРµР¶РґСѓ СЂР°Р±РѕС‡РёРјРё РІСЂРµРјРµРЅР°РјРё РІ РєРѕРЅС†Рµ Рё РЅР°С‡Р°Р»Рµ РёРЅС‚РµСЂРІР°Р»Р°:
+  // Разность между рабочими временами в конце и начале интервала:
   WorkingInterval := WorkingTime - FirstWorkingTime;
 
-  // Р’С‹РІРѕРґРёРј СЂРµР·СѓР»СЊС‚Р°С‚:
+  // Выводим результат:
   Result := WorkingInterval / (LifeInterval * 100 * ProcessorsCount);
 
   CloseHandle(ProcessHandle);

@@ -1,4 +1,4 @@
-ï»¿unit PipesAPI;
+unit PipesAPI;
 
 interface
 
@@ -15,9 +15,9 @@ type
   end;
 
 const
-  REDIRECT_INPUT  = 1;  // ÐŸÐµÑ€ÐµÐ½Ð°Ð¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð²Ð²Ð¾Ð´
-  REDIRECT_OUTPUT = 2;  // ÐŸÐµÑ€ÐµÐ½Ð°Ð¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð²Ñ‹Ð²Ð¾Ð´
-  REDIRECT_ALL    = 3;  // ÐŸÐµÑ€ÐµÐ½Ð°Ð¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒ Ð²ÑÑ‘
+  REDIRECT_INPUT  = 1;  // Ïåðåíàïðàâëÿòü òîëüêî ââîä
+  REDIRECT_OUTPUT = 2;  // Ïåðåíàïðàâëÿòü òîëüêî âûâîä
+  REDIRECT_ALL    = 3;  // Ïåðåíàïðàâëÿòü âñ¸
 
 function CreatePipes(ExecObject, CommandLine, CurrentDir: PAnsiChar; ShowWindow: LongWord; RedirectType: byte; out PipeInformation: TPipeInformation): LongBool;
 function GetOutputPipeDataSize(ReadStdOut: THandle): LongWord;
@@ -46,30 +46,30 @@ begin
   SecurityAttributes.lpSecurityDescriptor := nil;
   SecurityAttributes.bInheritHandle := true;
 
-  // ÐŸÐ°Ð¹Ð¿ Ð´Ð»Ñ StdIn:
+  // Ïàéï äëÿ StdIn:
   if not CreatePipe(StdIn, WriteStdIn, @SecurityAttributes, 0) then
   begin
     Result := false;
     Exit;
   end;
 
-  // ÐŸÐ°Ð¹Ð¿ Ð´Ð»Ñ StdOut:
+  // Ïàéï äëÿ StdOut:
   if not CreatePipe(ReadStdOut, StdOut, @SecurityAttributes, 0) then
   begin
     Result := false;
     Exit;
   end;
 
-  // ÐŸÐ°Ð¹Ð¿Ñ‹ ÑÐ¾Ð·Ð´Ð°Ð½Ñ‹, ÑÐ¾Ð·Ð´Ð°Ñ‘Ð¼ Ð¿Ñ€Ð¾Ñ†ÐµÑÑ:
+  // Ïàéïû ñîçäàíû, ñîçäà¸ì ïðîöåññ:
   FillChar(StartupInfo, SizeOf(StartupInfo), #0);
   StartupInfo.cb := SizeOf(StartupInfo);
   StartupInfo.wShowWindow := ShowWindow;
 
-  // ÐŸÐµÑ€ÐµÐ½Ð°Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð²Ð²Ð¾Ð´Ð°:
+  // Ïåðåíàïðàâëåíèå ââîäà:
   if (RedirectType and REDIRECT_INPUT) = REDIRECT_INPUT then
     StartupInfo.hStdInput := StdIn;
 
-  // ÐŸÐµÑ€ÐµÐ½Ð°Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð²Ñ‹Ð²Ð¾Ð´Ð°:
+  // Ïåðåíàïðàâëåíèå âûâîäà:
   if (RedirectType and REDIRECT_OUTPUT) = REDIRECT_OUTPUT then
   begin
     StartupInfo.hStdOutput := StdOut;
@@ -91,7 +91,7 @@ begin
                            ProcessInfo
                           );
 
-  // ÐŸÑ€Ð¾Ñ†ÐµÑÑ ÑÐ¾Ð·Ð´Ð°Ð½, Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚:
+  // Ïðîöåññ ñîçäàí, âîçâðàùàåì ðåçóëüòàò:
   FillChar(PipeInformation, SizeOf(PipeInformation), #0);
   if Result = true then
   begin
@@ -117,10 +117,10 @@ function ReadPipe(ReadStdOut: THandle; Buffer: pointer; BytesToRead: LongWord; o
 var
   AvailToRead: LongWord;
 begin
-  // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, ÐµÑÑ‚ÑŒ Ð»Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð² Ð¿Ð°Ð¹Ð¿Ðµ:
+  // Ïðîâåðÿåì, åñòü ëè äàííûå â ïàéïå:
   if not PeekNamedPipe(ReadStdOut, nil, 0, @BytesRead, @AvailToRead, nil) then AvailToRead := 0;
 
-  // Ð•ÑÐ»Ð¸ ÐµÑÑ‚ÑŒ, Ñ‚Ð¾ Ñ‡Ð¸Ñ‚Ð°ÐµÐ¼:
+  // Åñëè åñòü, òî ÷èòàåì:
   if AvailToRead > 0 then
   begin
     Result := ReadFile(ReadStdOut, Buffer^, BytesToRead, BytesRead, nil);

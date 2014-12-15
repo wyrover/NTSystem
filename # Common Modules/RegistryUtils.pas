@@ -7,12 +7,12 @@ uses
 
 function GetCurrentJavaPath: string;
 
-// Р—Р°РїРёСЃСЊ РїР°СЂР°РјРµС‚СЂРѕРІ:
+// Запись параметров:
 procedure SaveStringToRegistry(const Path, Name, Value: string);
 procedure SaveBooleanToRegistry(const Path, Name: string; Value: Boolean);
 procedure SaveNumberToRegistry(const Path, Name: string; Value: Integer);
 
-// Р§С‚РµРЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ:
+// Чтение параметров:
 function ReadStringFromRegistry(const Path, Name: string; DefaultValue: string = ''): string;
 function ReadBooleanFromRegistry(const Path, Name: string; DefaultValue: Boolean = False): Boolean;
 function ReadNumberFromRegistry(const Path, Name: string; DefaultValue: Integer = 0): Integer;

@@ -16,44 +16,44 @@ type
   NativeUInt = LongWord;
 {$ENDIF}
 
-// РЈСЃС‚Р°РЅРѕРІРєР° РЅРµРѕР±С…РѕРґРёРјС‹С… РїСЂРёРІРёР»РµРіРёР№ (РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё SE_DEBUG_NAME) - Р’Р«Р—Р«Р’РђРўР¬ Р’Р РЈР§РќРЈР®:
+// Установка необходимых привилегий (для установки SE_DEBUG_NAME) - ВЫЗЫВАТЬ ВРУЧНУЮ:
 function NTSetPrivilege(sPrivilege: string; bEnabled: Boolean): Boolean;
 
 
 {
-  РРЅСЉРµРєС†РёСЏ Р±РёР±Р»РёРѕС‚РµРє:
+  Инъекция библиотек:
 
-    РћСЃРЅРѕРІРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
-      ProcessHandle - С…СЌРЅРґР» РїСЂРѕС†РµСЃСЃР°, РІ РєРѕС‚РѕСЂС‹Р№ С…РѕС‚РёРј РїСЂРѕРІРµСЃС‚Рё РёРЅСЉРµРєС†РёСЋ
-      ModulePath - РђР‘РЎРћР›Р®РўРќР«Р™ РїСѓС‚СЊ Рє РІРЅРµРґСЂСЏРµРјРѕР№ Р±РёР±Р»РёРѕС‚РµРєРµ
+    Основные параметры:
+      ProcessHandle - хэндл процесса, в который хотим провести инъекцию
+      ModulePath - АБСОЛЮТНЫЙ путь к внедряемой библиотеке
 
-    Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
-      LLAddress - Р°РґСЂРµСЃ LoadLibraryA
-      ETAddress - Р°РґСЂРµСЃ ExitThread
+    Дополнительные параметры:
+      LLAddress - адрес LoadLibraryA
+      ETAddress - адрес ExitThread
 }
 function InjectDll32(ProcessID: LongWord; ModulePath: PAnsiChar; LLAddress: LongWord = 0; ETAddress: LongWord = 0): Boolean;
 function InjectDll64(ProcessID: LongWord; ModulePath: PAnsiChar; LLAddress: UInt64 = 0; ETAddress: UInt64 = 0): Boolean;
 
 
 {
-  Р’С‹РіСЂСѓР·РєР° Р±РёР±Р»РёРѕС‚РµРє:
+  Выгрузка библиотек:
 
-    РћСЃРЅРѕРІРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
-      ProcessHandle - С…СЌРЅРґР» РїСЂРѕС†РµСЃСЃР°, РІ РєРѕС‚РѕСЂС‹Р№ С…РѕС‚РёРј РїСЂРѕРІРµСЃС‚Рё РёРЅСЉРµРєС†РёСЋ
-      ModuleName - РёРјСЏ РІС‹РіСЂСѓР¶Р°РµРјРѕР№ Р±РёР±Р»РёРѕС‚РµРєРё
+    Основные параметры:
+      ProcessHandle - хэндл процесса, в который хотим провести инъекцию
+      ModuleName - имя выгружаемой библиотеки
 
-    Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
-      GMHAddress - Р°РґСЂРµСЃ GetModuleHandleA
-      FLAddress - Р°РґСЂРµСЃ FreeLibrary
-      ETAddress - Р°РґСЂРµСЃ ExitThread
+    Дополнительные параметры:
+      GMHAddress - адрес GetModuleHandleA
+      FLAddress - адрес FreeLibrary
+      ETAddress - адрес ExitThread
 }
 function UnloadDll32(ProcessID: LongWord; ModulePath: PAnsiChar; GMHAddress: LongWord = 0; FLAddress: LongWord = 0; ETAddress: LongWord = 0): Boolean;
 function UnloadDll64(ProcessID: LongWord; ModuleName: PAnsiChar; GMHAddress: UInt64 = 0; FLAddress: UInt64 = 0; ETAddress: UInt64 = 0): Boolean;
 
-// РРЅСЉРµРєС†РёСЏ РєРѕРґР° РЅР°РїСЂСЏРјСѓСЋ РёР· РїСЂРѕРіСЂР°РјРјС‹:
+// Инъекция кода напрямую из программы:
 procedure InjectFunction(ProcessID: LongWord; InjectedFunction: Pointer; InjectedFunctionSize: NativeUInt);
 
-// Р’С‹РіСЂСѓР·РєР° РЅРµРёСЃРїРѕР»СЊР·СѓРµРјС‹С… СЃС‚СЂР°РЅРёС† РїР°РјСЏС‚Рё:
+// Выгрузка неиспользуемых страниц памяти:
 function EmptyWorkingSet(Handle: NativeUInt): LongBool; stdcall; external 'psapi.dll';
 
 implementation
@@ -73,7 +73,7 @@ function NtWriteVirtualMemory(
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// РЈСЃС‚Р°РЅРѕРІРєР° РїСЂРёРІРёР»РµРіРёР№ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ С‡СѓР¶РёРјРё РїСЂРѕС†РµСЃСЃР°РјРё:
+// Установка привилегий для работы с чужими процессами:
 function NTSetPrivilege(sPrivilege: string; bEnabled: Boolean): Boolean;
 var
   hToken: THandle;
@@ -103,7 +103,7 @@ end;
 
 (* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ:
+// Оригинальная функция:
 procedure LoadHookLib32;
 const
   HookLib: PAnsiChar = 'HookLib.dll';
@@ -118,7 +118,7 @@ end;
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *)
 
-// РРЅСЉРµРєС†РёСЏ РІ 32С…-Р±РёС‚РЅС‹Рµ РїСЂРѕС†РµСЃСЃС‹:
+// Инъекция в 32х-битные процессы:
 function InjectDll32(ProcessID: LongWord; ModulePath: PAnsiChar; LLAddress: LongWord = 0; ETAddress: LongWord = 0): Boolean;
 var
   ProcessHandle: NativeUInt;
@@ -129,7 +129,7 @@ var
   hThread: LongWord;
   hKernel32: LongWord;
 
-  // РЎС‚СЂСѓРєС‚СѓСЂР° РјР°С€РёРЅРЅРѕРіРѕ РєРѕРґР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Рё Р·Р°РїСѓСЃРєР° Р±РёР±Р»РёРѕС‚РµРєРё:
+  // Структура машинного кода инициализации и запуска библиотеки:
   Inject: packed record
     // LL* = LoadLibrary:
     LLPushCommand: Byte;
@@ -153,7 +153,7 @@ begin
   ProcessHandle := OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessID);
   if ProcessHandle = 0 then Exit;
 
-  // Р’С‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РІ РєРѕРЅС‚РµРєСЃС‚Рµ РїСЂРѕС†РµСЃСЃР°, РєСѓРґР° Р·Р°РїРёС€РµРј РєРѕРґ РІС‹Р·РѕРІР° Р±РёР±Р»РёРѕС‚РµРєРё РїРµСЂРµС…РІР°С‚С‡РёРєР°:
+  // Выделяем память в контексте процесса, куда запишем код вызова библиотеки перехватчика:
   Memory := VirtualAllocEx(ProcessHandle, nil, SizeOf(Inject), MEM_COMMIT, PAGE_EXECUTE_READWRITE);
   if Memory = nil then Exit;
 
@@ -188,10 +188,10 @@ begin
 
 //  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 
-  // Р—Р°РїРёСЃС‹РІР°РµРј РјР°С€РёРЅРЅС‹Р№ РєРѕРґ РІ РІС‹РґРµР»РµРЅРЅСѓСЋ РїР°РјСЏС‚СЊ:
+  // Записываем машинный код в выделенную память:
   if NtWriteVirtualMemory(ProcessHandle, NativeUInt(Memory), @Inject, SizeOf(Inject), BytesWritten) <> 0 then Exit;
 
-  // Р’С‹РїРѕР»РЅСЏРµРј РјР°С€РёРЅРЅС‹Р№ РєРѕРґ РІ РѕС‚РґРµР»СЊРЅРѕРј РїРѕС‚РѕРєРµ:
+  // Выполняем машинный код в отдельном потоке:
   hThread := CreateRemoteThread(ProcessHandle, nil, 0, Memory, nil, 0, ThreadId);
 
   if hThread = 0 then
@@ -214,7 +214,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Р’С‹РіСЂСѓР·РєР° Р±РёР±Р»РёРѕС‚РµРєРё РёР· 32С…-Р±РёС‚РЅС‹С… РїСЂРѕС†РµСЃСЃРѕРІ:
+// Выгрузка библиотеки из 32х-битных процессов:
 function UnloadDll32(ProcessID: LongWord; ModulePath: PAnsiChar; GMHAddress: LongWord = 0; FLAddress: LongWord = 0; ETAddress: LongWord = 0): Boolean;
 var
   ProcessHandle: NativeUInt;
@@ -225,7 +225,7 @@ var
   hThread: LongWord;
   hKernel32: LongWord;
 
-  // РЎС‚СЂСѓРєС‚СѓСЂР° РјР°С€РёРЅРЅРѕРіРѕ РєРѕРґР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Рё Р·Р°РїСѓСЃРєР° Р±РёР±Р»РёРѕС‚РµРєРё:
+  // Структура машинного кода инициализации и запуска библиотеки:
   Inject: packed record
     // GMH* = GetModuleHandle:
     GMHPushCommand: Byte;
@@ -255,7 +255,7 @@ begin
   ProcessHandle := OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessID);
   if ProcessHandle = 0 then Exit;
 
-  // Р’С‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РІ РєРѕРЅС‚РµРєСЃС‚Рµ РїСЂРѕС†РµСЃСЃР°, РєСѓРґР° Р·Р°РїРёС€РµРј РєРѕРґ РІС‹Р·РѕРІР° Р±РёР±Р»РёРѕС‚РµРєРё РїРµСЂРµС…РІР°С‚С‡РёРєР°:
+  // Выделяем память в контексте процесса, куда запишем код вызова библиотеки перехватчика:
   Memory := VirtualAllocEx(ProcessHandle, nil, SizeOf(Inject), MEM_COMMIT, PAGE_EXECUTE_READWRITE);
   if Memory = nil then Exit;
 
@@ -300,10 +300,10 @@ begin
 
 //  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 
-  // Р—Р°РїРёСЃС‹РІР°РµРј РјР°С€РёРЅРЅС‹Р№ РєРѕРґ РІ РІС‹РґРµР»РµРЅРЅСѓСЋ РїР°РјСЏС‚СЊ:
+  // Записываем машинный код в выделенную память:
   if NtWriteVirtualMemory(ProcessHandle, NativeUInt(Memory), @Inject, SizeOf(Inject), BytesWritten) <> 0 then Exit;
 
-  // Р’С‹РїРѕР»РЅСЏРµРј РјР°С€РёРЅРЅС‹Р№ РєРѕРґ РІ РѕС‚РґРµР»СЊРЅРѕРј РїРѕС‚РѕРєРµ:
+  // Выполняем машинный код в отдельном потоке:
   hThread := CreateRemoteThread(ProcessHandle, nil, 0, Memory, nil, 0, ThreadId);
 
   if hThread = 0 then
@@ -329,16 +329,16 @@ end;
 
 
 {
-  РџРµСЂРµРґР°С‡Р° РїР°СЂР°РјРµС‚СЂРѕРІ РІ С…64-С„СѓРЅРєС†РёРё:
+  Передача параметров в х64-функции:
 
-  RCX - РїРµСЂРІС‹Р№ РїР°СЂР°РјРµС‚СЂ
-  RDX - РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ
-  R8 - С‚СЂРµС‚РёР№ РїР°СЂР°РјРµС‚СЂ
-  R9 - С‡РµС‚РІС‘СЂС‚С‹Р№ РїР°СЂР°РјРµС‚СЂ
+  RCX - первый параметр
+  RDX - второй параметр
+  R8 - третий параметр
+  R9 - четвёртый параметр
 
-  РћСЃС‚Р°Р»СЊРЅРѕРµ С‡РµСЂРµР· СЃС‚РµРє РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ СЃРѕРіР»Р°С€РµРЅРёРµРј Рѕ РІС‹Р·РѕРІРµ
+  Остальное через стек в соответствии с соглашением о вызове
 
-  РЎС‚РµРє РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹СЂР°РІРЅРёРІР°С‚СЊ РїСЂРё РІС…РѕРґРµ РІ С„СѓРЅРєС†РёСЋ:
+  Стек необходимо выравнивать при входе в функцию:
 
   asm
     push rbp
@@ -353,7 +353,7 @@ end;
   end;
 }
 
-// РћСЂРёРіРёРЅР°Р»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ:
+// Оригинальная функция:
 procedure LoadHookLib64;
 const
   HookLib: PAnsiChar = 'HookLib.dll';
@@ -376,7 +376,7 @@ end;
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *)
 
 
-// РРЅСЉРµРєС†РёСЏ РІ 64С…-Р±РёС‚РЅС‹Рµ РїСЂРѕС†РµСЃСЃС‹:
+// Инъекция в 64х-битные процессы:
 function InjectDll64(ProcessID: LongWord; ModulePath: PAnsiChar; LLAddress: UInt64 = 0; ETAddress: UInt64 = 0): Boolean;
 var
   ProcessHandle: NativeUInt;
@@ -387,7 +387,7 @@ var
   hThread: LongWord;
   hKernel32: NativeUInt;
 
-  // РЎС‚СЂСѓРєС‚СѓСЂР° РјР°С€РёРЅРЅРѕРіРѕ РєРѕРґР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Рё Р·Р°РїСѓСЃРєР° Р±РёР±Р»РёРѕС‚РµРєРё:
+  // Структура машинного кода инициализации и запуска библиотеки:
   Inject: packed record
     AlignStackAtStart: UInt64;
 
@@ -419,33 +419,33 @@ begin
   ProcessHandle := OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessID);
   if ProcessHandle = 0 then Exit;
 
-// Р’С‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РІ РєРѕРЅС‚РµРєСЃС‚Рµ РїСЂРѕС†РµСЃСЃР°, РєСѓРґР° Р·Р°РїРёС€РµРј РєРѕРґ РІС‹Р·РѕРІР° Р±РёР±Р»РёРѕС‚РµРєРё РїРµСЂРµС…РІР°С‚С‡РёРєР°:
+// Выделяем память в контексте процесса, куда запишем код вызова библиотеки перехватчика:
   Memory := VirtualAllocEx(ProcessHandle, nil, SizeOf(Inject), MEM_COMMIT, PAGE_EXECUTE_READWRITE);
   if Memory = nil then Exit;
 
   Code := UInt64(Memory);
   FillChar(Inject, SizeOf(Inject), #0);
 
-// Р’С‹СЂР°РІРЅРёРІР°РµРј 64С…-Р±РёС‚РЅС‹Р№ СЃС‚РµРє:
+// Выравниваем 64х-битный стек:
   Inject.AlignStackAtStart := $E5894820EC834855;
 
 {
    + - - - - - - - - - - - +
-   |  RAX - Р°РґСЂРµСЃ С„СѓРЅРєС†РёРё  |
-   |  RCX - РїР°СЂР°РјРµС‚СЂС‹      |
+   |  RAX - адрес функции  |
+   |  RCX - параметры      |
    + - - - - - - - - - - - +
 }
 
 // LoadLibraryA:
   Inject.LLMovRaxCommand := $B848;
-  Inject.LLMovRaxArgument := Code + 68; // Code + СЃРјРµС‰РµРЅРёРµ РґРѕ Р°РґСЂРµСЃР° LoadLibraryA
+  Inject.LLMovRaxArgument := Code + 68; // Code + смещение до адреса LoadLibraryA
 
   Inject.LLMovRaxData[0] := $48; //  ---+
   Inject.LLMovRaxData[1] := $8B; //  ---+--->  mov RAX, [RAX]
   Inject.LLMovRaxData[2] := $00; //  ---+
 
   Inject.LLMovRcxCommand := $B948;
-  Inject.LLMovRcxArgument := Code + 84; // Code + СЃРјРµС‰РµРЅРёРµ РґРѕ РЅР°С‡Р°Р»Р° РїСѓС‚Рё Рє Р±РёР±Р»РёРѕС‚РµРєРµ
+  Inject.LLMovRcxArgument := Code + 84; // Code + смещение до начала пути к библиотеке
 
   Inject.LLCallRax[0] := $48;
   Inject.LLCallRax[1] := $FF;
@@ -453,7 +453,7 @@ begin
 
 // ExitThread:
   Inject.ETMovRaxCommand := $B848;
-  Inject.ETMovRaxArgument := Code + 76; // Code + СЃРјРµС‰РµРЅРёРµ РґРѕ Р°РґСЂРµСЃР° ExitThread
+  Inject.ETMovRaxArgument := Code + 76; // Code + смещение до адреса ExitThread
 
   Inject.ETMovRaxData[0] := $48; //  ---+
   Inject.ETMovRaxData[1] := $8B; //  ---+--->  mov RAX, [RAX]
@@ -466,11 +466,11 @@ begin
   Inject.ETCallRax[1] := $FF;
   Inject.ETCallRax[2] := $D0;
 
-// Р’С‹СЂР°РІРЅРёРІР°РµРј 64С…-Р±РёС‚РЅС‹Р№ СЃС‚РµРє:
+// Выравниваем 64х-битный стек:
   Inject.AlignStackAtEnd := $90C3C35D20658D48;
 
 
-// Р—Р°РїРёСЃС‹РІР°РµРј Р°РґСЂРµСЃР° Р±РёР±Р»РёРѕС‚РµРє:
+// Записываем адреса библиотек:
   hKernel32 := LoadLibrary('kernel32.dll');
 
   if LLAddress = 0 then
@@ -487,10 +487,10 @@ begin
 
 //  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 
-  // Р—Р°РїРёСЃС‹РІР°РµРј РјР°С€РёРЅРЅС‹Р№ РєРѕРґ РІ РІС‹РґРµР»РµРЅРЅСѓСЋ РїР°РјСЏС‚СЊ:
+  // Записываем машинный код в выделенную память:
   if NtWriteVirtualMemory(ProcessHandle, NativeUInt(Memory), @Inject, SizeOf(Inject), BytesWritten) <> 0 then Exit;
 
-  // Р’С‹РїРѕР»РЅСЏРµРј РјР°С€РёРЅРЅС‹Р№ РєРѕРґ РІ РѕС‚РґРµР»СЊРЅРѕРј РїРѕС‚РѕРєРµ:
+  // Выполняем машинный код в отдельном потоке:
   hThread := CreateRemoteThread(ProcessHandle, nil, 0, Memory, nil, 0, ThreadId);
 
   if hThread = 0 then
@@ -514,7 +514,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Р’С‹РіСЂСѓР·РєР° Р±РёР±Р»РёРѕС‚РµРєРё РёР· 64С…-Р±РёС‚РЅС‹С… РїСЂРѕС†РµСЃСЃРѕРІ:
+// Выгрузка библиотеки из 64х-битных процессов:
 function UnloadDll64(ProcessID: LongWord; ModuleName: PAnsiChar; GMHAddress: UInt64 = 0; FLAddress: UInt64 = 0; ETAddress: UInt64 = 0): Boolean;
 var
   ProcessHandle: NativeUInt;
@@ -525,7 +525,7 @@ var
   hThread: LongWord;
   hKernel32: NativeUInt;
 
-  // РЎС‚СЂСѓРєС‚СѓСЂР° РјР°С€РёРЅРЅРѕРіРѕ РєРѕРґР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Рё Р·Р°РїСѓСЃРєР° Р±РёР±Р»РёРѕС‚РµРєРё:
+  // Структура машинного кода инициализации и запуска библиотеки:
   Inject: packed record
     AlignStackAtStart: UInt64;            // 8
 
@@ -565,33 +565,33 @@ begin
   ProcessHandle := OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessID);
   if ProcessHandle = 0 then Exit;
 
-// Р’С‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РІ РєРѕРЅС‚РµРєСЃС‚Рµ РїСЂРѕС†РµСЃСЃР°, РєСѓРґР° Р·Р°РїРёС€РµРј РєРѕРґ РІС‹Р·РѕРІР° Р±РёР±Р»РёРѕС‚РµРєРё РїРµСЂРµС…РІР°С‚С‡РёРєР°:
+// Выделяем память в контексте процесса, куда запишем код вызова библиотеки перехватчика:
   Memory := VirtualAllocEx(ProcessHandle, nil, SizeOf(Inject), MEM_COMMIT, PAGE_EXECUTE_READWRITE);
   if Memory = nil then Exit;
 
   Code := UInt64(Memory);
   FillChar(Inject, SizeOf(Inject), #0);
 
-// Р’С‹СЂР°РІРЅРёРІР°РµРј 64С…-Р±РёС‚РЅС‹Р№ СЃС‚РµРє:
+// Выравниваем 64х-битный стек:
   Inject.AlignStackAtStart := $E5894820EC834855;
 
 {
    + - - - - - - - - - - - +
-   |  RAX - Р°РґСЂРµСЃ С„СѓРЅРєС†РёРё  |
-   |  RCX - РїР°СЂР°РјРµС‚СЂС‹      |
+   |  RAX - адрес функции  |
+   |  RCX - параметры      |
    + - - - - - - - - - - - +
 }
 
 // GetModuleHandleA:
   Inject.GMHMovRaxCommand := $B848;
-  Inject.GMHMovRaxArgument := Code + 87; // Code + СЃРјРµС‰РµРЅРёРµ РґРѕ Р°РґСЂРµСЃР° GetModuleHandleA
+  Inject.GMHMovRaxArgument := Code + 87; // Code + смещение до адреса GetModuleHandleA
 
   Inject.GMHMovRaxData[0] := $48; //  ---+
   Inject.GMHMovRaxData[1] := $8B; //  ---+--->  mov RAX, [RAX]
   Inject.GMHMovRaxData[2] := $00; //  ---+
 
   Inject.GMHMovRcxCommand := $B948;
-  Inject.GMHMovRcxArgument := Code + 111; // Code + СЃРјРµС‰РµРЅРёРµ РґРѕ РЅР°С‡Р°Р»Р° РёРјРµРЅРё Р±РёР±Р»РёРѕС‚РµРєРё
+  Inject.GMHMovRcxArgument := Code + 111; // Code + смещение до начала имени библиотеки
 
   Inject.GMHCallRax[0] := $48;
   Inject.GMHCallRax[1] := $FF;
@@ -603,7 +603,7 @@ begin
   Inject.FLMovRcxRax[2] := $C1; //  ---+
 
   Inject.FLMovRaxCommand := $B848;
-  Inject.FLMovRaxArgument := Code + 95; // Code + СЃРјРµС‰РµРЅРёРµ РґРѕ Р°РґСЂРµСЃР° FreeLibrary
+  Inject.FLMovRaxArgument := Code + 95; // Code + смещение до адреса FreeLibrary
 
   Inject.FLMovRaxData[0] := $48; //  ---+
   Inject.FLMovRaxData[1] := $8B; //  ---+--->  mov RAX, [RAX]
@@ -615,7 +615,7 @@ begin
 
 // ExitThread:
   Inject.ETMovRaxCommand := $B848;
-  Inject.ETMovRaxArgument := Code + 103; // Code + СЃРјРµС‰РµРЅРёРµ РґРѕ Р°РґСЂРµСЃР° ExitThread
+  Inject.ETMovRaxArgument := Code + 103; // Code + смещение до адреса ExitThread
 
   Inject.ETMovRaxData[0] := $48; //  ---+
   Inject.ETMovRaxData[1] := $8B; //  ---+--->  mov RAX, [RAX]
@@ -628,11 +628,11 @@ begin
   Inject.ETCallRax[1] := $FF;
   Inject.ETCallRax[2] := $D0;
 
-// Р’С‹СЂР°РІРЅРёРІР°РµРј 64С…-Р±РёС‚РЅС‹Р№ СЃС‚РµРє:
+// Выравниваем 64х-битный стек:
   Inject.AlignStackAtEnd := $90C3C35D20658D48;
 
 
-// Р—Р°РїРёСЃС‹РІР°РµРј Р°РґСЂРµСЃР° Р±РёР±Р»РёРѕС‚РµРє:
+// Записываем адреса библиотек:
   hKernel32 := LoadLibrary('kernel32.dll');
 
   if GMHAddress = 0 then
@@ -654,10 +654,10 @@ begin
 
 //  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 
-  // Р—Р°РїРёСЃС‹РІР°РµРј РјР°С€РёРЅРЅС‹Р№ РєРѕРґ РІ РІС‹РґРµР»РµРЅРЅСѓСЋ РїР°РјСЏС‚СЊ:
+  // Записываем машинный код в выделенную память:
   if NtWriteVirtualMemory(ProcessHandle, NativeUInt(Memory), @Inject, SizeOf(Inject), BytesWritten) <> 0 then Exit;
 
-  // Р’С‹РїРѕР»РЅСЏРµРј РјР°С€РёРЅРЅС‹Р№ РєРѕРґ РІ РѕС‚РґРµР»СЊРЅРѕРј РїРѕС‚РѕРєРµ:
+  // Выполняем машинный код в отдельном потоке:
   hThread := CreateRemoteThread(ProcessHandle, nil, 0, Memory, nil, 0, ThreadId);
 
   if hThread = 0 then
@@ -680,7 +680,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// РРЅСЉРµРєС†РёСЏ РєРѕРґР° РЅР°РїСЂСЏРјСѓСЋ РёР· РїСЂРѕРіСЂР°РјРјС‹:
+// Инъекция кода напрямую из программы:
 procedure InjectFunction(ProcessID: LongWord; InjectedFunction: Pointer; InjectedFunctionSize: NativeUInt);
 var
   hProcess: NativeUInt;
@@ -692,18 +692,18 @@ begin
   hProcess := OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessID);
   if hProcess = 0 then
   begin
-    MessageBox(0, 'РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ РїСЂРѕС†РµСЃСЃ РґР»СЏ Р·Р°РїРёСЃРё!', 'РћС€РёР±РєР°!', MB_ICONERROR);
+    MessageBox(0, 'Не удалось открыть процесс для записи!', 'Ошибка!', MB_ICONERROR);
     Exit;
   end;
 
-  // РЎРѕР·РґР°С‘Рј РїР°РјСЏС‚СЊ РІ РїСЂРѕС†РµСЃСЃРµ:
+  // Создаём память в процессе:
   RemoteThreadBaseAddress := VirtualAllocEx(hProcess, nil, InjectedFunctionSize, MEM_COMMIT + MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 
-  // РџРёС€РµРј РІ РїР°РјСЏС‚СЊ РЅР°С€ РєРѕРґ:
+  // Пишем в память наш код:
   NtWriteVirtualMemory(hProcess, NativeUInt(RemoteThreadBaseAddress), InjectedFunction, InjectedFunctionSize, BytesWritten);
   if InjectedFunctionSize <> BytesWritten then
   begin
-    MessageBox(0, 'РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РїРёСЃР°С‚СЊ РєРѕРґ РІ РїР°РјСЏС‚СЊ СѓРґР°Р»С‘РЅРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР°!', 'РћС€РёР±РєР°!', MB_ICONERROR);
+    MessageBox(0, 'Не удалось записать код в память удалённого процесса!', 'Ошибка!', MB_ICONERROR);
     VirtualFreeEx(hProcess, RemoteThreadBaseAddress, InjectedFunctionSize, MEM_RELEASE);
     Exit;
   end;
@@ -711,7 +711,7 @@ begin
   RemoteThreadHandle := CreateRemoteThread(hProcess, nil, 0, RemoteThreadBaseAddress, nil, 0, RemoteThreadID);
   if RemoteThreadHandle = 0 then
   begin
-    MessageBox(0, 'РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РїСѓСЃС‚РёС‚СЊ РїРѕС‚РѕРє РІ СѓРґР°Р»С‘РЅРЅРѕРј РїСЂРѕС†РµСЃСЃРµ!', 'РћС€РёР±РєР°!', MB_ICONERROR);
+    MessageBox(0, 'Не удалось запустить поток в удалённом процессе!', 'Ошибка!', MB_ICONERROR);
     VirtualFreeEx(hProcess, RemoteThreadBaseAddress, InjectedFunctionSize, MEM_RELEASE);
     Exit;
   end;

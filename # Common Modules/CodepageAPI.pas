@@ -1,8 +1,8 @@
-п»їunit CodepageAPI;
+unit CodepageAPI;
 
 interface
 
-// РљРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ CodePage:
+// Константы для CodePage:
 const
   CP_ACP                   = 0;             { default to ANSI code page }
   CP_OEMCP                 = 1;             { default to OEM  code page }
@@ -12,11 +12,11 @@ const
   CP_UTF7                  = 65000;         { UTF-7 translation }
   CP_UTF8                  = 65001;         { UTF-8 translation }
 
-// Unicode РІ ANSI Рё РѕР±СЂР°С‚РЅРѕ:
+// Unicode в ANSI и обратно:
 function WideToAnsi(const WideString: WideString; CodePage: Word = CP_ACP): AnsiString;
 function AnsiToWide(const AnsiString: AnsiString; CodePage: Word = CP_ACP): WideString;
 
-// OEM РІ ANSI Рё РѕР±СЂР°С‚РЅРѕ:
+// OEM в ANSI и обратно:
 function StrOemToAnsi(const S: AnsiString): AnsiString;
 function StrAnsiToOem(const S: AnsiString): AnsiString;
 function ConvertToAnsi(OEM: PAnsiChar): PAnsiChar;

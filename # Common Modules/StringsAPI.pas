@@ -3,9 +3,9 @@ unit StringsAPI;
 interface
 
 const
-  METHOD_SIMPLE    = 0; // РџСЂРѕСЃС‚Р°СЏ Р·Р°РјРµРЅР°
-  METHOD_SELECTIVE = 1; // Р—Р°РјРµРЅР°, РµСЃР»Рё РїР°СЂР°РјРµС‚СЂ РЅРµ СЃРѕРґРµСЂР¶РёС‚СЃСЏ РІ СЃС‚СЂРѕРєРµ,
-                        // РѕР±СЂР°Р·СѓСЋС‰РµР№ Р·Р°РјРµРЅСЏСЋС‰СѓСЋ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ
+  METHOD_SIMPLE    = 0; // Простая замена
+  METHOD_SELECTIVE = 1; // Замена, если параметр не содержится в строке,
+                        // образующей заменяющую последовательность
 
 procedure SimpleReplaceParam(var Source: string; const Param, ReplacingString: string);
 procedure SelectiveReplaceParam(var Source: string; const Param, ReplacingString: string);
@@ -14,7 +14,7 @@ function ReplaceParam(const Source, Param, ReplacingString: string; Method: Long
 {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  * Simple - РїСЂРѕСЃС‚РѕР№ РјРµС‚РѕРґ:
+  * Simple - простой метод:
   Source          = aFFabFFabc
   Param           = ab
   ReplacingString = abc
@@ -23,13 +23,13 @@ function ReplaceParam(const Source, Param, ReplacingString: string; Method: Long
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  * Selective - РёР·Р±РёСЂР°С‚РµР»СЊРЅС‹Р№ РјРµС‚РѕРґ:
+  * Selective - избирательный метод:
   Source          = aFFabFFabc
   Param           = ab
   ReplacingString = abc
 
-  Result = aFFabcFFabc - РєСЂР°Р№РЅСЏСЏ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ С‚Р°РєР°СЏ Р¶Рµ, РєР°Рє
-                         Р·Р°РјРµРЅСЏСЋС‰Р°СЏ СЃС‚СЂРѕРєР° (abc), РїРѕСЌС‚РѕРјСѓ РµС‘ РЅРµ С‚СЂРѕРіР°РµРј
+  Result = aFFabcFFabc - крайняя последовательность такая же, как
+                         заменяющая строка (abc), поэтому её не трогаем
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 }
@@ -100,8 +100,8 @@ begin
     LeftDelta := ParamPosInReplacingString - 1;
     RightDelta := ReplacingStrLength - ParamPosInReplacingString;
     {
-      РќР°С‡Р°Р»Рѕ СЃС‚СЂРѕРєРё: Pos - LeftDelta
-      РљРѕРЅРµС† СЃС‚СЂРѕРєРё: Pos + RightDelta
+      Начало строки: Pos - LeftDelta
+      Конец строки: Pos + RightDelta
     }
   end;
 
@@ -110,10 +110,10 @@ begin
   StartPos := Pos(Param, Source);
   while StartPos <> 0 do
   begin
-    // Р’С‹С‡РёСЃР»СЏРµРј Р°Р±СЃРѕР»СЋС‚РЅРѕРµ СЃРјРµС‰РµРЅРёРµ:
+    // Вычисляем абсолютное смещение:
     StartPos := StartPos + NewPos - 1;
 
-    // РџРѕР»СѓС‡Р°РµРј РѕРєСЂСѓР¶РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР°:
+    // Получаем окружение параметра:
     if (StartPos - LeftDelta > 0) and (StartPos + RightDelta <= SourceLength) then
     begin
       ParamEnvironment := Copy(Source, StartPos - LeftDelta, ReplacingStrLength);

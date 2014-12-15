@@ -10,7 +10,7 @@ function InitWinSock: Integer;
 function DNStoIP(Host: AnsiString): AnsiString;
 function GetIP: AnsiString;
 
-// ÐšÐ»Ð¸ÐµÐ½Ñ‚ÑÐºÐ¸Ð¹ ÑÐ¾ÐºÐµÑ‚:
+// Êëèåíòñêèé ñîêåò:
 type
 
   TClientSocketInfo = record
@@ -138,10 +138,10 @@ var
 const
   BufferSize = 65536;
 begin
-  // Ð¡Ð»ÑƒÑˆÐ°ÐµÐ¼ ÑÐ¾ÐºÐµÑ‚:
+  // Ñëóøàåì ñîêåò:
   SocketInfo.ListenStatus := True;
 
-  // Ð—Ð°Ð¿Ð¾Ð»Ð½ÑÐµÐ¼ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ð¹:
+  // Çàïîëíÿåì ñòðóêòóðó ñîáûòèé:
   FillChar(ClientEventsData, SizeOf(ClientEventsData), #0);
   ClientEventsData.ClientSocket := SocketInfo.Socket;
   ClientEventsData.ServerHost := SocketInfo.ConnectionHost;
@@ -168,7 +168,7 @@ begin
   ClientEventsData.ReceivedData := nil;
   ClientEventsData.ReceivedDataSize := 0;
 
-  // Ð¡Ð¾ÐºÐµÑ‚ Ð·Ð°ÐºÑ€Ñ‹Ñ‚:
+  // Ñîêåò çàêðûò:
   SocketInfo.ListenStatus := False;
   SocketInfo.ConnectionStatus := False;
 
@@ -202,23 +202,23 @@ var
 
   ClientEventsData: TClientEventsData;
 begin
-  // Ð¡Ð¾Ð·Ð´Ð°Ñ‘Ð¼ ÑÐ¾ÐºÐµÑ‚:
+  // Ñîçäà¸ì ñîêåò:
   SocketInfo.Socket := Socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
   if SocketInfo.Socket = INVALID_SOCKET then Exit;
 
   SocketInfo.ConnectionHost := ServerAddress;
-  // ÐŸÑ€ÐµÐ¾Ð±Ñ€Ð°Ð·ÑƒÐµÐ¼ DNS Ð² IP Ð½Ð° Ð²ÑÑÐºÐ¸Ð¹ ÑÐ»ÑƒÑ‡Ð°Ð¹ (IP -> IP Ñ‚Ð¾Ð¶Ðµ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚):
+  // Ïðåîáðàçóåì DNS â IP íà âñÿêèé ñëó÷àé (IP -> IP òîæå ðàáîòàåò):
   ServerAddress := DNStoIP(ServerAddress);
   SocketInfo.ConnectionIP := ServerAddress;
   SocketInfo.ConnectionPort := Port;
 
-  // Ð¡Ñ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð° Ñ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÐµÐ¹ Ð¾ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ð¸:
+  // Ñòðóêòóðà ñ èíôîðìàöèåé î ïîäêëþ÷åíèè:
   FillChar(SockAddr, SizeOf(TSockAddr), 0);
   SockAddr.sin_family := AF_INET;
   SockAddr.sin_port := htons(Port);
   SockAddr.sin_addr.S_addr := inet_addr(PAnsiChar(ServerAddress));
 
-  // ÐŸÑ‹Ñ‚Ð°ÐµÐ¼ÑÑ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ:
+  // Ïûòàåìñÿ ïîäêëþ÷èòüñÿ:
   if Timeout > 0 then
   begin
     NonBlockingMode := 1;

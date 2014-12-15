@@ -1,13 +1,17 @@
-﻿unit Perimeter;
+unit Perimeter;
 
 interface
 
-{$DEFINE SOUNDS}
-{$DEFINE KERNEL_SUPPORT}
-{$DEFINE HARDCORE_MODE}
+//{$DEFINE SOUNDS}
+//{$DEFINE USER_LOCK}
+//{$DEFINE KERNEL_SUPPORT}
+//{$DEFINE HARDCORE_MODE}
 
 uses
-  Windows, SysUtils, TlHelp32, MMSystem;
+  Windows,
+  SysUtils,
+  TlHelp32
+  {$IFDEF SOUNDS}, MMSystem{$ENDIF};
 
   
 const
@@ -79,7 +83,9 @@ const
   Nothing           = 0;
   ShutdownProcess   = 1;
   Notify            = 2;
+{$IFDEF USER_LOCK}
   BlockIO           = 4;
+{$ENDIF}
 {$IFDEF KERNEL_SUPPORT}
   ShutdownPrimary   = 8;
   ShutdownSecondary = 16;
@@ -141,7 +147,9 @@ function KillTask(ExeFileName: string): Integer;
 // Функции противодействия:
 procedure _ShutdownProcess; inline;
 procedure _Notify(Handle: THandle = 0; MessageType: Byte = 0); inline;
+{$IFDEF USER_LOCK}
 procedure _BlockIO(Status: LongBool); inline;
+{$ENDIF}
 {$IFDEF KERNEL_SUPPORT}
 procedure _ShutdownPrimary; inline;
 procedure _ShutdownSecondary; inline;
@@ -378,6 +386,8 @@ const
 procedure LdrShutdownProcess; stdcall; external 'ntdll.dll';
 function ZwTerminateProcess(Handle: LongWord; ExitStatus: LongWord): NTStatus; stdcall; external 'ntdll.dll';
 
+
+{$IFDEF KERNEL_SUPPORT}
 // 1й способ отключения питания:
 function ZwShutdownSystem(Action: SHUTDOWN_ACTION): NTSTATUS; stdcall; external 'ntdll.dll';
 
@@ -398,7 +408,7 @@ function ZwRaiseHardError(
                            ResponseOption: HARDERROR_RESPONSE_OPTION;
                            PHardError_Response: Pointer
                           ): NTSTATUS; stdcall; external 'ntdll.dll';
-
+{$ENDIF}
 
 function ZwQueryInformationProcess(
                                     ProcessHandle: THANDLE;
@@ -431,9 +441,10 @@ function CheckRemoteDebuggerPresent(Handle: THandle; out RemoteDebuggerPresent: 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+{$IFDEF USER_LOCK}
 // user32.dll:
 function BlockInput(Status: LongBool): LongBool; stdcall; external 'user32.dll';
-
+{$ENDIF}
 
 //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
@@ -647,10 +658,12 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+{$IFDEF USER_LOCK}
 procedure _BlockIO(Status: LongBool); inline;
 begin
   BlockInput(Status);
 end;
+{$ENDIF}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -755,8 +768,10 @@ procedure PerimeterThread;
         _Notify(PerimeterSettings.MessagesReceiverHandle, MESSAGE_UNKNOWN);
       end;
 
+{$IFDEF USER_LOCK}
       if IsNumberContains(ResistanceType, BlockIO) then
         _BlockIO(True);
+{$ENDIF}
 
 {$IFDEF KERNEL_SUPPORT}
       if IsNumberContains(ResistanceType, ShutdownPrimary) then
