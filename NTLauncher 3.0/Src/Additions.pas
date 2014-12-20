@@ -1,4 +1,4 @@
-unit Additions;
+п»їunit Additions;
 
 interface
 
@@ -154,7 +154,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Проверка на запрещённые символы:
+// РџСЂРѕРІРµСЂРєР° РЅР° Р·Р°РїСЂРµС‰С‘РЅРЅС‹Рµ СЃРёРјРІРѕР»С‹:
 function CheckSymbols(Input: string): Boolean;
 var
   C: Char;

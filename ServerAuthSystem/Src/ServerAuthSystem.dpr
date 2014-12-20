@@ -10,11 +10,12 @@ uses
   BaseUtils in 'BaseUtils.pas',
   PlayersUtils in 'PlayersUtils.pas',
   MySQLSupport in 'MySQLSupport.pas',
-  OOPSocketsTCP in '..\..\# Common Modules\OOPSocketsTCP.pas',
-  PipesAPI in '..\..\# Common Modules\PipesAPI.pas',
-  ProcessAPI in '..\..\# Common Modules\ProcessAPI.pas',
-  RegistryUtils in '..\..\# Common Modules\RegistryUtils.pas',
-  CodepageAPI in '..\..\# Common Modules\CodepageAPI.pas';
+  OOPSocketsTCP in '..\..\Commons\OOPSocketsTCP.pas',
+  PipesAPI in '..\..\Commons\PipesAPI.pas',
+  ProcessAPI in '..\..\Commons\ProcessAPI.pas',
+  RegistryUtils in '..\..\Commons\RegistryUtils.pas',
+  StringsAPI in '..\..\Commons\StringsAPI.pas',
+  CodepageAPI in '..\..\Commons\CodepageAPI.pas';
 
 {$R *.res}
 {$R Font.res}

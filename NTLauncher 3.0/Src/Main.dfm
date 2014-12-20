@@ -4,7 +4,7 @@ object MainForm: TMainForm
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'NTLauncher 3.0'
-  ClientHeight = 463
+  ClientHeight = 440
   ClientWidth = 592
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -415,25 +415,106 @@ object MainForm: TMainForm
       end
     end
     object TabSheet1: TTabSheet
-      Caption = #1054#1090#1083#1072#1076#1082#1072' '#1082#1083#1080#1077#1085#1090#1072
+      Caption = #1054#1090#1083#1072#1076#1086#1095#1085#1072#1103' '#1080#1085#1092#1086#1088#1084#1072#1094#1080#1103
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object DebugPageControl: TPageControl
         Left = 3
         Top = 3
         Width = 588
         Height = 434
-        ActivePage = TabSheet2
+        ActivePage = TabSheet4
         TabOrder = 0
+        object TabSheet4: TTabSheet
+          Caption = #1054#1090#1083#1072#1076#1082#1072' '#1083#1072#1091#1085#1095#1077#1088#1072
+          ImageIndex = 2
+          ExplicitTop = 25
+          object Label7: TLabel
+            Left = 23
+            Top = 114
+            Width = 103
+            Height = 13
+            Caption = #1050#1086#1085#1090#1088#1086#1083#1100#1085#1072#1103' '#1089#1091#1084#1084#1072':'
+          end
+          object Label8: TLabel
+            Left = 23
+            Top = 146
+            Width = 86
+            Height = 13
+            Caption = #1054#1089#1085#1086#1074#1085#1072#1103' '#1087#1072#1087#1082#1072':'
+          end
+          object Label9: TLabel
+            Left = 23
+            Top = 174
+            Width = 94
+            Height = 13
+            Caption = #1055#1072#1087#1082#1072' '#1089' '#1082#1083#1080#1077#1085#1090#1086#1084':'
+          end
+          object Label10: TLabel
+            Left = 23
+            Top = 207
+            Width = 95
+            Height = 13
+            Caption = #1054#1090#1074#1077#1090' '#1086#1090' '#1086#1073#1074#1103#1079#1082#1080':'
+          end
+          object ChecksumEdit: TEdit
+            Left = 132
+            Top = 111
+            Width = 327
+            Height = 21
+            TabOrder = 0
+            Text = #1056#1072#1089#1089#1095#1080#1090#1072#1081#1090#1077' '#1082#1086#1085#1090#1088#1086#1083#1100#1085#1091#1102' '#1089#1091#1084#1084#1091
+          end
+          object MainpathEdit: TEdit
+            Left = 132
+            Top = 144
+            Width = 384
+            Height = 21
+            TabOrder = 1
+          end
+          object MinepathEdit: TEdit
+            Left = 132
+            Top = 172
+            Width = 384
+            Height = 21
+            TabOrder = 2
+          end
+          object ResponseEdit: TEdit
+            Left = 132
+            Top = 205
+            Width = 421
+            Height = 21
+            TabOrder = 3
+          end
+          object CalculateChecksumButton: TButton
+            Left = 463
+            Top = 109
+            Width = 91
+            Height = 25
+            Caption = #1056#1072#1089#1089#1095#1080#1090#1072#1090#1100
+            TabOrder = 4
+            OnClick = CalculateChecksumButtonClick
+          end
+          object GoToMainpathButton: TButton
+            Left = 520
+            Top = 142
+            Width = 34
+            Height = 25
+            Caption = '->'
+            TabOrder = 5
+            OnClick = GoToMainpathButtonClick
+          end
+          object GoToMinepathButton: TButton
+            Left = 520
+            Top = 170
+            Width = 34
+            Height = 25
+            Caption = '->'
+            TabOrder = 6
+            OnClick = GoToMinepathButtonClick
+          end
+        end
         object TabSheet2: TTabSheet
           Caption = #1050#1086#1084#1072#1085#1076#1085#1072#1103' '#1089#1090#1088#1086#1082#1072
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object CommandLineConsole: TMemo
             Left = 0
             Top = 0
@@ -452,10 +533,6 @@ object MainForm: TMainForm
         object TabSheet3: TTabSheet
           Caption = #1050#1086#1085#1089#1086#1083#1100' '#1082#1083#1080#1077#1085#1090#1072
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object ClientConsole: TMemo
             Left = 0
             Top = 0

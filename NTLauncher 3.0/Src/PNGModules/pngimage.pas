@@ -1,4 +1,4 @@
-{Portable Network Graphics Delphi 1.564      (31 July 2006)   }
+﻿{Portable Network Graphics Delphi 1.564      (31 July 2006)   }
 
 {This is a full, open sourced implementation of png in Delphi }
 {It has native support for most of png features including the }

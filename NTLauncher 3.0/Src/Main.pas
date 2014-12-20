@@ -1,4 +1,4 @@
-unit Main;
+﻿unit Main;
 
 interface
 
@@ -16,12 +16,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Controls, Forms,
-  ScktComp, ExtCtrls, StdCtrls, HTTPSend, BlckSock,
-  Additions, RegistryUtils, LauncherSettings, HashUtils, FileAPI,
-  {$IFDEF LAUNCH_PERIMETER}Perimeter,{$ENDIF}
+  ExtCtrls, StdCtrls, ComCtrls, Graphics, Dialogs,
+  ScktComp,  HTTPSend, BlckSock, ServerQuery,
+  Additions, RegistryUtils, LauncherSettings, HashUtils, FileAPI, Perimeter, Defence,
   SkinSystem, HWID, MinecraftLauncher, MultiserverUtils,
-  PostRequest, Dialogs, Defence, PNGImage,
-  ShellAPI, ComCtrls, Graphics, ProcessAPI, ServerQuery, TlHelp32, PipesAPI,
+  PostRequest, PNGImage,
+  ShellAPI,  ProcessAPI, TlHelp32, PipesAPI,
   StringsAPI;
 
 type
@@ -76,6 +76,18 @@ type
     DebugPageControl: TPageControl;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    Label7: TLabel;
+    ChecksumEdit: TEdit;
+    Label8: TLabel;
+    MainpathEdit: TEdit;
+    Label9: TLabel;
+    MinepathEdit: TEdit;
+    Label10: TLabel;
+    ResponseEdit: TEdit;
+    CalculateChecksumButton: TButton;
+    GoToMainpathButton: TButton;
+    GoToMinepathButton: TButton;
     procedure FormCreate(Sender: TObject);
     procedure ClientSocketConnect(Sender: TObject; Socket: TCustomWinSocket);
     procedure GameButtonClick(Sender: TObject);
@@ -107,6 +119,9 @@ type
     procedure DeauthLabelClick(Sender: TObject);
     procedure FreeRAMLabelClick(Sender: TObject);
     procedure ClientConsoleChange(Sender: TObject);
+    procedure CalculateChecksumButtonClick(Sender: TObject);
+    procedure GoToMainpathButtonClick(Sender: TObject);
+    procedure GoToMinepathButtonClick(Sender: TObject);
   end;
 
 var
@@ -234,6 +249,7 @@ type
 var
   Mainpath: string; // Рабочая папка
   Minepath: string; // Папка с клиентом
+  JavaPath: string; // Путь к Java
 
   // Переменные для хранения временного пути до скина и плаща для загрузки их на сайт:
   TempSkinPath: string;
@@ -329,6 +345,11 @@ begin
   Mainpath := GetSpecialFolderPath(26) + MainFolder;
   Minepath := Mainpath;
 
+  {$IFDEF DEBUG_MODE}
+  MainpathEdit.Text := MainPath;
+  MinepathEdit.Text := Minepath;
+  {$ENDIF}
+
   {$IFDEF MONITORING}
   // Создаём поток мониторинга:
   MonitoringThread := TMonitoringThread.Create(True);
@@ -419,9 +440,22 @@ end;
 
 procedure TMainForm.GameButtonClick(Sender: TObject);
 begin
+  {$IFDEF CUSTOM_JAVA}
+  JavaPath := Minepath + '\' + JavaDir + '\' + JavaApp;
+  {$ELSE}
+  JavaPath := JavaEdit.Text + '\' + JavaApp;
+  {$ENDIF}
+
+  if not FileExists(JavaPath) then
+  begin
+    MessageBox(Handle, PAnsiChar('Java-машина не найдена!' + #13#10 + 'Предполагаемый путь:' + #13#10 + JavaPath), 'Ошибка!', MB_ICONERROR);
+    Exit;
+  end;
+
   TypeOfConnection := TYPE_GAMEAUTH;
   SetupConnect;
 end;
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -583,6 +617,10 @@ begin
     WinSocketStream.Read(Buffer, 65535);
     Received := Buffer;
 
+    {$IFDEF DEBUG_MODE}
+    ResponseEdit.Text := Received;
+    {$ENDIF}
+
     // Проверяем версию лаунчера:
     if TypeOfConnection = TYPE_AUTH then
     begin
@@ -720,11 +758,7 @@ begin
       begin
         FillChar(MCData, SizeOf(MCData), #0);
         MCData.Minepath := Minepath;
-        {$IFDEF CUSTOM_JAVA}
-        MCData.Java := Minepath + '\' + JavaDir + '\' + JavaApp;
-        {$ELSE}
-        MCData.Java := JavaEdit.Text + '\' + JavaApp;
-        {$ENDIF}
+        MCData.Java := JavaPath;
         MCData.JVMParams := JVMParams;
         MCData.Xms := RAMEdit.Text;
         MCData.Xmx := RAMEdit.Text;
@@ -752,13 +786,7 @@ begin
 
         MCData.TweakClass := TweakClass;
 
-        if not FileExists(MCData.Java) then
-        begin
-          FreeAndNil(WinSocketStream);
-          ClientSocket.Close;
-          MessageBox(Handle, PAnsiChar('Java-машина не найдена!' + #13#10 + 'Предполагаемый путь:' + #13#10 + MCData.Java), 'Ошибка!', MB_ICONERROR);
-          Exit;
-        end;
+
 
         // Сохраняем настройки в реестре:
         SaveStringToRegistry(RegistryPath, 'RAM', RAMEdit.Text);
@@ -824,6 +852,11 @@ begin
 
   Minepath := Mainpath + '\' + Servers[Index].Folder;
   SetLauncherSettings(Index);
+
+  {$IFDEF DEBUG_MODE}
+  MainpathEdit.Text := MainPath;
+  MinepathEdit.Text := Minepath;
+  {$ENDIF}
 
   {$IFDEF MONITORING}
   // Переключаем сервер для мониторинга:
@@ -931,6 +964,7 @@ end;
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 procedure TMainForm.ChooseCloakButtonClick(Sender: TObject);
 var
@@ -1632,5 +1666,26 @@ begin
 end;
 
 {$ENDIF}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+procedure TMainForm.CalculateChecksumButtonClick(Sender: TObject);
+begin
+  ChecksumEdit.Text := GetGameHash(Minepath, MineJarFolder, LibrariesFolder);
+end;
+
+
+procedure TMainForm.GoToMainpathButtonClick(Sender: TObject);
+begin
+  ShellExecute(Handle, nil, PChar(MainpathEdit.Text), nil, nil, SW_SHOWNORMAL);
+end;
+
+
+procedure TMainForm.GoToMinepathButtonClick(Sender: TObject);
+begin
+  ShellExecute(Handle, nil, PChar(MinepathEdit.Text), nil, nil, SW_SHOWNORMAL);
+end;
+
 
 end.

@@ -36,15 +36,14 @@ uses
   Defence in 'Defence.pas',
   ServerQuery in 'ServerQuery.pas',
   PostRequest in 'PostRequest.pas',
-  CodepageAPI in '..\..\# Common Modules\CodepageAPI.pas',
-  FileAPI in '..\..\# Common Modules\FileAPI.pas',
-  MappingAPI in '..\..\# Common Modules\MappingAPI.pas',
-  Perimeter in '..\..\# Common Modules\Perimeter.pas',
-  PipesAPI in '..\..\# Common Modules\PipesAPI.pas',
-  RegistryUtils in '..\..\# Common Modules\RegistryUtils.pas',
-  StringsAPI in '..\..\# Common Modules\StringsAPI.pas',
-  ProcessAPI in '..\..\# Common Modules\ProcessAPI.pas',
-  Ratibor in '..\..\# Common Modules\Ratibor.pas';
+  MappingAPI in '..\..\Commons\MappingAPI.pas',
+  Perimeter in '..\..\Commons\Perimeter.pas',
+  PipesAPI in '..\..\Commons\PipesAPI.pas',
+  ProcessAPI in '..\..\Commons\ProcessAPI.pas',
+  Ratibor in '..\..\Commons\Ratibor.pas',
+  RegistryUtils in '..\..\Commons\RegistryUtils.pas',
+  StringsAPI in '..\..\Commons\StringsAPI.pas',
+  FileAPI in '..\..\Commons\FileAPI.pas';
 
 {$R *.res}
 {$R Font.res}

@@ -1,11 +1,11 @@
-////////////////////////////////////////////////////////////////////////////////
+п»ї////////////////////////////////////////////////////////////////////////////////
 //
 //  ****************************************************************************
 //  * Project   : FWZip
 //  * Unit Name : FWZipReader
-//  * Purpose   : Набор классов для распаковки ZIP архива
-//  * Author    : Александр (Rouse_) Багель
-//  * Copyright : © Fangorn Wizards Lab 1998 - 2013.
+//  * Purpose   : РќР°Р±РѕСЂ РєР»Р°СЃСЃРѕРІ РґР»СЏ СЂР°СЃРїР°РєРѕРІРєРё ZIP Р°СЂС…РёРІР°
+//  * Author    : РђР»РµРєСЃР°РЅРґСЂ (Rouse_) Р‘Р°РіРµР»СЊ
+//  * Copyright : В© Fangorn Wizards Lab 1998 - 2013.
 //  * Version   : 1.0.10
 //  * Home Page : http://rouse.drkb.ru
 //  * Home Blog : http://alexander-bagel.blogspot.ru
@@ -14,7 +14,7 @@
 //  * Latest Source  : https://github.com/AlexanderBagel/FWZip
 //  ****************************************************************************
 //
-//  Используемые источники:
+//  РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РёСЃС‚РѕС‡РЅРёРєРё:
 //  ftp://ftp.info-zip.org/pub/infozip/doc/appnote-iz-latest.zip
 //  http://zlib.net/zlib-1.2.5.tar.gz
 //  http://www.base2ti.com/
@@ -119,7 +119,7 @@ type
   protected
     property ZIPStream: TStream read FZIPStream;
     // Rouse_ 02.10.2012
-    // Добавлены поля для указания кастомной позиции архива в стриме с данными
+    // Р”РѕР±Р°РІР»РµРЅС‹ РїРѕР»СЏ РґР»СЏ СѓРєР°Р·Р°РЅРёСЏ РєР°СЃС‚РѕРјРЅРѕР№ РїРѕР·РёС†РёРё Р°СЂС…РёРІР° РІ СЃС‚СЂРёРјРµ СЃ РґР°РЅРЅС‹РјРё
     property StartZipDataOffset: Int64 read FStartZipDataOffset;
     property EndZipDataOffset: Int64 read FEndZipDataOffset;
   protected
@@ -179,7 +179,7 @@ implementation
 { TFWZipReaderItem }
 
 //
-//  Обработчик OnProcess у распаковщика
+//  РћР±СЂР°Р±РѕС‚С‡РёРє OnProcess Сѓ СЂР°СЃРїР°РєРѕРІС‰РёРєР°
 // =============================================================================
 procedure TFWZipReaderItem.DecompressorOnProcess(Sender: TObject);
 begin
@@ -187,7 +187,7 @@ begin
 end;
 
 //
-//  Процедура вызывает внешнее событие OnProcess
+//  РџСЂРѕС†РµРґСѓСЂР° РІС‹Р·С‹РІР°РµС‚ РІРЅРµС€РЅРµРµ СЃРѕР±С‹С‚РёРµ OnProcess
 // =============================================================================
 procedure TFWZipReaderItem.DoProgress(Sender: TObject;
   ProgressState: TProgressState);
@@ -205,7 +205,7 @@ begin
 end;
 
 //
-//  Функция распаковывает текущий элемент архва в указанный файл
+//  Р¤СѓРЅРєС†РёСЏ СЂР°СЃРїР°РєРѕРІС‹РІР°РµС‚ С‚РµРєСѓС‰РёР№ СЌР»РµРјРµРЅС‚ Р°СЂС…РІР° РІ СѓРєР°Р·Р°РЅРЅС‹Р№ С„Р°Р№Р»
 // =============================================================================
 function TFWZipReaderItem.Extract(Path: string; const Password: string): TExtractResult;
 var
@@ -217,7 +217,7 @@ var
 begin
   Result := erDone;
 
-  // Правка пустого и относительного пути
+  // РџСЂР°РІРєР° РїСѓСЃС‚РѕРіРѕ Рё РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕРіРѕ РїСѓС‚Рё
   Path := PathCanonicalize(Path);
   if Path = '' then
     Path := GetCurrentDir;
@@ -228,8 +228,8 @@ begin
 
   if Length(FullPath) > MAX_PATH then
     raise EZipReaderItem.CreateFmt(
-      'Элемент архива №%d "%s" не может быть распакован.' + sLineBreak +
-      'Общая длина пути и имени файла не должна превышать 260 символов',
+      'Р­Р»РµРјРµРЅС‚ Р°СЂС…РёРІР° в„–%d "%s" РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЂР°СЃРїР°РєРѕРІР°РЅ.' + sLineBreak +
+      'РћР±С‰Р°СЏ РґР»РёРЅР° РїСѓС‚Рё Рё РёРјРµРЅРё С„Р°Р№Р»Р° РЅРµ РґРѕР»Р¶РЅР° РїСЂРµРІС‹С€Р°С‚СЊ 260 СЃРёРјРІРѕР»РѕРІ',
       [ItemIndex, FFileHeader.FileName]);
   if IsFolder then
   begin
@@ -239,39 +239,39 @@ begin
   ForceDirectories(ExtractFilePath(FullPath));
   try
 
-    // проверка на существование файла
+    // РїСЂРѕРІРµСЂРєР° РЅР° СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ С„Р°Р№Р»Р°
     if FileExists(FullPath) then
     begin
       if Assigned(FDuplicate) then
       begin
-        // если файл уже существует, узнаем - как жить дальше с этим ;)
+        // РµСЃР»Рё С„Р°Р№Р» СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, СѓР·РЅР°РµРј - РєР°Рє Р¶РёС‚СЊ РґР°Р»СЊС€Рµ СЃ СЌС‚РёРј ;)
         DuplicateAction := daSkip;
         FDuplicate(Self, FullPath, DuplicateAction);
 
         case DuplicateAction of
 
-          // пропустить файл
+          // РїСЂРѕРїСѓСЃС‚РёС‚СЊ С„Р°Р№Р»
           daSkip:
           begin
             Result := erSkiped;
             Exit;
           end;
 
-          // перезаписать
+          // РїРµСЂРµР·Р°РїРёСЃР°С‚СЊ
           daOverwrite:
             SetFileAttributes(PChar(FullPath), FILE_ATTRIBUTE_NORMAL);
 
-          // распаковать с другим именем
+          // СЂР°СЃРїР°РєРѕРІР°С‚СЊ СЃ РґСЂСѓРіРёРј РёРјРµРЅРµРј
           daUseNewFilePath:
-            // если программист указал новый пусть к файлу,
-            // то о существовании директории он должен позаботиться сам
+            // РµСЃР»Рё РїСЂРѕРіСЂР°РјРјРёСЃС‚ СѓРєР°Р·Р°Р» РЅРѕРІС‹Р№ РїСѓСЃС‚СЊ Рє С„Р°Р№Р»Сѓ,
+            // С‚Рѕ Рѕ СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРё РґРёСЂРµРєС‚РѕСЂРёРё РѕРЅ РґРѕР»Р¶РµРЅ РїРѕР·Р°Р±РѕС‚РёС‚СЊСЃСЏ СЃР°Рј
             if not DirectoryExists(ExtractFilePath(FullPath)) then
             begin
               Result := erSkiped;
               Exit;
             end;
 
-          // прервать распаковку
+          // РїСЂРµСЂРІР°С‚СЊ СЂР°СЃРїР°РєРѕРІРєСѓ
           daAbort:
             Abort;
 
@@ -326,7 +326,7 @@ begin
 end;
 
 //
-//  Функция распаковывает текущий элемент архва в стрим
+//  Р¤СѓРЅРєС†РёСЏ СЂР°СЃРїР°РєРѕРІС‹РІР°РµС‚ С‚РµРєСѓС‰РёР№ СЌР»РµРјРµРЅС‚ Р°СЂС…РІР° РІ СЃС‚СЂРёРј
 // =============================================================================
 function TFWZipReaderItem.ExtractToStream(Value: TStream;
   const Password: string; CheckCRC32: Boolean): TExtractResult;
@@ -349,7 +349,7 @@ function TFWZipReaderItem.ExtractToStream(Value: TStream;
             Size := Count - FTotalExtracted;
           if Src.Read(Buff^, Size) <> Size then
             raise EZipReaderRead.CreateFmt(
-              'Ошибка чтения данных элемента №%d "%s".', [ItemIndex, FileName]);
+              'РћС€РёР±РєР° С‡С‚РµРЅРёСЏ РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".', [ItemIndex, FileName]);
           if Decryptor <> nil then
             Decryptor.DecryptBuffer(Buff, Size);
           Result := CRC32Calc(Result, Buff, Size);
@@ -399,29 +399,29 @@ begin
   try
     if IsFolder then Exit;
 
-    // Данные для распаковки находятся сразу за LocalFileHeader.
-    // Для получения оффсета на начало данных необходимо распарсить
-    // данную структуру включая блоки с дополнительной информацией.
+    // Р”Р°РЅРЅС‹Рµ РґР»СЏ СЂР°СЃРїР°РєРѕРІРєРё РЅР°С…РѕРґСЏС‚СЃСЏ СЃСЂР°Р·Сѓ Р·Р° LocalFileHeader.
+    // Р”Р»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РѕС„С„СЃРµС‚Р° РЅР° РЅР°С‡Р°Р»Рѕ РґР°РЅРЅС‹С… РЅРµРѕР±С…РѕРґРёРјРѕ СЂР°СЃРїР°СЂСЃРёС‚СЊ
+    // РґР°РЅРЅСѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ РІРєР»СЋС‡Р°СЏ Р±Р»РѕРєРё СЃ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕР№ РёРЅС„РѕСЂРјР°С†РёРµР№.
     if FFileHeader.DataOffset = 0 then
       LoadLocalFileHeader;
 
     FOwner.FZIPStream.Position := FFileHeader.DataOffset;
     RealCompressedSize := FFileHeader.CompressedSize;
 
-    // Если файл зашифрован, необходимо инициализировать ключ для распаковки
+    // Р•СЃР»Рё С„Р°Р№Р» Р·Р°С€РёС„СЂРѕРІР°РЅ, РЅРµРѕР±С…РѕРґРёРјРѕ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєР»СЋС‡ РґР»СЏ СЂР°СЃРїР°РєРѕРІРєРё
     if FFileHeader.Header.GeneralPurposeBitFlag and PBF_CRYPTED <> 0 then
     begin
 
       if FFileHeader.Header.GeneralPurposeBitFlag and
         PBF_STRONG_CRYPT <> 0 then
         raise EZipReaderItem.CreateFmt(
-          'Ошибка извлечения данных элемента №%d "%s".' + sLineBreak +
-          'Не поддерживаемый режим шифрования',
+          'РћС€РёР±РєР° РёР·РІР»РµС‡РµРЅРёСЏ РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".' + sLineBreak +
+          'РќРµ РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹Р№ СЂРµР¶РёРј С€РёС„СЂРѕРІР°РЅРёСЏ',
           [ItemIndex, FileName]);
 
       if Password = '' then
       begin
-        // пароль не может быть пустым
+        // РїР°СЂРѕР»СЊ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј
         Result := erNeedPassword;
         Exit;
       end;
@@ -432,13 +432,13 @@ begin
         FFileHeader.Header.LastModFileTimeTime +
         FFileHeader.Header.LastModFileTimeDate shl 16) then
       begin
-        // ошика инициализации ключа
+        // РѕС€РёРєР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєР»СЋС‡Р°
         Result := erNeedPassword;
         Exit;
       end
       else
-        // если ключ инициализирован успешно - вычитаем из сжатого размера
-        // размер заголовка инициализации ключа
+        // РµСЃР»Рё РєР»СЋС‡ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ СѓСЃРїРµС€РЅРѕ - РІС‹С‡РёС‚Р°РµРј РёР· СЃР¶Р°С‚РѕРіРѕ СЂР°Р·РјРµСЂР°
+        // СЂР°Р·РјРµСЂ Р·Р°РіРѕР»РѕРІРєР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєР»СЋС‡Р°
         Dec(RealCompressedSize, EncryptedHeaderSize);
     end;
 
@@ -449,25 +449,25 @@ begin
           CopyWithProgress(FOwner.FZIPStream, Value,
             UncompressedSize, Decryptor);
         // Rouse_ 11.03.2011
-        // А выставить результат то и забыли.
-        // Cпасибо Ромкину за обнаружение косяка
+        // Рђ РІС‹СЃС‚Р°РІРёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ С‚Рѕ Рё Р·Р°Р±С‹Р»Рё.
+        // CРїР°СЃРёР±Рѕ Р РѕРјРєРёРЅСѓ Р·Р° РѕР±РЅР°СЂСѓР¶РµРЅРёРµ РєРѕСЃСЏРєР°
         Result := erDone;
       end;
       Z_DEFLATED:
       begin
 
-        // TFWZipItemStream выступает как посредник между FOwner.FZIPStream
-        // и TDecompressionStream. Его задача добавить в передаваемый
-        // буффер данных отсутствующий ZLib заголовок и расшифровать
-        // данные при необходимости
+        // TFWZipItemStream РІС‹СЃС‚СѓРїР°РµС‚ РєР°Рє РїРѕСЃСЂРµРґРЅРёРє РјРµР¶РґСѓ FOwner.FZIPStream
+        // Рё TDecompressionStream. Р•РіРѕ Р·Р°РґР°С‡Р° РґРѕР±Р°РІРёС‚СЊ РІ РїРµСЂРµРґР°РІР°РµРјС‹Р№
+        // Р±СѓС„С„РµСЂ РґР°РЅРЅС‹С… РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‰РёР№ ZLib Р·Р°РіРѕР»РѕРІРѕРє Рё СЂР°СЃС€РёС„СЂРѕРІР°С‚СЊ
+        // РґР°РЅРЅС‹Рµ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
         ZipItemStream := TFWZipItemStream.Create(FOwner.FZIPStream,
           nil, Decryptor,
           FFileHeader.Header.GeneralPurposeBitFlag and 6,
           RealCompressedSize
           {$IFNDEF USE_AUTOGENERATED_ZLIB_HEADER}
-          + 4 // буффер, он все равно не используется,
-              // но нужен для завершения ZInflate при использовании windowBits
-              // особенно для архивов запакованных 7Zip
+          + 4 // Р±СѓС„С„РµСЂ, РѕРЅ РІСЃРµ СЂР°РІРЅРѕ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ,
+              // РЅРѕ РЅСѓР¶РµРЅ РґР»СЏ Р·Р°РІРµСЂС€РµРЅРёСЏ ZInflate РїСЂРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё windowBits
+              // РѕСЃРѕР±РµРЅРЅРѕ РґР»СЏ Р°СЂС…РёРІРѕРІ Р·Р°РїР°РєРѕРІР°РЅРЅС‹С… 7Zip
           {$ENDIF}
           );
         try
@@ -477,11 +477,11 @@ begin
             Decompressor.OnProgress := DecompressorOnProcess;
             FExtractStreamStartSize := Value.Size;
             FExtractStream := Value;
-            // TFWZipCRC32Stream выступает как посредник между
-            // TDecompressionStream и результирующим стримом,
-            // в который происходит распаковка данных.
-            // Его задача отследить все распакованные блоки данных
-            // и рассчитать их контрольную сумму
+            // TFWZipCRC32Stream РІС‹СЃС‚СѓРїР°РµС‚ РєР°Рє РїРѕСЃСЂРµРґРЅРёРє РјРµР¶РґСѓ
+            // TDecompressionStream Рё СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰РёРј СЃС‚СЂРёРјРѕРј,
+            // РІ РєРѕС‚РѕСЂС‹Р№ РїСЂРѕРёСЃС…РѕРґРёС‚ СЂР°СЃРїР°РєРѕРІРєР° РґР°РЅРЅС‹С….
+            // Р•РіРѕ Р·Р°РґР°С‡Р° РѕС‚СЃР»РµРґРёС‚СЊ РІСЃРµ СЂР°СЃРїР°РєРѕРІР°РЅРЅС‹Рµ Р±Р»РѕРєРё РґР°РЅРЅС‹С…
+            // Рё СЂР°СЃСЃС‡РёС‚Р°С‚СЊ РёС… РєРѕРЅС‚СЂРѕР»СЊРЅСѓСЋ СЃСѓРјРјСѓ
             DoProgress(Decompressor, psInitialization);
             CRC32Stream := TFWZipCRC32Stream.Create(Value);
             try
@@ -490,36 +490,36 @@ begin
               except
                 on E: EReadError do
                   raise EZipReaderRead.CreateFmt(
-                    'Ошибка чтения данных элемента №%d "%s".', [ItemIndex, FileName]);
+                    'РћС€РёР±РєР° С‡С‚РµРЅРёСЏ РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".', [ItemIndex, FileName]);
 
                 // Rouse_ 04.04.2010
-                // Ранее это исключенияе было EDecompressionError
-                // Поэтому привяжемся к базовому исключению EZLibError
+                // Р Р°РЅРµРµ СЌС‚Рѕ РёСЃРєР»СЋС‡РµРЅРёСЏРµ Р±С‹Р»Рѕ EDecompressionError
+                // РџРѕСЌС‚РѕРјСѓ РїСЂРёРІСЏР¶РµРјСЃСЏ Рє Р±Р°Р·РѕРІРѕРјСѓ РёСЃРєР»СЋС‡РµРЅРёСЋ EZLibError
                 // on E: EZDecompressionError do
                 on E: EZLibError do
                 begin
                   if FFileHeader.Header.GeneralPurposeBitFlag and
                     PBF_CRYPTED <> 0 then
                   begin
-                    // Ошибка может подняться из-за того что инициализация
-                    // криптозаголовка прошла успешно, но пароль был указан не верный
-                    // Такое может произойти, т.к. количество коллизий
-                    // при проверке заголовка очень велико
+                    // РћС€РёР±РєР° РјРѕР¶РµС‚ РїРѕРґРЅСЏС‚СЊСЃСЏ РёР·-Р·Р° С‚РѕРіРѕ С‡С‚Рѕ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
+                    // РєСЂРёРїС‚РѕР·Р°РіРѕР»РѕРІРєР° РїСЂРѕС€Р»Р° СѓСЃРїРµС€РЅРѕ, РЅРѕ РїР°СЂРѕР»СЊ Р±С‹Р» СѓРєР°Р·Р°РЅ РЅРµ РІРµСЂРЅС‹Р№
+                    // РўР°РєРѕРµ РјРѕР¶РµС‚ РїСЂРѕРёР·РѕР№С‚Рё, С‚.Рє. РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕР»Р»РёР·РёР№
+                    // РїСЂРё РїСЂРѕРІРµСЂРєРµ Р·Р°РіРѕР»РѕРІРєР° РѕС‡РµРЅСЊ РІРµР»РёРєРѕ
                     Result := erNeedPassword;
                     Exit;
                   end
                   else
                     DoProgress(Decompressor, psException);
                   raise EZipReaderRead.CreateFmt(
-                    'Ошибка распаковки данных элемента №%d "%s".' + sLineBreak +
+                    'РћС€РёР±РєР° СЂР°СЃРїР°РєРѕРІРєРё РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".' + sLineBreak +
                     E.ClassName + ': ' + E.Message, [ItemIndex, FileName]);
                 end;
 
                 // Rouse_ 01.11.2013
-                // Для остальных исключений тоже нужно говорить с каким элементом беда приключилась.
+                // Р”Р»СЏ РѕСЃС‚Р°Р»СЊРЅС‹С… РёСЃРєР»СЋС‡РµРЅРёР№ С‚РѕР¶Рµ РЅСѓР¶РЅРѕ РіРѕРІРѕСЂРёС‚СЊ СЃ РєР°РєРёРј СЌР»РµРјРµРЅС‚РѕРј Р±РµРґР° РїСЂРёРєР»СЋС‡РёР»Р°СЃСЊ.
                 on E: Exception do
                   raise EZipReaderRead.CreateFmt(
-                    'Ошибка распаковки данных элемента №%d "%s".' + sLineBreak +
+                    'РћС€РёР±РєР° СЂР°СЃРїР°РєРѕРІРєРё РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".' + sLineBreak +
                     E.ClassName + ': ' + E.Message, [ItemIndex, FileName]);
 
               end;
@@ -538,20 +538,20 @@ begin
       end;
       1..7, 9..12:
         raise EZipReaderItem.CreateFmt(
-          'Ошибка извлечения данных элемента №%d "%s".' + sLineBreak +
-          'Не поддерживаемый алгоритм декомпрессии "%s"',
+          'РћС€РёР±РєР° РёР·РІР»РµС‡РµРЅРёСЏ РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".' + sLineBreak +
+          'РќРµ РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹Р№ Р°Р»РіРѕСЂРёС‚Рј РґРµРєРѕРјРїСЂРµСЃСЃРёРё "%s"',
           [ItemIndex, FileName, CompressionMetods[CompressionMethod]]);
     else
       raise EZipReaderItem.CreateFmt(
-        'Ошибка извлечения данных элемента №%d "%s".' + sLineBreak +
-        'Не поддерживаемый алгоритм декомпрессии (%d)',
+        'РћС€РёР±РєР° РёР·РІР»РµС‡РµРЅРёСЏ РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".' + sLineBreak +
+        'РќРµ РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹Р№ Р°Р»РіРѕСЂРёС‚Рј РґРµРєРѕРјРїСЂРµСЃСЃРёРё (%d)',
         [ItemIndex, FileName, FFileHeader.Header.CompressionMethod]);
     end;
     if CurrItemCRC32 <> Crc32 then
       if CheckCRC32 then
         raise EZipReaderItem.CreateFmt(
-          'Ошибка извлечения данных элемента №%d "%s".' + sLineBreak +
-          'Неверная контрольная сумма.',
+          'РћС€РёР±РєР° РёР·РІР»РµС‡РµРЅРёСЏ РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".' + sLineBreak +
+          'РќРµРІРµСЂРЅР°СЏ РєРѕРЅС‚СЂРѕР»СЊРЅР°СЏ СЃСѓРјРјР°.',
           [ItemIndex, FileName])
       else
         Result := erWrongCRC32;
@@ -571,8 +571,8 @@ begin
 end;
 
 //
-//  Конструктор элемента архива.
-//  Инициализация класса происходит на основе данных из архива
+//  РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЌР»РµРјРµРЅС‚Р° Р°СЂС…РёРІР°.
+//  РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєР»Р°СЃСЃР° РїСЂРѕРёСЃС…РѕРґРёС‚ РЅР° РѕСЃРЅРѕРІРµ РґР°РЅРЅС‹С… РёР· Р°СЂС…РёРІР°
 // =============================================================================
 constructor TFWZipReaderItem.InitFromStream(Owner: TFWZipReader;
   Index: Integer; Value: TStream);
@@ -586,12 +586,12 @@ begin
   if Owner.ZIPStream.Read(FFileHeader.Header,
     SizeOf(TCentralDirectoryFileHeader)) <> SizeOf(TCentralDirectoryFileHeader) then
     raise EZipReaderRead.CreateFmt(
-      'Отсутствуют данные TCentralDirectoryFileHeader элемента №%d', [ItemIndex]);
+      'РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РґР°РЅРЅС‹Рµ TCentralDirectoryFileHeader СЌР»РµРјРµРЅС‚Р° в„–%d', [ItemIndex]);
 
   if FFileHeader.Header.CentralFileHeaderSignature <>
     CENTRAL_FILE_HEADER_SIGNATURE then
     raise EZipReaderItem.CreateFmt(
-      'Ошибка чтения структуры TCentralDirectoryFileHeader элемента №%d', [ItemIndex]);
+      'РћС€РёР±РєР° С‡С‚РµРЅРёСЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ TCentralDirectoryFileHeader СЌР»РµРјРµРЅС‚Р° в„–%d', [ItemIndex]);
 
   LoadStringValue(FFileHeader.FileName, FFileHeader.Header.FilenameLength, True);
 
@@ -601,11 +601,11 @@ begin
       (FFileHeader.FileName[FFileHeader.Header.FilenameLength] = ZIP_SLASH);
 
 
-  // Следующие 4 параметра могут быть выставлены в -1 из-за переполнения
-  // и их реальные значения будут содержаться в блоке расширенных данных.
-  // Запоминаем их текущие значения.
-  // В случае если какой-либо из параметров выставлен в -1,
-  // его значение поменяется при вызове процедуры LoadExData.
+  // РЎР»РµРґСѓСЋС‰РёРµ 4 РїР°СЂР°РјРµС‚СЂР° РјРѕРіСѓС‚ Р±С‹С‚СЊ РІС‹СЃС‚Р°РІР»РµРЅС‹ РІ -1 РёР·-Р·Р° РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ
+  // Рё РёС… СЂРµР°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ Р±СѓРґСѓС‚ СЃРѕРґРµСЂР¶Р°С‚СЊСЃСЏ РІ Р±Р»РѕРєРµ СЂР°СЃС€РёСЂРµРЅРЅС‹С… РґР°РЅРЅС‹С….
+  // Р—Р°РїРѕРјРёРЅР°РµРј РёС… С‚РµРєСѓС‰РёРµ Р·РЅР°С‡РµРЅРёСЏ.
+  // Р’ СЃР»СѓС‡Р°Рµ РµСЃР»Рё РєР°РєРѕР№-Р»РёР±Рѕ РёР· РїР°СЂР°РјРµС‚СЂРѕРІ РІС‹СЃС‚Р°РІР»РµРЅ РІ -1,
+  // РµРіРѕ Р·РЅР°С‡РµРЅРёРµ РїРѕРјРµРЅСЏРµС‚СЃСЏ РїСЂРё РІС‹Р·РѕРІРµ РїСЂРѕС†РµРґСѓСЂС‹ LoadExData.
   FFileHeader.UncompressedSize := FFileHeader.Header.UncompressedSize;
   FFileHeader.CompressedSize := FFileHeader.Header.CompressedSize;
   FFileHeader.RelativeOffsetOfLocalHeader :=
@@ -617,8 +617,8 @@ begin
   LoadStringValue(FFileHeader.FileComment,
     FFileHeader.Header.FileCommentLength, False);
 
-  // часть информации дублируется в расширенном заголовке
-  // необходимо ее заполнить
+  // С‡Р°СЃС‚СЊ РёРЅС„РѕСЂРјР°С†РёРё РґСѓР±Р»РёСЂСѓРµС‚СЃСЏ РІ СЂР°СЃС€РёСЂРµРЅРЅРѕРј Р·Р°РіРѕР»РѕРІРєРµ
+  // РЅРµРѕР±С…РѕРґРёРјРѕ РµРµ Р·Р°РїРѕР»РЅРёС‚СЊ
   FFileHeader.Attributes.dwFileAttributes :=
     FFileHeader.Header.ExternalFileAttributes;
   FFileHeader.Attributes.nFileSizeHigh :=
@@ -628,7 +628,7 @@ begin
 end;
 
 //
-//  Процедура зачитывает дополнительные данные о элементе
+//  РџСЂРѕС†РµРґСѓСЂР° Р·Р°С‡РёС‚С‹РІР°РµС‚ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ Рѕ СЌР»РµРјРµРЅС‚Рµ
 // =============================================================================
 procedure TFWZipReaderItem.LoadExData;
 var
@@ -651,7 +651,7 @@ begin
 
     if FOwner.ZIPStream.Read(Buff^, BuffCount) <> BuffCount then
       raise EZipReaderRead.CreateFmt(
-        'Отсутствуют данные поля ExtraField элемента №%d "%s"', [ItemIndex, FileName]);
+        'РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РґР°РЅРЅС‹Рµ РїРѕР»СЏ ExtraField СЌР»РµРјРµРЅС‚Р° в„–%d "%s"', [ItemIndex, FileName]);
 
     EOFBuff := Pointer(Integer(Buff) + BuffCount);
     while BuffCount > 0 do
@@ -782,24 +782,24 @@ begin
           which is "01-Jan-1601 00:00:00 UTC".
           }
 
-          // проверяем размерность поля с учетом примечания:
+          // РїСЂРѕРІРµСЂСЏРµРј СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ РїРѕР»СЏ СЃ СѓС‡РµС‚РѕРј РїСЂРёРјРµС‡Р°РЅРёСЏ:
           // this field has a fixed total data size of 32 bytes
 
-          // если размер буффера меньше 32 байт - то выходим из процедуры
+          // РµСЃР»Рё СЂР°Р·РјРµСЂ Р±СѓС„С„РµСЂР° РјРµРЅСЊС€Рµ 32 Р±Р°Р№С‚ - С‚Рѕ РІС‹С…РѕРґРёРј РёР· РїСЂРѕС†РµРґСѓСЂС‹
           if BuffCount < 32 then Break;
 
-          // если же он не равер 32 байтам,
-          // то просто пропускаем его и ереходим к слежующей записи
+          // РµСЃР»Рё Р¶Рµ РѕРЅ РЅРµ СЂР°РІРµСЂ 32 Р±Р°Р№С‚Р°Рј,
+          // С‚Рѕ РїСЂРѕСЃС‚Рѕ РїСЂРѕРїСѓСЃРєР°РµРј РµРіРѕ Рё РµСЂРµС…РѕРґРёРј Рє СЃР»РµР¶СѓСЋС‰РµР№ Р·Р°РїРёСЃРё
           if BlockSize <> 32 then
           begin
             Dec(BuffCount, BlockSize);
             Continue;
           end;
 
-          // пропускаем поле Reserved
+          // РїСЂРѕРїСѓСЃРєР°РµРј РїРѕР»Рµ Reserved
           Dec(BuffCount, 4);
 
-          // Проверяем поле Tag
+          // РџСЂРѕРІРµСЂСЏРµРј РїРѕР»Рµ Tag
           if PWord(GetOffset(BuffCount))^ <> 1 then
           begin
             Dec(BuffCount, BlockSize);
@@ -807,7 +807,7 @@ begin
           end;
           Dec(BuffCount, 2);
 
-          // Проверяем размер блока данных
+          // РџСЂРѕРІРµСЂСЏРµРј СЂР°Р·РјРµСЂ Р±Р»РѕРєР° РґР°РЅРЅС‹С…
           if PWord(GetOffset(BuffCount))^ <> SizeOf(TNTFSFileTime) then
           begin
             Dec(BuffCount, BlockSize);
@@ -815,7 +815,7 @@ begin
           end;
           Dec(BuffCount, 2);
 
-          // Читаем сами данные
+          // Р§РёС‚Р°РµРј СЃР°РјРё РґР°РЅРЅС‹Рµ
           FFileHeader.Attributes.ftLastWriteTime := PFileTime(GetOffset(BuffCount))^;
           Dec(BuffCount, SizeOf(TFileTime));
           FFileHeader.Attributes.ftLastAccessTime := PFileTime(GetOffset(BuffCount))^;
@@ -845,33 +845,33 @@ begin
 end;
 
 //
-//  Процедура зачитывает и проверяет валидность структуры LocalFileHeader
-//  Задача процедуры получить правильное значение оффсета на начало
-//  запакованного блока данных.
+//  РџСЂРѕС†РµРґСѓСЂР° Р·Р°С‡РёС‚С‹РІР°РµС‚ Рё РїСЂРѕРІРµСЂСЏРµС‚ РІР°Р»РёРґРЅРѕСЃС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂС‹ LocalFileHeader
+//  Р—Р°РґР°С‡Р° РїСЂРѕС†РµРґСѓСЂС‹ РїРѕР»СѓС‡РёС‚СЊ РїСЂР°РІРёР»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РѕС„С„СЃРµС‚Р° РЅР° РЅР°С‡Р°Р»Рѕ
+//  Р·Р°РїР°РєРѕРІР°РЅРЅРѕРіРѕ Р±Р»РѕРєР° РґР°РЅРЅС‹С….
 // =============================================================================
 procedure TFWZipReaderItem.LoadLocalFileHeader;
 begin
   // Rouse_ 02.10.2012
-  // При чтении учитываем оффсет на начало архива StartZipDataOffset
+  // РџСЂРё С‡С‚РµРЅРёРё СѓС‡РёС‚С‹РІР°РµРј РѕС„С„СЃРµС‚ РЅР° РЅР°С‡Р°Р»Рѕ Р°СЂС…РёРІР° StartZipDataOffset
   FOwner.ZIPStream.Position :=
     FFileHeader.RelativeOffsetOfLocalHeader + FOwner.StartZipDataOffset;
 
   if FOwner.ZIPStream.Read(FLocalFileHeader,
     SizeOf(TLocalFileHeader)) <> SizeOf(TLocalFileHeader) then
     raise EZipReaderRead.CreateFmt(
-      'Отсутстсвуют данные TLocalFileHeader элемента №%d "%s"', [ItemIndex, FileName]);
+      'РћС‚СЃСѓС‚СЃС‚СЃРІСѓСЋС‚ РґР°РЅРЅС‹Рµ TLocalFileHeader СЌР»РµРјРµРЅС‚Р° в„–%d "%s"', [ItemIndex, FileName]);
 
   if FLocalFileHeader.LocalFileHeaderSignature <>
     LOCAL_FILE_HEADER_SIGNATURE then
     raise EZipReaderItem.CreateFmt(
-      'Ошибка чтения TLocalFileHeader элемента №%d "%s"', [ItemIndex, FileName]);
+      'РћС€РёР±РєР° С‡С‚РµРЅРёСЏ TLocalFileHeader СЌР»РµРјРµРЅС‚Р° в„–%d "%s"', [ItemIndex, FileName]);
 
   FFileHeader.DataOffset := FOwner.ZIPStream.Position +
     FLocalFileHeader.FilenameLength + FLocalFileHeader.ExtraFieldLength;
 end;
 
 //
-//  Процедура зачитывает строковое значение и переводит его в Ansi формат
+//  РџСЂРѕС†РµРґСѓСЂР° Р·Р°С‡РёС‚С‹РІР°РµС‚ СЃС‚СЂРѕРєРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ Рё РїРµСЂРµРІРѕРґРёС‚ РµРіРѕ РІ Ansi С„РѕСЂРјР°С‚
 // =============================================================================
 procedure TFWZipReaderItem.LoadStringValue(var Value: string;
   nSize: Cardinal; CheckEncoding: Boolean);
@@ -884,17 +884,17 @@ begin
 
     if FOwner.ZIPStream.Read(aString[1], nSize) <> Integer(nSize) then
       raise EZipReaderRead.CreateFmt(
-        'Ошибка чтения строковых данных элемента №%d "%s"', [ItemIndex, FileName]);
+        'РћС€РёР±РєР° С‡С‚РµРЅРёСЏ СЃС‚СЂРѕРєРѕРІС‹С… РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s"', [ItemIndex, FileName]);
 
     // Rouse_ 13.06.2013
-    // 11 бит отвечает за UTF8 кодировку
+    // 11 Р±РёС‚ РѕС‚РІРµС‡Р°РµС‚ Р·Р° UTF8 РєРѕРґРёСЂРѕРІРєСѓ
     if FFileHeader.Header.GeneralPurposeBitFlag and PBF_UTF8 = PBF_UTF8 then
     begin
       {$IFDEF UNICODE}
       Value := string(UTF8ToUnicodeString(aString))
       {$ELSE}
       Value := string(UTF8Decode(aString));
-      // в неюникодных версиях Delphi юникодные символы будут преобразованы в знаки вопроса
+      // РІ РЅРµСЋРЅРёРєРѕРґРЅС‹С… РІРµСЂСЃРёСЏС… Delphi СЋРЅРёРєРѕРґРЅС‹Рµ СЃРёРјРІРѕР»С‹ Р±СѓРґСѓС‚ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅС‹ РІ Р·РЅР°РєРё РІРѕРїСЂРѕСЃР°
       if CheckEncoding then
         Value := StringReplace(Value, '?', '_', [rfReplaceAll]);
       {$ENDIF}
@@ -910,8 +910,8 @@ end;
 { TFWZipReader }
 
 //
-//  Процедура производит проверку архива с учетом маски файла в архиве
-//  Данные распаковываются, но не сохраняются
+//  РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕРёР·РІРѕРґРёС‚ РїСЂРѕРІРµСЂРєСѓ Р°СЂС…РёРІР° СЃ СѓС‡РµС‚РѕРј РјР°СЃРєРё С„Р°Р№Р»Р° РІ Р°СЂС…РёРІРµ
+//  Р”Р°РЅРЅС‹Рµ СЂР°СЃРїР°РєРѕРІС‹РІР°СЋС‚СЃСЏ, РЅРѕ РЅРµ СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ
 // =============================================================================
 procedure TFWZipReader.Check(const ExtractMask: string);
 begin
@@ -919,7 +919,7 @@ begin
 end;
 
 //
-//  Процедура очищает данные о открытом ранее архиве
+//  РџСЂРѕС†РµРґСѓСЂР° РѕС‡РёС‰Р°РµС‚ РґР°РЅРЅС‹Рµ Рѕ РѕС‚РєСЂС‹С‚РѕРј СЂР°РЅРµРµ Р°СЂС…РёРІРµ
 // =============================================================================
 procedure TFWZipReader.Clear;
 begin
@@ -933,7 +933,7 @@ begin
 end;
 
 //
-//  Функция возвращает количество элементов открытого архива
+//  Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РѕС‚РєСЂС‹С‚РѕРіРѕ Р°СЂС…РёРІР°
 // =============================================================================
 function TFWZipReader.Count: Integer;
 begin
@@ -960,7 +960,7 @@ begin
 end;
 
 //
-//  Процедура вызывает обработчик OnProgress
+//  РџСЂРѕС†РµРґСѓСЂР° РІС‹Р·С‹РІР°РµС‚ РѕР±СЂР°Р±РѕС‚С‡РёРє OnProgress
 // =============================================================================
 procedure TFWZipReader.DoProgress(Sender: TObject; const FileName: string;
   Extracted, TotalSize: Int64; ProgressState: TProgressState);
@@ -992,8 +992,8 @@ begin
 end;
 
 //
-//  Процедура производит автоматическую распаковку архива в указанную папку
-//  с учетом маски файла в архиве
+//  РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕРёР·РІРѕРґРёС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєСѓСЋ СЂР°СЃРїР°РєРѕРІРєСѓ Р°СЂС…РёРІР° РІ СѓРєР°Р·Р°РЅРЅСѓСЋ РїР°РїРєСѓ
+//  СЃ СѓС‡РµС‚РѕРј РјР°СЃРєРё С„Р°Р№Р»Р° РІ Р°СЂС…РёРІРµ
 // =============================================================================
 procedure TFWZipReader.ExtractAll(const ExtractMask: string; Path: string);
 begin
@@ -1001,7 +1001,7 @@ begin
 end;
 
 //
-//  Процедура производит автоматическую распаковку архива в указанную папку
+//  РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕРёР·РІРѕРґРёС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєСѓСЋ СЂР°СЃРїР°РєРѕРІРєСѓ Р°СЂС…РёРІР° РІ СѓРєР°Р·Р°РЅРЅСѓСЋ РїР°РїРєСѓ
 // =============================================================================
 procedure TFWZipReader.ExtractAll(const Path: string);
 begin
@@ -1009,7 +1009,7 @@ begin
 end;
 
 //
-//  Функция возвращает индекс элемента по его имени
+//  Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ РёРЅРґРµРєСЃ СЌР»РµРјРµРЅС‚Р° РїРѕ РµРіРѕ РёРјРµРЅРё
 // =============================================================================
 function TFWZipReader.GetElementIndex(const FileName: string): Integer;
 var
@@ -1025,7 +1025,7 @@ begin
 end;
 
 //
-//  Функция возвращает элемент архива по его индексу
+//  Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ СЌР»РµРјРµРЅС‚ Р°СЂС…РёРІР° РїРѕ РµРіРѕ РёРЅРґРµРєСЃСѓ
 // =============================================================================
 function TFWZipReader.GetItem(Index: Integer): TFWZipReaderItem;
 begin
@@ -1033,7 +1033,7 @@ begin
 end;
 
 //
-//  Процедура зачитывает центральную директорию архива
+//  РџСЂРѕС†РµРґСѓСЂР° Р·Р°С‡РёС‚С‹РІР°РµС‚ С†РµРЅС‚СЂР°Р»СЊРЅСѓСЋ РґРёСЂРµРєС‚РѕСЂРёСЋ Р°СЂС…РёРІР°
 // =============================================================================
 procedure TFWZipReader.LoadCentralDirectoryFileHeader;
 var
@@ -1044,48 +1044,48 @@ begin
     FLocalFiles.Add(TFWZipReaderItem.InitFromStream(Self, Count, FZIPStream));
 
   // Rouse_ 01.11.2013
-  // Исключение будем поднимать только в случае если заявленное кол-во элементов
-  // больше чем удалось прочитать.
-  // Ибо попался мне один архив в котором кол-во элементов 95188,
-  // (превышение по количеству элементов и нужно использовать ZIP64),
-  // но ZIP64 не использовался и поле TotalNumberOfEntries хранило значение 29652
-  // Собственно что и равняется 95188 - $10000
+  // РСЃРєР»СЋС‡РµРЅРёРµ Р±СѓРґРµРј РїРѕРґРЅРёРјР°С‚СЊ С‚РѕР»СЊРєРѕ РІ СЃР»СѓС‡Р°Рµ РµСЃР»Рё Р·Р°СЏРІР»РµРЅРЅРѕРµ РєРѕР»-РІРѕ СЌР»РµРјРµРЅС‚РѕРІ
+  // Р±РѕР»СЊС€Рµ С‡РµРј СѓРґР°Р»РѕСЃСЊ РїСЂРѕС‡РёС‚Р°С‚СЊ.
+  // РР±Рѕ РїРѕРїР°Р»СЃСЏ РјРЅРµ РѕРґРёРЅ Р°СЂС…РёРІ РІ РєРѕС‚РѕСЂРѕРј РєРѕР»-РІРѕ СЌР»РµРјРµРЅС‚РѕРІ 95188,
+  // (РїСЂРµРІС‹С€РµРЅРёРµ РїРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ СЌР»РµРјРµРЅС‚РѕРІ Рё РЅСѓР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ ZIP64),
+  // РЅРѕ ZIP64 РЅРµ РёСЃРїРѕР»СЊР·РѕРІР°Р»СЃСЏ Рё РїРѕР»Рµ TotalNumberOfEntries С…СЂР°РЅРёР»Рѕ Р·РЅР°С‡РµРЅРёРµ 29652
+  // РЎРѕР±СЃС‚РІРµРЅРЅРѕ С‡С‚Рѕ Рё СЂР°РІРЅСЏРµС‚СЃСЏ 95188 - $10000
 
-  // Поэтому вместо такого условия:
+  // РџРѕСЌС‚РѕРјСѓ РІРјРµСЃС‚Рѕ С‚Р°РєРѕРіРѕ СѓСЃР»РѕРІРёСЏ:
   //if Count <> TotalEntryesCount then
-  //пишем вот так:
+  //РїРёС€РµРј РІРѕС‚ С‚Р°Рє:
   if Count < TotalEntryesCount then
 
     raise EZipReader.CreateFmt(
-      'Ошибка чтения центральной директории. ' + sLineBreak +
-      'Прочитанное количество элементов (%d) не соответствует заявленному (%d).',
+      'РћС€РёР±РєР° С‡С‚РµРЅРёСЏ С†РµРЅС‚СЂР°Р»СЊРЅРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё. ' + sLineBreak +
+      'РџСЂРѕС‡РёС‚Р°РЅРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ (%d) РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р·Р°СЏРІР»РµРЅРЅРѕРјСѓ (%d).',
       [Count, TotalEntryesCount]);
 end;
 
 //
-//  Процедура проеряет валидность структуры EndOfCentralDirectory
-//  Задача процедуры получить оффсет на начало CentralDirectory
+//  РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕРµСЂСЏРµС‚ РІР°Р»РёРґРЅРѕСЃС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂС‹ EndOfCentralDirectory
+//  Р—Р°РґР°С‡Р° РїСЂРѕС†РµРґСѓСЂС‹ РїРѕР»СѓС‡РёС‚СЊ РѕС„С„СЃРµС‚ РЅР° РЅР°С‡Р°Р»Рѕ CentralDirectory
 // =============================================================================
 procedure TFWZipReader.LoadEndOfCentralDirectory;
 var
   Zip64LocatorOffset: Int64;
 begin
-  // Согласно спецификации в случае наличия 64-битных структур
-  // TZip64EOFCentralDirectoryLocator идет сразу перед EndOfCentralDirectory.
-  // Запоминаем оффсет на предполагаемую позицию данной структуры.
+  // РЎРѕРіР»Р°СЃРЅРѕ СЃРїРµС†РёС„РёРєР°С†РёРё РІ СЃР»СѓС‡Р°Рµ РЅР°Р»РёС‡РёСЏ 64-Р±РёС‚РЅС‹С… СЃС‚СЂСѓРєС‚СѓСЂ
+  // TZip64EOFCentralDirectoryLocator РёРґРµС‚ СЃСЂР°Р·Сѓ РїРµСЂРµРґ EndOfCentralDirectory.
+  // Р—Р°РїРѕРјРёРЅР°РµРј РѕС„С„СЃРµС‚ РЅР° РїСЂРµРґРїРѕР»Р°РіР°РµРјСѓСЋ РїРѕР·РёС†РёСЋ РґР°РЅРЅРѕР№ СЃС‚СЂСѓРєС‚СѓСЂС‹.
   Zip64LocatorOffset := FZIPStream.Position -
     SizeOf(TZip64EOFCentralDirectoryLocator);
 
   if FZIPStream.Read(FEndOfCentralDir, SizeOf(TEndOfCentralDir)) <>
     SizeOf(TEndOfCentralDir) then
-    raise EZipReader.Create('Отсутствуют данные структуры TEndOfCentralDir.');
+    raise EZipReader.Create('РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РґР°РЅРЅС‹Рµ СЃС‚СЂСѓРєС‚СѓСЂС‹ TEndOfCentralDir.');
 
   if FEndOfCentralDir.NumberOfThisDisk <> 0 then
-    raise EZipReader.Create('Многотомные архивы не поддерживаются.');
+    raise EZipReader.Create('РњРЅРѕРіРѕС‚РѕРјРЅС‹Рµ Р°СЂС…РёРІС‹ РЅРµ РїРѕРґРґРµСЂР¶РёРІР°СЋС‚СЃСЏ.');
 
   if FEndOfCentralDir.EndOfCentralDirSignature <>
     END_OF_CENTRAL_DIR_SIGNATURE then
-    raise EZipReader.Create('Ошибка чтения структуры TEndOfCentralDir.');
+    raise EZipReader.Create('РћС€РёР±РєР° С‡С‚РµРЅРёСЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ TEndOfCentralDir.');
 
   LoadStringValue(FEndOfCentralDirComment,
     FEndOfCentralDir.ZipfileCommentLength);
@@ -1104,29 +1104,29 @@ begin
     (FEndOfCentralDir.SizeOfTheCentralDirectory = MAXDWORD) or
     (FEndOfCentralDir.OffsetOfStartOfCentralDirectory = MAXDWORD) then
   begin
-    // Одна из позиций не содержит валидных данных
-    // Согласно спецификации их необходимо получить через Zip64Locator
+    // РћРґРЅР° РёР· РїРѕР·РёС†РёР№ РЅРµ СЃРѕРґРµСЂР¶РёС‚ РІР°Р»РёРґРЅС‹С… РґР°РЅРЅС‹С…
+    // РЎРѕРіР»Р°СЃРЅРѕ СЃРїРµС†РёС„РёРєР°С†РёРё РёС… РЅРµРѕР±С…РѕРґРёРјРѕ РїРѕР»СѓС‡РёС‚СЊ С‡РµСЂРµР· Zip64Locator
     FZIPStream.Position := Zip64LocatorOffset + StartZipDataOffset;
     LoadZIP64Locator;
   end
   else
     // Rouse_ 02.10.2012
-    // При чтении учитываем оффсет на начало архива StartZipDataOffset
+    // РџСЂРё С‡С‚РµРЅРёРё СѓС‡РёС‚С‹РІР°РµРј РѕС„С„СЃРµС‚ РЅР° РЅР°С‡Р°Р»Рѕ Р°СЂС…РёРІР° StartZipDataOffset
     FZIPStream.Position :=
       FEndOfCentralDir.OffsetOfStartOfCentralDirectory + StartZipDataOffset;
 end;
 
 //
-//  Процедура открывает архив по указанному пути
+//  РџСЂРѕС†РµРґСѓСЂР° РѕС‚РєСЂС‹РІР°РµС‚ Р°СЂС…РёРІ РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ РїСѓС‚Рё
 // =============================================================================
 procedure TFWZipReader.LoadFromFile(const Value: string;
   SFXOffset, ZipEndOffset: Integer);
 begin
   // Rouse_ 20.02.2012
-  // Если TFileStream не создался FFileStream может содержать реф на разрушенный TFileStream,
-  // созданный при предыдущем вызове LoadFromFile,
-  // что приведет к ошибке в деструкторе при разрушении FFileStream
-  // Спасибо v1ctar за найденый глюк
+  // Р•СЃР»Рё TFileStream РЅРµ СЃРѕР·РґР°Р»СЃСЏ FFileStream РјРѕР¶РµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ СЂРµС„ РЅР° СЂР°Р·СЂСѓС€РµРЅРЅС‹Р№ TFileStream,
+  // СЃРѕР·РґР°РЅРЅС‹Р№ РїСЂРё РїСЂРµРґС‹РґСѓС‰РµРј РІС‹Р·РѕРІРµ LoadFromFile,
+  // С‡С‚Рѕ РїСЂРёРІРµРґРµС‚ Рє РѕС€РёР±РєРµ РІ РґРµСЃС‚СЂСѓРєС‚РѕСЂРµ РїСЂРё СЂР°Р·СЂСѓС€РµРЅРёРё FFileStream
+  // РЎРїР°СЃРёР±Рѕ v1ctar Р·Р° РЅР°Р№РґРµРЅС‹Р№ РіР»СЋРє
   //FFileStream.Free;
   FreeAndNil(FFileStream);
   FFileStream := TFileStream.Create(Value, fmOpenRead);
@@ -1134,7 +1134,7 @@ begin
 end;
 
 //
-//  Процерура открывает архив из переданного стрима
+//  РџСЂРѕС†РµСЂСѓСЂР° РѕС‚РєСЂС‹РІР°РµС‚ Р°СЂС…РёРІ РёР· РїРµСЂРµРґР°РЅРЅРѕРіРѕ СЃС‚СЂРёРјР°
 // =============================================================================
 procedure TFWZipReader.LoadFromStream(Value: TStream;
   SFXOffset, ZipEndOffset: Integer);
@@ -1148,10 +1148,10 @@ begin
   FZIPStream := Value;
 
   // Rouse_ 02.10.2012
-  // Теперь могут передаватся оффсеты на расположение архива в стриме с данными
-  // SFXOffset указывает на начало архива
-  // ZipEndOffset указывает на позицию после которой не производится поиск
-  // сигнатуры EndOfCentralDir
+  // РўРµРїРµСЂСЊ РјРѕРіСѓС‚ РїРµСЂРµРґР°РІР°С‚СЃСЏ РѕС„С„СЃРµС‚С‹ РЅР° СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ Р°СЂС…РёРІР° РІ СЃС‚СЂРёРјРµ СЃ РґР°РЅРЅС‹РјРё
+  // SFXOffset СѓРєР°Р·С‹РІР°РµС‚ РЅР° РЅР°С‡Р°Р»Рѕ Р°СЂС…РёРІР°
+  // ZipEndOffset СѓРєР°Р·С‹РІР°РµС‚ РЅР° РїРѕР·РёС†РёСЋ РїРѕСЃР»Рµ РєРѕС‚РѕСЂРѕР№ РЅРµ РїСЂРѕРёР·РІРѕРґРёС‚СЃСЏ РїРѕРёСЃРє
+  // СЃРёРіРЅР°С‚СѓСЂС‹ EndOfCentralDir
   if SFXOffset < 0 then
     FStartZipDataOffset := 0
   else
@@ -1162,7 +1162,7 @@ begin
   else
     FEndZipDataOffset := ZipEndOffset;
 
-  // Ищем сигнатуру EndOfCentralDir
+  // РС‰РµРј СЃРёРіРЅР°С‚СѓСЂСѓ EndOfCentralDir
   BuffSize := $FFFF;
   EndOfCentralDirectoryOffset := 0;
   Offset := EndZipDataOffset;
@@ -1180,12 +1180,12 @@ begin
       Value.Position := Offset;
 
       if Value.Read(Buff^, BuffSize) <> BuffSize then
-        raise EZipReaderRead.Create('Ошибка чтения данных при поиске END_OF_CENTRAL_DIR_SIGNATURE');
+        raise EZipReaderRead.Create('РћС€РёР±РєР° С‡С‚РµРЅРёСЏ РґР°РЅРЅС‹С… РїСЂРё РїРѕРёСЃРєРµ END_OF_CENTRAL_DIR_SIGNATURE');
 
       // Rouse_ 14.02.2013
-      // Если в архиве будет незапакованый ZIP архив,
-      // то есть большой шанс что первую END_OF_CENTRAL_DIR_SIGNATURE мы
-      // обнаружим у него, а не у нашего архива
+      // Р•СЃР»Рё РІ Р°СЂС…РёРІРµ Р±СѓРґРµС‚ РЅРµР·Р°РїР°РєРѕРІР°РЅС‹Р№ ZIP Р°СЂС…РёРІ,
+      // С‚Рѕ РµСЃС‚СЊ Р±РѕР»СЊС€РѕР№ С€Р°РЅСЃ С‡С‚Рѕ РїРµСЂРІСѓСЋ END_OF_CENTRAL_DIR_SIGNATURE РјС‹
+      // РѕР±РЅР°СЂСѓР¶РёРј Сѓ РЅРµРіРѕ, Р° РЅРµ Сѓ РЅР°С€РµРіРѕ Р°СЂС…РёРІР°
 
       {
       Cursor := Buff;
@@ -1200,7 +1200,7 @@ begin
           Inc(Cursor);
       }
 
-      // поэтому сигнатуру END_OF_CENTRAL_DIR_SIGNATURE будем искать вот так
+      // РїРѕСЌС‚РѕРјСѓ СЃРёРіРЅР°С‚СѓСЂСѓ END_OF_CENTRAL_DIR_SIGNATURE Р±СѓРґРµРј РёСЃРєР°С‚СЊ РІРѕС‚ С‚Р°Рє
       Cursor := PByte(PAnsiChar(Buff) + BuffSize - 5);
       for I := BuffSize - 5 downto 0 do
       begin
@@ -1217,8 +1217,8 @@ begin
         Break;
 
       // Rouse_ 14.02.2013
-      // Сигнатура может располагаться на границе между двумя буферами
-      // поэтому чтобы считать граничное состояние делаем поправку
+      // РЎРёРіРЅР°С‚СѓСЂР° РјРѕР¶РµС‚ СЂР°СЃРїРѕР»Р°РіР°С‚СЊСЃСЏ РЅР° РіСЂР°РЅРёС†Рµ РјРµР¶РґСѓ РґРІСѓРјСЏ Р±СѓС„РµСЂР°РјРё
+      // РїРѕСЌС‚РѕРјСѓ С‡С‚РѕР±С‹ СЃС‡РёС‚Р°С‚СЊ РіСЂР°РЅРёС‡РЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РґРµР»Р°РµРј РїРѕРїСЂР°РІРєСѓ
       SignOffset := 4;
 
     end;
@@ -1226,20 +1226,20 @@ begin
     FreeMem(Buff);
   end;
   if EndOfCentralDirectoryOffset = 0 then
-    raise EZipReader.Create('Не найдена сигнатура END_OF_CENTRAL_DIR_SIGNATURE.');
+    raise EZipReader.Create('РќРµ РЅР°Р№РґРµРЅР° СЃРёРіРЅР°С‚СѓСЂР° END_OF_CENTRAL_DIR_SIGNATURE.');
 
-  // Зачитываем саму структуру EndOfCentralDirectory
-  // При необходимости будут зачитаны данные из 64 битных структур
+  // Р—Р°С‡РёС‚С‹РІР°РµРј СЃР°РјСѓ СЃС‚СЂСѓРєС‚СѓСЂСѓ EndOfCentralDirectory
+  // РџСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё Р±СѓРґСѓС‚ Р·Р°С‡РёС‚Р°РЅС‹ РґР°РЅРЅС‹Рµ РёР· 64 Р±РёС‚РЅС‹С… СЃС‚СЂСѓРєС‚СѓСЂ
   Value.Position := EndOfCentralDirectoryOffset;
   LoadEndOfCentralDirectory;
 
-  // Теперь указатель стрима выставлен на начало структуры CentralDirectory
-  // Зачитываем ее саму
+  // РўРµРїРµСЂСЊ СѓРєР°Р·Р°С‚РµР»СЊ СЃС‚СЂРёРјР° РІС‹СЃС‚Р°РІР»РµРЅ РЅР° РЅР°С‡Р°Р»Рѕ СЃС‚СЂСѓРєС‚СѓСЂС‹ CentralDirectory
+  // Р—Р°С‡РёС‚С‹РІР°РµРј РµРµ СЃР°РјСѓ
   LoadCentralDirectoryFileHeader;
 end;
 
 //
-//  Процедура зачитывает строковое значение и переводит его в Ansi формат
+//  РџСЂРѕС†РµРґСѓСЂР° Р·Р°С‡РёС‚С‹РІР°РµС‚ СЃС‚СЂРѕРєРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ Рё РїРµСЂРµРІРѕРґРёС‚ РµРіРѕ РІ Ansi С„РѕСЂРјР°С‚
 // =============================================================================
 procedure TFWZipReader.LoadStringValue(var Value: AnsiString; nSize: Cardinal);
 begin
@@ -1248,15 +1248,15 @@ begin
     SetLength(Value, nSize);
 
     if FZIPStream.Read(Value[1], nSize) <> Integer(nSize) then
-      raise EZipReaderRead.Create('Ошибка чтения коментария к архиву');
+      raise EZipReaderRead.Create('РћС€РёР±РєР° С‡С‚РµРЅРёСЏ РєРѕРјРµРЅС‚Р°СЂРёСЏ Рє Р°СЂС…РёРІСѓ');
 
     OemToAnsi(@Value[1], @Value[1]);
   end;
 end;
 
 //
-//  Процедура проверяет валидность структуры Zip64EOFCentralDirectoryRecord
-//  Задача процедуру получить оффсет на CentralDirectory
+//  РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕРІРµСЂСЏРµС‚ РІР°Р»РёРґРЅРѕСЃС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂС‹ Zip64EOFCentralDirectoryRecord
+//  Р—Р°РґР°С‡Р° РїСЂРѕС†РµРґСѓСЂСѓ РїРѕР»СѓС‡РёС‚СЊ РѕС„С„СЃРµС‚ РЅР° CentralDirectory
 // =============================================================================
 procedure TFWZipReader.LoadZip64EOFCentralDirectoryRecord;
 begin
@@ -1265,17 +1265,17 @@ begin
 
   if not Zip64Present then
     raise EZipReader.Create(
-      'Ошибка чтения структуры TZip64EOFCentralDirectoryRecord');
+      'РћС€РёР±РєР° С‡С‚РµРЅРёСЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ TZip64EOFCentralDirectoryRecord');
 
   // Rouse_ 02.10.2012
-  // При чтении учитываем оффсет на начало архива StartZipDataOffset
+  // РџСЂРё С‡С‚РµРЅРёРё СѓС‡РёС‚С‹РІР°РµРј РѕС„С„СЃРµС‚ РЅР° РЅР°С‡Р°Р»Рѕ Р°СЂС…РёРІР° StartZipDataOffset
   FZIPStream.Position := FZip64EOFCentralDirectoryRecord.Offset +
     StartZipDataOffset;
 end;
 
 //
-//  Процедура проверяет валидность структуры ZIP64Locator
-//  Задача процедуру получить оффсет на Zip64EOFCentralDirectoryRecord
+//  РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕРІРµСЂСЏРµС‚ РІР°Р»РёРґРЅРѕСЃС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂС‹ ZIP64Locator
+//  Р—Р°РґР°С‡Р° РїСЂРѕС†РµРґСѓСЂСѓ РїРѕР»СѓС‡РёС‚СЊ РѕС„С„СЃРµС‚ РЅР° Zip64EOFCentralDirectoryRecord
 // =============================================================================
 procedure TFWZipReader.LoadZIP64Locator;
 begin
@@ -1285,10 +1285,10 @@ begin
   if FZip64EOFCentralDirectoryLocator.Signature <>
     ZIP64_END_OF_CENTRAL_DIR_LOCATOR_SIGNATURE then
     raise EZipReader.Create(
-      'Ошибка чтения структуры TZip64EOFCentralDirectoryLocator');
+      'РћС€РёР±РєР° С‡С‚РµРЅРёСЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ TZip64EOFCentralDirectoryLocator');
 
-  // Данная структура хранит оффсет на TZip64EOFCentralDirectoryRecord
-  // В котором и храниться расширенная информация
+  // Р”Р°РЅРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° С…СЂР°РЅРёС‚ РѕС„С„СЃРµС‚ РЅР° TZip64EOFCentralDirectoryRecord
+  // Р’ РєРѕС‚РѕСЂРѕРј Рё С…СЂР°РЅРёС‚СЊСЃСЏ СЂР°СЃС€РёСЂРµРЅРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ
   FZIPStream.Position := FZip64EOFCentralDirectoryLocator.RelativeOffset +
     StartZipDataOffset;
   LoadZip64EOFCentralDirectoryRecord;
@@ -1297,7 +1297,7 @@ end;
 { TFakeStream }
 
 //
-//  TFakeStream предназначен для проверки архива на целостность
+//  TFakeStream РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅ РґР»СЏ РїСЂРѕРІРµСЂРєРё Р°СЂС…РёРІР° РЅР° С†РµР»РѕСЃС‚РЅРѕСЃС‚СЊ
 // =============================================================================
 type
   TFakeStream = class(TStream)
@@ -1339,8 +1339,8 @@ begin
 end;
 
 //
-//  Процедура производит распаковку или проверку архива с учетом маски файла в архиве
-//  При проверке архива данные распаковываются, но не сохраняются
+//  РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕРёР·РІРѕРґРёС‚ СЂР°СЃРїР°РєРѕРІРєСѓ РёР»Рё РїСЂРѕРІРµСЂРєСѓ Р°СЂС…РёРІР° СЃ СѓС‡РµС‚РѕРј РјР°СЃРєРё С„Р°Р№Р»Р° РІ Р°СЂС…РёРІРµ
+//  РџСЂРё РїСЂРѕРІРµСЂРєРµ Р°СЂС…РёРІР° РґР°РЅРЅС‹Рµ СЂР°СЃРїР°РєРѕРІС‹РІР°СЋС‚СЃСЏ, РЅРѕ РЅРµ СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ
 // =============================================================================
 procedure TFWZipReader.ProcessExtractOrCheckAllData(const ExtractMask: string;
   Path: string; CheckMode: Boolean);
@@ -1360,7 +1360,7 @@ begin
   FTotalProcessedCount := 0;
   ExtractList := TList.Create;
   try
-    // Производим поиск файлов для распаковки
+    // РџСЂРѕРёР·РІРѕРґРёРј РїРѕРёСЃРє С„Р°Р№Р»РѕРІ РґР»СЏ СЂР°СЃРїР°РєРѕРІРєРё
     for I := 0 to Count - 1 do
       if ExtractMask = '' then
       begin
@@ -1376,16 +1376,16 @@ begin
 
     if not CheckMode then
     begin
-      // Правка пустого и относительного пути
+      // РџСЂР°РІРєР° РїСѓСЃС‚РѕРіРѕ Рё РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕРіРѕ РїСѓС‚Рё
       Path := PathCanonicalize(Path);
       if Path = '' then
         Path := GetCurrentDir;
 
-      // Проверка хватит ли места на диске?
+      // РџСЂРѕРІРµСЂРєР° С…РІР°С‚РёС‚ Р»Рё РјРµСЃС‚Р° РЅР° РґРёСЃРєРµ?
       if GetDiskFreeSpaceEx(PChar(Path), FreeAvailable, TotalSpace, nil) then
         if FreeAvailable <= FTotalSizeCount then
-          raise EZipReader.CreateFmt('Недостаточно места на диске "%s".' + sLineBreak +
-            'Необходимо освободить %s.', [Path[1], FileSizeToStr(FTotalSizeCount)]);
+          raise EZipReader.CreateFmt('РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РјРµСЃС‚Р° РЅР° РґРёСЃРєРµ "%s".' + sLineBreak +
+            'РќРµРѕР±С…РѕРґРёРјРѕ РѕСЃРІРѕР±РѕРґРёС‚СЊ %s.', [Path[1], FileSizeToStr(FTotalSizeCount)]);
     end;
 
     FakeStream := TFakeStream.Create;
@@ -1401,7 +1401,7 @@ begin
           OldDuplicateEvent := CurrentItem.OnDuplicate;
           try
             CurrentItem.OnDuplicate := OnDuplicate;
-            // Пробуем извлечь файл
+            // РџСЂРѕР±СѓРµРј РёР·РІР»РµС‡СЊ С„Р°Р№Р»
             try
               if CheckMode then
                 ExtractResult := CurrentItem.ExtractToStream(FakeStream, '')
@@ -1409,8 +1409,8 @@ begin
                 ExtractResult := CurrentItem.Extract(Path, '');
               if ExtractResult = erNeedPassword then
               begin
-                // Если произошла обшибка из-за того что файл зашифрован,
-                // пробуем расшифровать его используя список известных паролей
+                // Р•СЃР»Рё РїСЂРѕРёР·РѕС€Р»Р° РѕР±С€РёР±РєР° РёР·-Р·Р° С‚РѕРіРѕ С‡С‚Рѕ С„Р°Р№Р» Р·Р°С€РёС„СЂРѕРІР°РЅ,
+                // РїСЂРѕР±СѓРµРј СЂР°СЃС€РёС„СЂРѕРІР°С‚СЊ РµРіРѕ РёСЃРїРѕР»СЊР·СѓСЏ СЃРїРёСЃРѕРє РёР·РІРµСЃС‚РЅС‹С… РїР°СЂРѕР»РµР№
                 for A := 0 to FPasswordList.Count - 1 do
                 begin
                   if CheckMode then
@@ -1419,7 +1419,7 @@ begin
                     ExtractResult := CurrentItem.Extract(Path, FPasswordList[A]);
                   if ExtractResult in [erDone, erSkiped] then Break;
                 end;
-                // если не получилось, запрашиваем пароль у пользователя
+                // РµСЃР»Рё РЅРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ, Р·Р°РїСЂР°С€РёРІР°РµРј РїР°СЂРѕР»СЊ Сѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
                 if ExtractResult = erNeedPassword then
                   if Assigned(FOnNeedPwd) then
                   begin
@@ -1442,17 +1442,17 @@ begin
                   end
                   else
                     raise EWrongPasswordException.CreateFmt(
-                      'Ошибка извлечения данных элемента №%d "%s".' + sLineBreak +
-                      'Неверный пароль.', [CurrentItem.ItemIndex, CurrentItem.FileName]);
+                      'РћС€РёР±РєР° РёР·РІР»РµС‡РµРЅРёСЏ РґР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚Р° в„–%d "%s".' + sLineBreak +
+                      'РќРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ.', [CurrentItem.ItemIndex, CurrentItem.FileName]);
               end;
             except
 
-              // Пользователь отменил распаковку архива
+              // РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РѕС‚РјРµРЅРёР» СЂР°СЃРїР°РєРѕРІРєСѓ Р°СЂС…РёРІР°
               on E: EAbort do
                 Exit;
 
-              // Ну не прерывать же распаковку из-за исключения на одном файле?
-              // Пусть решение о прерывании распаковки принимают снаружи
+              // РќСѓ РЅРµ РїСЂРµСЂС‹РІР°С‚СЊ Р¶Рµ СЂР°СЃРїР°РєРѕРІРєСѓ РёР·-Р·Р° РёСЃРєР»СЋС‡РµРЅРёСЏ РЅР° РѕРґРЅРѕРј С„Р°Р№Р»Рµ?
+              // РџСѓСЃС‚СЊ СЂРµС€РµРЅРёРµ Рѕ РїСЂРµСЂС‹РІР°РЅРёРё СЂР°СЃРїР°РєРѕРІРєРё РїСЂРёРЅРёРјР°СЋС‚ СЃРЅР°СЂСѓР¶Рё
               on E: Exception do
               begin
                 Handled := False;
@@ -1460,8 +1460,8 @@ begin
                   FException(Self, E, Integer(ExtractList[I]), Handled);
                 if not Handled then
                   // Rouse_ 20.02.2012
-                  // Неверно перевозбуждено исключение
-                  // Спасибо v1ctar за найденый глюк
+                  // РќРµРІРµСЂРЅРѕ РїРµСЂРµРІРѕР·Р±СѓР¶РґРµРЅРѕ РёСЃРєР»СЋС‡РµРЅРёРµ
+                  // РЎРїР°СЃРёР±Рѕ v1ctar Р·Р° РЅР°Р№РґРµРЅС‹Р№ РіР»СЋРє
                   //raise E;
                   raise;
               end;
@@ -1487,7 +1487,7 @@ begin
 end;
 
 //
-//  Функция возвращает размер центральной директории
+//  Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РјРµСЂ С†РµРЅС‚СЂР°Р»СЊРЅРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
 // =============================================================================
 function TFWZipReader.SizeOfCentralDirectory: Int64;
 begin
@@ -1498,7 +1498,7 @@ begin
 end;
 
 //
-//  Функция возвращает количество элементов архива
+//  Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ Р°СЂС…РёРІР°
 // =============================================================================
 function TFWZipReader.TotalEntryesCount: Integer;
 begin
@@ -1509,8 +1509,8 @@ begin
 end;
 
 //
-//  Вспомогательная функция,
-//  указывает из какого блока данных брать валидное значение
+//  Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ,
+//  СѓРєР°Р·С‹РІР°РµС‚ РёР· РєР°РєРѕРіРѕ Р±Р»РѕРєР° РґР°РЅРЅС‹С… Р±СЂР°С‚СЊ РІР°Р»РёРґРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
 // =============================================================================
 function TFWZipReader.Zip64Present: Boolean;
 begin

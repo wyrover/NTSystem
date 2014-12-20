@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{10bcf546-a22a-4dcb-9adc-f4a512be1a1a}</ProjectGuid>
@@ -45,15 +45,14 @@
     <DelphiCompile Include="NTLauncher.dpr">
       <MainSource>MainSource</MainSource>
     </DelphiCompile>
-    <DCCReference Include="..\..\# Common Modules\CodepageAPI.pas" />
-    <DCCReference Include="..\..\# Common Modules\FileAPI.pas" />
-    <DCCReference Include="..\..\# Common Modules\MappingAPI.pas" />
-    <DCCReference Include="..\..\# Common Modules\Perimeter.pas" />
-    <DCCReference Include="..\..\# Common Modules\PipesAPI.pas" />
-    <DCCReference Include="..\..\# Common Modules\ProcessAPI.pas" />
-    <DCCReference Include="..\..\# Common Modules\Ratibor.pas" />
-    <DCCReference Include="..\..\# Common Modules\RegistryUtils.pas" />
-    <DCCReference Include="..\..\# Common Modules\StringsAPI.pas" />
+    <DCCReference Include="..\..\Commons\FileAPI.pas" />
+    <DCCReference Include="..\..\Commons\MappingAPI.pas" />
+    <DCCReference Include="..\..\Commons\Perimeter.pas" />
+    <DCCReference Include="..\..\Commons\PipesAPI.pas" />
+    <DCCReference Include="..\..\Commons\ProcessAPI.pas" />
+    <DCCReference Include="..\..\Commons\Ratibor.pas" />
+    <DCCReference Include="..\..\Commons\RegistryUtils.pas" />
+    <DCCReference Include="..\..\Commons\StringsAPI.pas" />
     <DCCReference Include="Additions.pas" />
     <DCCReference Include="Defence.pas" />
     <DCCReference Include="HashModules\cHash.pas" />

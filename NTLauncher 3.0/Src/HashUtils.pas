@@ -1,4 +1,4 @@
-unit HashUtils;
+﻿unit HashUtils;
 
 interface
 

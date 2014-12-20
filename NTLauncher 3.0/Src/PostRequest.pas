@@ -1,4 +1,4 @@
-unit PostRequest;
+п»їunit PostRequest;
 
 interface
 
@@ -20,7 +20,7 @@ const
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Извлекает имя хоста:
+// РР·РІР»РµРєР°РµС‚ РёРјСЏ С…РѕСЃС‚Р°:
 // http://site.ru/folder/script.php  -->  site.ru
 function ExtractHost(Path: string): string;
 var
@@ -28,14 +28,14 @@ var
   PathLen: LongWord;
 begin
   PathLen := Length(Path);
-  I := 8; // Длина "http://"
+  I := 8; // Р”Р»РёРЅР° "http://"
   while (I <= PathLen) and (Path[I] <> '\') and (Path[I] <> '/') do Inc(I);
   Result := Copy(Path, 8, I - 8);
 end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Извлекает имя объекта:
+// РР·РІР»РµРєР°РµС‚ РёРјСЏ РѕР±СЉРµРєС‚Р°:
 // http://site.ru/folder/script.php  -->  folder/script.php
 function ExtractObject(Path: string): string;
 var
@@ -50,7 +50,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Добавляет в запрос текстовое поле:
+// Р”РѕР±Р°РІР»СЏРµС‚ РІ Р·Р°РїСЂРѕСЃ С‚РµРєСЃС‚РѕРІРѕРµ РїРѕР»Рµ:
 procedure AddPOSTField(var Data: pointer; var Size: LongWord; Param, Value: string);
 var
   NewMemSize: LongWord;
@@ -73,7 +73,7 @@ begin
   else
     ReallocMem(Data, NewMemSize);
 
-// Установили указатель на конец старого блока и записали данные:
+// РЈСЃС‚Р°РЅРѕРІРёР»Рё СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РєРѕРЅРµС† СЃС‚Р°СЂРѕРіРѕ Р±Р»РѕРєР° Рё Р·Р°РїРёСЃР°Р»Рё РґР°РЅРЅС‹Рµ:
   NewPtr := Pointer(LongWord(Data) + Size);
   Move((@StrData[1])^, NewPtr^, DataLen);
 
@@ -82,7 +82,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Добавляет в запрос файл:
+// Р”РѕР±Р°РІР»СЏРµС‚ РІ Р·Р°РїСЂРѕСЃ С„Р°Р№Р»:
 procedure AddPOSTFile(var Data: pointer; var Size: LongWord; Param, Value, FilePath, ContentType: string);
 var
   hFile: THandle;
@@ -116,7 +116,7 @@ begin
   else
     ReallocMem(Data, NewMemSize);
 
-// Установили указатель на конец старого блока и записали данные:
+// РЈСЃС‚Р°РЅРѕРІРёР»Рё СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РєРѕРЅРµС† СЃС‚Р°СЂРѕРіРѕ Р±Р»РѕРєР° Рё Р·Р°РїРёСЃР°Р»Рё РґР°РЅРЅС‹Рµ:
   NewPtr := Pointer(LongWord(Data) + Size);
   Move((@StrData[1])^, NewPtr^, DataLen);
 
@@ -129,7 +129,7 @@ end;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-// Выполнение запроса:
+// Р’С‹РїРѕР»РЅРµРЅРёРµ Р·Р°РїСЂРѕСЃР°:
 function HTTPPost(ScriptAddress: string; Data: pointer; Size: LongWord): string;
 var
   hInet, hConnect, hRequest: hInternet;
@@ -150,19 +150,19 @@ begin
   Host := PAnsiChar(ExtractHost(ScriptAddress));
   ScriptName := PAnsiChar(ExtractObject(ScriptAddress));
 
-  // Устанавливаем соединение:
+  // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЃРѕРµРґРёРЅРµРЅРёРµ:
   hInet := InternetOpen(@AgentName[1], 0, nil, nil, 0);
   hConnect := InternetConnect(hInet, Host, 80, nil, nil, 3, 0, 0);
   hRequest := HTTPOpenRequest(hConnect, lpPOST, ScriptName, HTTPVer, nil, nil, $4000000 + $100 + $80000000 + $800, 0);
 
-  // Посылаем запрос:
+  // РџРѕСЃС‹Р»Р°РµРј Р·Р°РїСЂРѕСЃ:
   if Size = 0 then
   begin
     Result := '[PEACE OF SHIT]: Error at sending request: send data not present!';
     Exit;
   end;
 
-  StrData := #13#10 + '--' + Boundary + '--'; // Завершаем Boundary до вида "--boundary--"
+  StrData := #13#10 + '--' + Boundary + '--'; // Р—Р°РІРµСЂС€Р°РµРј Boundary РґРѕ РІРёРґР° "--boundary--"
 
   DataLen := LongWord(Length(StrData));
   NewMemSize := DataLen + Size;
@@ -173,7 +173,7 @@ begin
   HTTPSendRequest(hRequest, PAnsiChar(Header + Boundary), Length(Header + Boundary), Data, NewMemSize);
   FreeMem(Data);
 
-  // Получаем ответ:
+  // РџРѕР»СѓС‡Р°РµРј РѕС‚РІРµС‚:
   GetMem(Buffer, ReceiverSize);
 
   Response := '';

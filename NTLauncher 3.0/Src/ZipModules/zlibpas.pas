@@ -1,4 +1,4 @@
-{Portable Network Graphics Delphi ZLIB linking  (16 May 2002) }
+﻿{Portable Network Graphics Delphi ZLIB linking  (16 May 2002) }
 
 {This unit links ZLIB to pngimage unit in order to implement  }
 {the library. It's now using the new ZLIB version, 1.1.4      }

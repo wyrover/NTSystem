@@ -1,4 +1,4 @@
-unit MySQLSupport;
+п»їunit MySQLSupport;
 
 interface
 
@@ -144,11 +144,11 @@ begin
       Exit;
     end;
 
-    // Проверяем, есть ли игрок в базе:
+    // РџСЂРѕРІРµСЂСЏРµРј, РµСЃС‚СЊ Р»Рё РёРіСЂРѕРє РІ Р±Р°Р·Рµ:
     MySQL_Query(Connect, PAnsiChar('SELECT COUNT(*) AS NUM ' + Request));
     SQLResult := MySQL_Store_Result(Connect);
 
-    // Если в базе есть такой игрок:
+    // Р•СЃР»Рё РІ Р±Р°Р·Рµ РµСЃС‚СЊ С‚Р°РєРѕР№ РёРіСЂРѕРє:
     if SQLResult <> nil then
       Result := MySQL_Fetch_Row(SQLResult)[0] = '1';
 
@@ -174,7 +174,7 @@ begin
       Exit;
     end;
 
-    // Добавляем игрока в базу:
+    // Р”РѕР±Р°РІР»СЏРµРј РёРіСЂРѕРєР° РІ Р±Р°Р·Сѓ:
     MySQL_Query(Connect, PAnsiChar(Request));
 
     MySQL_Close(Connect);

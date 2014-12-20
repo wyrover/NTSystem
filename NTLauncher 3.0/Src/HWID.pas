@@ -1,4 +1,4 @@
-unit HWID;
+﻿unit HWID;
 
 interface
 
